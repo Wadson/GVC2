@@ -8,8 +8,8 @@ namespace GVC.MODEL
 {
     internal class PagamentoMODEL
     {
-        public int PagamentoID { get; set; }
-        public int ParcelaID { get; set; }
+        public long PagamentoID { get; set; }
+        public long ParcelaID { get; set; }
         public DateTime DataPagamento { get; set; }
         public decimal ValorPago { get; set; }
         public string MetodoPagamento { get; set; }

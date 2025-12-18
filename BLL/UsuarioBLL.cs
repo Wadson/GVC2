@@ -2,7 +2,7 @@
 using GVC.MODEL;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -14,15 +14,30 @@ namespace GVC.BLL
 {
     internal class UsuarioBLL
     {
-        UsuarioDALL usuariodal = null;
+        UsuarioDal usuariodal = null;
 
+        public string ObterSenhaHashPorId(int usuarioId)
+        {
+            string sql = "SELECT Senha FROM Usuarios WHERE UsuarioID = @id";
+
+            using (var conn = GVC.Helpers.Conexao.Conex())
+            using (var cmd = new SqliteCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", usuarioId);
+
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                return result?.ToString(); // retorna a senha como string
+            }
+
+        }
         public DataTable Listar()
         {
             DataTable dtable = new DataTable();
             try
             {
-                usuariodal = new UsuarioDALL();
-                dtable = usuariodal.listaUsuario();
+                usuariodal = new UsuarioDal();
+                dtable = usuariodal.ListaUsuario();
             }
             catch (Exception erro)
             {
@@ -35,8 +50,8 @@ namespace GVC.BLL
         {
             try
             {
-                usuariodal = new UsuarioDALL();
-                usuariodal.gravaUsuario(usuarios);
+                usuariodal = new UsuarioDal();
+                usuariodal.GravaUsuario(usuarios);
             }
             catch (Exception erro)
             {
@@ -48,8 +63,8 @@ namespace GVC.BLL
         {
             try
             {
-                usuariodal = new UsuarioDALL();
-                usuariodal.excluiUsuario(usuarios);
+                usuariodal = new UsuarioDal();
+                usuariodal.ExcluiUsuario(usuarios);
             }
             catch (Exception erro)
             {
@@ -60,8 +75,8 @@ namespace GVC.BLL
         {
             try
             {
-                usuariodal = new UsuarioDALL();
-                usuariodal.atualizaUsuario(usuarios);
+                usuariodal = new UsuarioDal();
+                usuariodal.Atualizar(usuarios);
             }
             catch (Exception erro)
             {
@@ -73,8 +88,8 @@ namespace GVC.BLL
         {
             try
             {
-                usuariodal = new UsuarioDALL();
-                usuariodal.atualizaUsuarioSenha(usuarios);
+                usuariodal = new UsuarioDal();
+                usuariodal.AtualizaUsuarioSenha(usuarios);
             }
             catch (Exception erro)
             {
@@ -84,12 +99,12 @@ namespace GVC.BLL
       
         public UsuarioMODEL PesquisarNo(DataGridView DataGridPesquisa, string pesquisa)
         {
-            var conn = Conexao.Conex();
+            var conn = GVC.Helpers.Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM Usuario WHERE NomeUsuario like '" + pesquisa + "%'", conn);
+                SqliteCommand sql = new SqliteCommand("SELECT * FROM Usuarios WHERE NomeUsuario like '" + pesquisa + "%'", conn);
                 conn.Open();
-                SqlDataReader datareader;
+                SqliteDataReader datareader;
                 UsuarioMODEL obj_usuario = new UsuarioMODEL();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 
@@ -111,12 +126,12 @@ namespace GVC.BLL
         }
         public UsuarioMODEL PesquisarCodigo(string pesquisa)
         {
-            var conn = Conexao.Conex();
+            var conn = GVC.Helpers.Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM Usuario WHERE UsuarioID like '" + pesquisa + "%'", conn);
+                SqliteCommand sql = new SqliteCommand("SELECT * FROM Usuarios WHERE UsuarioID like '" + pesquisa + "%'", conn);
                 conn.Open();
-                SqlDataReader datareader;
+                SqliteDataReader datareader;
                 UsuarioMODEL obj_usuario = new UsuarioMODEL();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 

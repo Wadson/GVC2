@@ -1,4 +1,5 @@
-﻿using GVC.Relatorios;
+﻿
+using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace GVC.View
 {
-    public partial class FrmFerramentas : GVC.FrmModeloForm
+    public partial class FrmFerramentas : KryptonForm
     {
         public FrmFerramentas()
         {
@@ -29,15 +30,12 @@ namespace GVC.View
         }
 
         private void btnRestaurarBackup_Click(object sender, EventArgs e)
-        {
-            FrmRestauraBackup frmRestauraBackup = new FrmRestauraBackup();
-            frmRestauraBackup.ShowDialog();
+        {            
         }
 
         private void btnRelatorio_Click(object sender, EventArgs e)
         {
-            FrmMenuRelatorio frmMenuRelatorio = new FrmMenuRelatorio();
-            frmMenuRelatorio.ShowDialog();
+            
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -46,14 +44,16 @@ namespace GVC.View
         }
 
         private void btnRelProdutos_Click(object sender, EventArgs e)
-        {
-            FrmRelProdutos frm = new FrmRelProdutos();
-            frm.ShowDialog();
+        {            
         }
 
         private void InsertBanco_Click(object sender, EventArgs e)
+        {           
+        }
+
+        private void FrmModeloUI_Click(object sender, EventArgs e)
         {
-            FrmInsertBancoSqlCompact frm = new FrmInsertBancoSqlCompact();
+            FrmModeloUI frm = new FrmModeloUI();
             frm.ShowDialog();
         }
     }

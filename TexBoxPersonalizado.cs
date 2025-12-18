@@ -16,12 +16,12 @@ namespace GVC
         {
             InitializeComponent();
         }
-        public string Text
+        public new string Text
         {
             get => textBox1.Text; // textBox1 é o controle interno do tipo TextBox
             set => textBox1.Text = value;
         }
-        public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => textBox1.TextChanged += value;
             remove => textBox1.TextChanged -= value;

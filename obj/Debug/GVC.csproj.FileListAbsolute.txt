@@ -12,7 +12,6 @@ D:\GVC\obj\Debug\GVC.FrmCadUser.resources
 D:\GVC\obj\Debug\GVC.View.FrmContaReceberr.resources
 D:\GVC\obj\Debug\GVC.View.FrmEntradaEstoque.resources
 D:\GVC\obj\Debug\GVC.View.FrmExclusaoOrfaos.resources
-D:\GVC\obj\Debug\GVC.View.FrmExclusaoOrfao.resources
 D:\GVC\obj\Debug\GVC.View.FrmFerramentas.resources
 D:\GVC\obj\Debug\GVC.View.FrmInsertBancoSqlCompact.resources
 D:\GVC\obj\Debug\GVC.View.FrmLocalizarEstado.resources
@@ -23,7 +22,6 @@ D:\GVC\obj\Debug\GVC.FrmBaixarConta.resources
 D:\GVC\obj\Debug\GVC.FrmModeloUI.resources
 D:\GVC\obj\Debug\GVC.View.FrmPedidoVendaNovo.resources
 D:\GVC\obj\Debug\GVC.View.FrmTelaPrincipal.resources
-D:\GVC\obj\Debug\GVC.View.FrmPrincipal.resources
 D:\GVC\obj\Debug\GVC.View.FrmRelatorios.resources
 D:\GVC\obj\Debug\GVC.View.FrmRestauraBackup.resources
 D:\GVC\obj\Debug\GVC.FrmModelo.resources
@@ -204,3 +202,385 @@ D:\GVC\bin\Debug\pt-BR\Microsoft.Data.SqlClient.resources.dll
 D:\GVC\obj\Debug\GVC.Relatorios.FrmRelContaReceberGeral.resources
 D:\GVC\obj\Debug\GVC.Relatorios.FrmRelContaAbertaPorCliente.resources
 D:\GVC\obj\Debug\GVC.Relatorios.FrmRelHistoricoPagamento.resources
+D:\Códigos C#\GVC\bin\Debug\SqlServerTypes\x64\msvcr120.dll
+D:\Códigos C#\GVC\bin\Debug\SqlServerTypes\x64\SqlServerSpatial140.dll
+D:\Códigos C#\GVC\bin\Debug\SqlServerTypes\x86\msvcr120.dll
+D:\Códigos C#\GVC\bin\Debug\SqlServerTypes\x86\SqlServerSpatial140.dll
+D:\Códigos C#\GVC\bin\Debug\GVC.exe.config
+D:\Códigos C#\GVC\bin\Debug\GVC.exe.manifest
+D:\Códigos C#\GVC\bin\Debug\GVC.application
+D:\Códigos C#\GVC\bin\Debug\GVC.exe
+D:\Códigos C#\GVC\bin\Debug\GVC.pdb
+D:\Códigos C#\GVC\bin\Debug\Azure.Core.dll
+D:\Códigos C#\GVC\bin\Debug\Azure.Identity.dll
+D:\Códigos C#\GVC\bin\Debug\BouncyCastle.Cryptography.dll
+D:\Códigos C#\GVC\bin\Debug\EPPlus.dll
+D:\Códigos C#\GVC\bin\Debug\EPPlus.Interfaces.dll
+D:\Códigos C#\GVC\bin\Debug\EPPlus.System.Drawing.dll
+D:\Códigos C#\GVC\bin\Debug\Guna.UI2.dll
+D:\Códigos C#\GVC\bin\Debug\itextsharp.dll
+D:\Códigos C#\GVC\bin\Debug\Krypton.Toolkit.dll
+D:\Códigos C#\GVC\bin\Debug\MetroFramework.Design.dll
+D:\Códigos C#\GVC\bin\Debug\MetroFramework.dll
+D:\Códigos C#\GVC\bin\Debug\MetroFramework.Fonts.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Identity.Client.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Abstractions.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Logging.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.ReportViewer.Common.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.ReportViewer.DataVisualization.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.ReportViewer.Design.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+D:\Códigos C#\GVC\bin\Debug\Microsoft.SqlServer.Types.dll
+D:\Códigos C#\GVC\bin\Debug\System.Buffers.dll
+D:\Códigos C#\GVC\bin\Debug\System.ClientModel.dll
+D:\Códigos C#\GVC\bin\Debug\System.ComponentModel.Annotations.dll
+D:\Códigos C#\GVC\bin\Debug\System.Configuration.ConfigurationManager.dll
+D:\Códigos C#\GVC\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+D:\Códigos C#\GVC\bin\Debug\System.Drawing.Common.dll
+D:\Códigos C#\GVC\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+D:\Códigos C#\GVC\bin\Debug\System.IO.FileSystem.AccessControl.dll
+D:\Códigos C#\GVC\bin\Debug\System.Memory.Data.dll
+D:\Códigos C#\GVC\bin\Debug\System.Memory.dll
+D:\Códigos C#\GVC\bin\Debug\System.Numerics.Vectors.dll
+D:\Códigos C#\GVC\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\Códigos C#\GVC\bin\Debug\System.Security.AccessControl.dll
+D:\Códigos C#\GVC\bin\Debug\System.Security.Cryptography.ProtectedData.dll
+D:\Códigos C#\GVC\bin\Debug\System.Security.Permissions.dll
+D:\Códigos C#\GVC\bin\Debug\System.Security.Principal.Windows.dll
+D:\Códigos C#\GVC\bin\Debug\System.Text.Encodings.Web.dll
+D:\Códigos C#\GVC\bin\Debug\System.Text.Json.dll
+D:\Códigos C#\GVC\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\Códigos C#\GVC\bin\Debug\System.Transactions.dll
+D:\Códigos C#\GVC\bin\Debug\System.ValueTuple.dll
+D:\Códigos C#\GVC\bin\Debug\EnvDTE.dll
+D:\Códigos C#\GVC\bin\Debug\Azure.Core.xml
+D:\Códigos C#\GVC\bin\Debug\Azure.Identity.xml
+D:\Códigos C#\GVC\bin\Debug\BouncyCastle.Cryptography.xml
+D:\Códigos C#\GVC\bin\Debug\EPPlus.xml
+D:\Códigos C#\GVC\bin\Debug\itextsharp.xml
+D:\Códigos C#\GVC\bin\Debug\Krypton.Toolkit.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Identity.Client.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.Identity.Client.Extensions.Msal.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Abstractions.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Logging.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IdentityModel.Tokens.xml
+D:\Códigos C#\GVC\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+D:\Códigos C#\GVC\bin\Debug\System.Buffers.xml
+D:\Códigos C#\GVC\bin\Debug\System.ClientModel.xml
+D:\Códigos C#\GVC\bin\Debug\System.Configuration.ConfigurationManager.xml
+D:\Códigos C#\GVC\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+D:\Códigos C#\GVC\bin\Debug\System.Drawing.Common.pdb
+D:\Códigos C#\GVC\bin\Debug\System.Drawing.Common.xml
+D:\Códigos C#\GVC\bin\Debug\System.IdentityModel.Tokens.Jwt.xml
+D:\Códigos C#\GVC\bin\Debug\System.IO.FileSystem.AccessControl.xml
+D:\Códigos C#\GVC\bin\Debug\System.Memory.xml
+D:\Códigos C#\GVC\bin\Debug\System.Memory.Data.xml
+D:\Códigos C#\GVC\bin\Debug\System.Numerics.Vectors.xml
+D:\Códigos C#\GVC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\Códigos C#\GVC\bin\Debug\System.Security.AccessControl.xml
+D:\Códigos C#\GVC\bin\Debug\System.Security.Cryptography.ProtectedData.xml
+D:\Códigos C#\GVC\bin\Debug\System.Security.Permissions.xml
+D:\Códigos C#\GVC\bin\Debug\System.Security.Principal.Windows.xml
+D:\Códigos C#\GVC\bin\Debug\System.Text.Encodings.Web.xml
+D:\Códigos C#\GVC\bin\Debug\System.Text.Json.xml
+D:\Códigos C#\GVC\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\Códigos C#\GVC\bin\Debug\System.ValueTuple.xml
+D:\Códigos C#\GVC\bin\Debug\de\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\es\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\fr\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\it\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ja\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ko\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\pt\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ru\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.Common.resources.dll
+D:\Códigos C#\GVC\bin\Debug\de\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\es\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\fr\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\it\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ja\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ko\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\pt\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ru\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\Códigos C#\GVC\bin\Debug\de\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\es\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\fr\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\it\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ja\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ko\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\pt\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ru\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.Design.resources.dll
+D:\Códigos C#\GVC\bin\Debug\de\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\es\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\fr\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\it\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ja\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ko\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\pt\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\ru\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
+D:\Códigos C#\GVC\obj\Debug\GVC.csproj.AssemblyReference.cache
+D:\Códigos C#\GVC\obj\Debug\GVC.MUI.FrmLogin.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.MUI.FrmRecuperarSenhaOffline.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmMenuRelatorio.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmRelContaAbertaPorCliente.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmRelContaReceberGeral.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmRelGeralContasAbertas.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmRelHistoricoPagamento.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.FrmRelProdutos.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Relatorios.RelClienteContaAberta.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmBackup.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmCadCidade.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmCadEstado.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmCadUser.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmContaReceberr.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmEntradaEstoque.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmExclusaoOrfaos.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmFerramentas.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmInsertBancoSqlCompact.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmLocalizarEstado.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmManutEstado.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmManutCidade.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmModeloForm.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmBaixarConta.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmModeloUI.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmPedidoVendaNovo.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmTelaPrincipal.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmRelatorios.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmRestauraBackup.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmModelo.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.TexBoxTelefoneFormatado.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmBaseManutencao.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmBasePesquisa.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmCadCliente.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmCadFornecedor.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmCadProdutos.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmGerarParcelas.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmLocalizarCidade.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmLocalizarCliente.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmLocalizarFornedor.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmLocalizarProduto.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmManutCliente.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmManutFornecedor.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.FrmManutProduto.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.FrmManutUsuario.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.Properties.Resources.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.TexBoxPersonalizado.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.View.Sobre.resources
+D:\Códigos C#\GVC\obj\Debug\GVC.csproj.GenerateResource.cache
+D:\Códigos C#\GVC\obj\Debug\GVC.csproj.CoreCompileInputs.cache
+D:\Códigos C#\GVC\obj\Debug\GVC.TrustInfo.xml
+D:\Códigos C#\GVC\obj\Debug\GVC.exe.manifest
+D:\Códigos C#\GVC\obj\Debug\GVC.application
+D:\Códigos C#\GVC\obj\Debug\GVC.csproj.Up2Date
+D:\Códigos C#\GVC\obj\Debug\GVC.exe
+D:\Códigos C#\GVC\obj\Debug\GVC.pdb
+D:\CodigosCSharp\GVC\bin\Debug\SqlServerTypes\x64\msvcr120.dll
+D:\CodigosCSharp\GVC\bin\Debug\SqlServerTypes\x64\SqlServerSpatial140.dll
+D:\CodigosCSharp\GVC\bin\Debug\SqlServerTypes\x86\msvcr120.dll
+D:\CodigosCSharp\GVC\bin\Debug\SqlServerTypes\x86\SqlServerSpatial140.dll
+D:\CodigosCSharp\GVC\bin\Debug\GVC.exe.config
+D:\CodigosCSharp\GVC\bin\Debug\GVC.exe.manifest
+D:\CodigosCSharp\GVC\bin\Debug\GVC.application
+D:\CodigosCSharp\GVC\bin\Debug\GVC.exe
+D:\CodigosCSharp\GVC\bin\Debug\GVC.pdb
+D:\CodigosCSharp\GVC\bin\Debug\Azure.Core.dll
+D:\CodigosCSharp\GVC\bin\Debug\Azure.Identity.dll
+D:\CodigosCSharp\GVC\bin\Debug\BouncyCastle.Cryptography.dll
+D:\CodigosCSharp\GVC\bin\Debug\EPPlus.dll
+D:\CodigosCSharp\GVC\bin\Debug\EPPlus.Interfaces.dll
+D:\CodigosCSharp\GVC\bin\Debug\EPPlus.System.Drawing.dll
+D:\CodigosCSharp\GVC\bin\Debug\Guna.UI2.dll
+D:\CodigosCSharp\GVC\bin\Debug\itextsharp.dll
+D:\CodigosCSharp\GVC\bin\Debug\Krypton.Toolkit.dll
+D:\CodigosCSharp\GVC\bin\Debug\MetroFramework.Design.dll
+D:\CodigosCSharp\GVC\bin\Debug\MetroFramework.dll
+D:\CodigosCSharp\GVC\bin\Debug\MetroFramework.Fonts.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Identity.Client.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Abstractions.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Logging.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.ReportViewer.Common.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.ReportViewer.DataVisualization.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.ReportViewer.Design.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.SqlServer.Types.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Buffers.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.ClientModel.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.ComponentModel.Annotations.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Configuration.ConfigurationManager.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Drawing.Common.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.IO.FileSystem.AccessControl.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Memory.Data.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Memory.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Numerics.Vectors.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.AccessControl.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Cryptography.ProtectedData.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Permissions.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Principal.Windows.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Text.Encodings.Web.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Text.Json.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.Transactions.dll
+D:\CodigosCSharp\GVC\bin\Debug\System.ValueTuple.dll
+D:\CodigosCSharp\GVC\bin\Debug\EnvDTE.dll
+D:\CodigosCSharp\GVC\bin\Debug\Azure.Core.xml
+D:\CodigosCSharp\GVC\bin\Debug\Azure.Identity.xml
+D:\CodigosCSharp\GVC\bin\Debug\BouncyCastle.Cryptography.xml
+D:\CodigosCSharp\GVC\bin\Debug\EPPlus.xml
+D:\CodigosCSharp\GVC\bin\Debug\itextsharp.xml
+D:\CodigosCSharp\GVC\bin\Debug\Krypton.Toolkit.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Identity.Client.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.Identity.Client.Extensions.Msal.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Abstractions.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Logging.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IdentityModel.Tokens.xml
+D:\CodigosCSharp\GVC\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Buffers.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.ClientModel.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Configuration.ConfigurationManager.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Drawing.Common.pdb
+D:\CodigosCSharp\GVC\bin\Debug\System.Drawing.Common.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.IdentityModel.Tokens.Jwt.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.IO.FileSystem.AccessControl.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Memory.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Memory.Data.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Numerics.Vectors.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.AccessControl.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Cryptography.ProtectedData.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Permissions.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Security.Principal.Windows.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Text.Encodings.Web.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Text.Json.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\CodigosCSharp\GVC\bin\Debug\System.ValueTuple.xml
+D:\CodigosCSharp\GVC\bin\Debug\de\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\es\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\fr\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\it\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ja\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ko\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\pt\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ru\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.Common.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\de\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\es\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\fr\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\it\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ja\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ko\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\pt\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ru\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.DataVisualization.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\de\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\es\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\fr\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\it\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ja\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ko\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\pt\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ru\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.Design.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\de\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\es\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\fr\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\it\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ja\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ko\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\pt\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\ru\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\bin\Debug\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
+D:\CodigosCSharp\GVC\obj\Debug\GVC.csproj.AssemblyReference.cache
+D:\CodigosCSharp\GVC\obj\Debug\GVC.MUI.FrmLogin.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.MUI.FrmRecuperarSenhaOffline.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmMenuRelatorio.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmRelContaAbertaPorCliente.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmRelContaReceberGeral.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmRelGeralContasAbertas.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmRelHistoricoPagamento.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.FrmRelProdutos.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Relatorios.RelClienteContaAberta.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmBackup.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmCadCidade.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmCadEstado.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmCadUser.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmContaReceberr.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmEntradaEstoque.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmExclusaoOrfaos.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmFerramentas.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmInsertBancoSqlCompact.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmLocalizarEstado.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmManutEstado.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmManutCidade.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmModeloForm.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmBaixarConta.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmModeloUI.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmPedidoVendaNovo.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmTelaPrincipal.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmRelatorios.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmRestauraBackup.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmModelo.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.TexBoxTelefoneFormatado.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmBaseManutencao.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmBasePesquisa.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmCadCliente.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmCadFornecedor.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmCadProdutos.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmGerarParcelas.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmLocalizarCidade.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmLocalizarCliente.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmLocalizarFornedor.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmLocalizarProduto.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmManutCliente.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmManutFornecedor.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.FrmManutProduto.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.FrmManutUsuario.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.Properties.Resources.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.TexBoxPersonalizado.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.View.Sobre.resources
+D:\CodigosCSharp\GVC\obj\Debug\GVC.csproj.GenerateResource.cache
+D:\CodigosCSharp\GVC\obj\Debug\GVC.csproj.CoreCompileInputs.cache
+D:\CodigosCSharp\GVC\obj\Debug\GVC.TrustInfo.xml
+D:\CodigosCSharp\GVC\obj\Debug\GVC.exe.manifest
+D:\CodigosCSharp\GVC\obj\Debug\GVC.application
+D:\CodigosCSharp\GVC\obj\Debug\GVC.csproj.Up2Date
+D:\CodigosCSharp\GVC\obj\Debug\GVC.exe
+D:\CodigosCSharp\GVC\obj\Debug\GVC.pdb

@@ -1,187 +1,236 @@
 ﻿using GVC.DALL;
 using GVC.MODEL;
+using GVC.MUI;
 using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+using System.Text.RegularExpressions;
 
 namespace GVC.BLL
 {
-    internal class FornecedorBLL
+    internal class FornecedorBll
     {
-        FornecedorDALL fornecedordal = null;
+        private readonly FornecedorDal _dal = new FornecedorDal();
 
+        // ==============================================================
+        // 1. LISTAR TODOS OS FORNECEDORES
+        // ==============================================================
         public DataTable Listar()
         {
-            DataTable dtable = new DataTable();
             try
             {
-                fornecedordal = new FornecedorDALL();
-                dtable = fornecedordal.lista_Fornecedor();
+                return _dal.ListarFornecedores();
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
-            }
-            return dtable;
-        }
-
-        public void Salvar(FornecedorMODEL fornecedor)
-        {
-            try
-            {
-                fornecedordal = new FornecedorDALL();
-                fornecedordal.gravaFornecedor(fornecedor);
-            }
-            catch (Exception erro)
-            {
-                throw erro;
+                throw new Exception($"Erro ao carregar fornecedores: {ex.Message}", ex);
             }
         }
 
-        private void Log(string message)
-        {
-            File.AppendAllText("logExcluirFornecedor.txt", $"{DateTime.Now}: {message}\n");
-        }
-        public void Excluir(FornecedorMODEL fornecedor)
-        {
-            try
-            {
-               
-
-                Log($"Iniciando exclusão do fornecedor com ID: {fornecedor.FornecedorID}");
-                fornecedordal = new FornecedorDALL();
-                fornecedordal.excluiFornecedor(fornecedor);
-                Log("Fornecedor excluído com sucesso.");
-            }
-            catch (Exception erro)
-            {
-                Log($"Erro ao limpar o formulário: {erro.Message}");                
-            }
-        }
-
-        public void Alterar(FornecedorMODEL fornecedor)
+        // ==============================================================
+        // 2. SALVAR NOVO FORNECEDOR
+        // ==============================================================
+        public void Salvar(FornecedorModel fornecedor)
         {
             try
             {
-                fornecedordal = new FornecedorDALL();
-                fornecedordal.atualizaFornecedor(fornecedor);
+                ValidarFornecedor(fornecedor, isNovo: true);
+
+                var cnpjLimpo = LimparCnpj(fornecedor.Cnpj);
+                fornecedor.Cnpj = string.IsNullOrWhiteSpace(cnpjLimpo) ? null : cnpjLimpo;
+
+                if (_dal.FornecedorExiste(fornecedor.Nome, fornecedor.Cnpj))
+                    throw new Exception("Já existe um fornecedor cadastrado com este nome ou CNPJ.");
+
+                if (_dal.BuscarPorCnpj(fornecedor.Cnpj) != null)
+                    throw new Exception("Já existe um fornecedor cadastrado com este CNPJ.");
+
+                fornecedor.DataCriacao = DateTime.Now;
+
+                _dal.SalvarFornecedor(fornecedor);
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
+                throw new Exception($"Erro ao salvar fornecedor: {ex.Message}", ex);
             }
         }
 
-        public FornecedorMODEL pesquisar(string pesquisa)
+        // ==============================================================
+        // 3. ALTERAR FORNECEDOR EXISTENTE
+        // ==============================================================
+        public void Alterar(FornecedorModel fornecedor)
         {
-            var conn = Conexao.Conex();
-
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM Fornecedor WHERE NomeFornecedor LIKE '" + pesquisa + "%'", conn);
-                conn.Open();
-                SqlDataReader datareader;
-                FornecedorMODEL obj_fornecedor = new FornecedorMODEL();
-                datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
-                while (datareader.Read())
-                {
-                    if (datareader.IsDBNull(0))
-                    {
-                        string erro;
-                        erro = "Nenhum registro encontrado";
-                        Console.Write(erro);
-                    }
-                    else
-                    {
-                        obj_fornecedor.FornecedorID = Convert.ToInt32(datareader["FornecedorID"]);
-                        obj_fornecedor.NomeFornecedor = datareader["NomeFornecedor"].ToString();
-                    }
-                }
-                return obj_fornecedor;
+                if (fornecedor.FornecedorID <= 0)
+                    throw new Exception("Fornecedor inválido para alteração.");
+
+                ValidarFornecedor(fornecedor, isNovo: false);
+
+                var cnpjLimpo = LimparCnpj(fornecedor.Cnpj);
+                var existente = _dal.BuscarPorCnpj(cnpjLimpo);
+
+                // Permite manter o mesmo CNPJ se for o próprio fornecedor
+                if (existente != null && existente.FornecedorID != fornecedor.FornecedorID)
+                    throw new Exception("Outro fornecedor já está cadastrado com este CNPJ.");
+
+                fornecedor.DataCriacao ??= DateTime.Now;
+
+                _dal.Atualizar(fornecedor);
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
-            }
-            finally
-            {
-                conn.Close();
+                throw new Exception($"Erro ao alterar fornecedor: {ex.Message}", ex);
             }
         }
-        public FornecedorMODEL PesquisaFornecedorEspecial(string pesquisa)
+
+        // ==============================================================
+        // 4. EXCLUIR FORNECEDOR
+        // ==============================================================
+        public void Excluir(int fornecedorId)
         {
-            var conn = Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT Fornecedor FROM Fornecedor WHERE Fornecedo LIKE '" + pesquisa + "%'", conn);
-                conn.Open();
-                SqlDataReader datareader;
-                FornecedorMODEL obj_fornecedor = new FornecedorMODEL();
-                datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
-                while (datareader.Read())
-                {
-                    if (datareader.IsDBNull(0))
-                    {
-                        string erro;
-                        erro = "Nenhum registro encontrado";
-                        Console.Write(erro);
-                    }
-                    else
-                    {
-                        obj_fornecedor.FornecedorID = Convert.ToInt32(datareader["FornecedorID"]);
-                    }
-                }
-                return obj_fornecedor;
+                if (fornecedorId <= 0) throw new Exception("ID do fornecedor inválido.");
+                _dal.ExcluirFornecedor(fornecedorId);
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
-            }
-            finally
-            {
-                conn.Close();
+                throw new Exception($"Erro ao excluir fornecedor: {ex.Message}", ex);
             }
         }
-        public FornecedorMODEL PesquisaFornecedorCod(string pesquisa)
-        {
-            var conn = Conexao.Conex();
+        public void Excluir(FornecedorModel fornecedor) => Excluir((int)fornecedor.FornecedorID);
 
+        // ==============================================================
+        // 5. PESQUISAS
+        // ==============================================================
+        public DataTable PesquisarPorNome(string nome)
+        {
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT Fornecedor FROM Fornecedor  WHERE FornecedorID LIKE '" + pesquisa + "%' ", conn);//AND Pago = false
-                conn.Open();
-                SqlDataReader datareader;
-
-                FornecedorMODEL obj_fornecedor = new FornecedorMODEL();
-
-
-                datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
-                while (datareader.Read())
-                {
-                    if (datareader.IsDBNull(0))
-                    {
-                        string erros = "Nenhum registro ENCONTRADO";
-                        Console.WriteLine(erros);
-                    }
-                    else
-                        obj_fornecedor.NomeFornecedor = datareader["NomeFornecedor"].ToString();
-                }
-                return obj_fornecedor;
+                return string.IsNullOrWhiteSpace(nome) ? Listar() : _dal.PesquisarPorNome(nome);
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
+                throw new Exception($"Erro na pesquisa por nome: {ex.Message}", ex);
             }
-            finally
-            {
-                conn.Close();
-            }
+        }
 
+        public DataTable PesquisarPorCodigo(int codigo)
+        {
+            try
+            {
+                return _dal.PesquisarPorCodigo(codigo);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro na pesquisa por código: {ex.Message}", ex);
+            }
+        }
+
+        public DataTable PesquisarGeral(string texto)
+        {
+            try
+            {
+                return _dal.PesquisarGeral(texto);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro na pesquisa geral: {ex.Message}", ex);
+            }
+        }
+
+        // ==============================================================
+        // 6. BUSCAR POR CNPJ
+        // ==============================================================
+        public FornecedorModel? BuscarPorCnpj(string cnpj)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(cnpj)) return null;
+
+                cnpj = LimparCnpj(cnpj);
+                if (!Utilitario.ValidarCNPJ(cnpj))
+                    throw new Exception("CNPJ inválido.");
+
+                return _dal.BuscarPorCnpj(cnpj);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao buscar fornecedor por CNPJ: {ex.Message}", ex);
+            }
+        }
+
+        // ==============================================================
+        // 7. BUSCAR POR ID
+        // ==============================================================
+        public FornecedorModel? BuscarPorId(int id)
+        {
+            try
+            {
+                if (id <= 0) return null;
+                return _dal.BuscarPorId(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao buscar fornecedor por ID: {ex.Message}", ex);
+            }
+        }
+
+        // ==============================================================
+        // VALIDAÇÕES DO FORNECEDOR
+        // ==============================================================
+        private void ValidarFornecedor(FornecedorModel f, bool isNovo)
+        {
+            if (f == null) throw new ArgumentNullException(nameof(f));
+
+            if (string.IsNullOrWhiteSpace(f.Nome))
+                throw new Exception("Nome do fornecedor é obrigatório.");
+
+            if (!string.IsNullOrWhiteSpace(f.Email) && !IsValidEmail(f.Email))
+                throw new Exception("E-mail inválido.");
+
+            if (f.CidadeID <= 0)
+                throw new Exception("Cidade é obrigatória.");
+
+            if (string.IsNullOrWhiteSpace(f.Logradouro))
+                throw new Exception("Logradouro é obrigatório.");
+
+            if (string.IsNullOrWhiteSpace(f.Numero))
+                throw new Exception("Número é obrigatório.");
+
+            if (string.IsNullOrWhiteSpace(f.Bairro))
+                throw new Exception("Bairro é obrigatório.");
+
+            if (string.IsNullOrWhiteSpace(f.Cep))
+                throw new Exception("CEP é obrigatório.");
+
+            if (f.Cep.Length < 8 || !Regex.IsMatch(f.Cep, @"^\d{8}$"))
+                throw new Exception("CEP deve conter 8 dígitos numéricos.");
+
+            // Documento (CNPJ) opcional
+            string cnpj = Utilitario.ApenasNumeros(f.Cnpj);
+            if (!string.IsNullOrWhiteSpace(cnpj))
+            {
+                if (cnpj.Length != 14 || !Utilitario.ValidarCNPJ(cnpj))
+                    throw new Exception("CNPJ inválido. Verifique os dígitos.");
+            }
+        }
+
+        // ==============================================================
+        // MÉTODOS AUXILIARES
+        // ==============================================================
+        private static string LimparCnpj(string cnpj) => Regex.Replace(cnpj ?? "", @"\D", "");
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

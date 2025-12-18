@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Dapper;
+using GVC.Helpers;
+using Krypton.Toolkit;
+using Microsoft.Data.Sqlite;
+using System;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
 
 namespace GVC
 {
@@ -16,265 +14,150 @@ namespace GVC
     {
         public FrmBaseManutencao()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            this.KeyPreview = true; // Permite capturar teclas no form
+            this.Load += FrmBaseManutencao_Load;
         }
 
-        public string RetornoEvitaDuplicado { get; set; }
-        
-        public string QueryProduto = "SELECT MAX(ProdutoID) FROM Produto";
-        public string QueryGrupo = "SELECT MAX(CategoriaID) FROM Categoria";
-        public string QueryParcelasReceitas = "SELECT MAX(ParcelaID) FROM Parcela";
-        public string QueryUsuario = "SELECT MAX(UsuarioID) FROM Usuario";
-        public string QueryFornecedor = "SELECT MAX(FornecedorID) FROM Fornecedor";
-        public string QueryCliente = "SELECT MAX(ClienteID) FROM Cliente";
-        public string QueryCentro = "SELECT MAX(CategoriaID) FROM Categoria";
-        
+        private void FrmBaseManutencao_Load(object sender, EventArgs e)
+        {
+            Utilitario.AplicarEfeitoFoco(this);
+        }
 
-        public string NomeUsuario { get; set; }
-        public string NivelAcesso { get; set; }
-        public string NomeCliente { get; set; }
-        public string NomeProduto { get; set; }
-        public string NomeCategoria { get; set; }
-        public string NomeCidade { get; set; }
+        // ==============================================================
+        // PROPRIEDADES PÚBLICAS (mantidas para compatibilidade)
+        // ==============================================================
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string NomeUsuario { get; set; } = "";
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string NivelAcesso { get; set; } = "";
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int ProdutoID { get; set; }
-        public int UsuarioID { get; set; }
-        public int SubCategoriaID { get; set; }
-        public int CategoriaID { get; set; }
-        public string queryfor { get; set; }
-
-        public string Categoria { get; set; }
-        public string SubCategoria { get; set; }
-        public string EventoBotao { get; set; }
-        public string Descricao { get; set; }
-        public string Parcela { get; set; }
-        public string Documento { get; set; }
-        public string String_Busca_codigo { get; set; }
-        public string Capturavalor { get; set; }
-        public string Contagem { get; set; }
-        public string criterio { get; set; }
-        public string sqlString { get; set; }
-        public string sqlString1 { get; set; }
-        public string sqlString2 { get; set; }
-        public int linhaAtual { get; set; }
-        public double Valor { get; set; }
-        public DateTime Cadastro { get; set; }
-        public DateTime Vencimento { get; set; }
-        public DateTime Pagamento { get; set; }
-        public DateTime Data { get; set; }
-        public DateTime dtNascimento { get; set; }
-        public bool umavez { get; set; }
-        public bool parcelado { get; set; }
-        public string Status { get; set; }
-        public string FormaPgto { get; set; }
-        public int FormaPgtoID { get; set; }
-        public int VendaID { get; set; }
-        public int ParcelaID { get; set; }
-        public int IdParcelaR { get; set; }
-        public int FornecedorID { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int ClienteID { get; set; }
-        public int ContaReceberID { get; set; }
-        public int CidadeID { get; set; }
-        public int Qtd_caractere { get; set; }
-        public string NomeFornecedor { get; set; } //1
-        public string FormadePgto { get; set; }
-        public string Cliente { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public int FornecedorID { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public int VendaID { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string NomeCliente { get; set; } = "";
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string NomeProduto { get; set; } = "";
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string NomeFornecedor { get; set; } = "";
 
-        public string StatusOperacao { get; set; }
-        public DateTime PrevReceb { get; set; }
-        public DateTime Emissao { get; set; }
-        public DateTime Datas { get; set; }
-        public DateTime DtNascimento { get; set; }
+        // ==============================================================
+        // MÉTODOS UTILITÁRIOS MODERNOS
+        // ==============================================================
 
-
-        public virtual void LimpaCampo()
+        /// <summary>
+        /// Limpa todos os campos do formulário (TextBox, ComboBox, DateTimePicker, etc) - SUPORTE COMPLETO AO KRYPTON
+        /// </summary>
+        public virtual void LimparCampos()
         {
-            foreach (Control c in Controls)
-            {
-                if (c is TextBox)
-                {
-                    (c as TextBox).Text = "";
-                }
-                if (c is MaskedTextBox)
-                {
-                    (c as MaskedTextBox).Text = "";
-                }
-
-                if (c is DateTimePicker) c.Text = null; if (c is ComboBox) c.Text = string.Empty; //Implementado por Wadson só esta linha
-
-                if (c is Panel)
-                {
-                    for (int i = 0; i < c.Controls.Count; i++)
-                    {
-                        if (c.Controls[i] is TextBox)
-                        {
-                            (c.Controls[i] as TextBox).Text = "";
-                        }
-                        if (c.Controls[i] is MaskedTextBox)
-                        {
-                            (c.Controls[i] as MaskedTextBox).Text = "";
-                        }
-                        if (c.Controls[i] is ComboBox)
-                        {
-                            (c.Controls[i] as ComboBox).Text = "";
-                        }
-                    }
-                }
-
-                if (c is GroupBox)
-                {
-                    for (int i = 0; i < c.Controls.Count; i++)
-                    {
-                        if (c.Controls[i] is TextBox)
-                        {
-                            (c.Controls[i] as TextBox).Text = "";
-                        }
-                        if (c.Controls[i] is ComboBox)
-                        {
-                            (c.Controls[i] as ComboBox).Text = "";
-                        }
-                        //********************IMPLEMENTADO POR WADSON RODRIGUS LIMA
-                        if (c.Controls[i] is MaskedTextBox)
-                        {
-                            (c.Controls[i] as MaskedTextBox).Text = "";
-                        }
-                        if (c.Controls[i] is DateTimePicker)
-                        {
-                            (c.Controls[i] as DateTimePicker).Text = null;
-                        }//*********************FIM DA IMPLEMENTAÇÃO 
-                    }
-                }
-                if (c is DataGridView)
-                {
-                    (c as DataGridView).DataSource = null;
-                }
-            }
-
-        }
-        public virtual DataTable LocalizarGeral(SqlCommand comando)
-        {
-            var conn = Conexao.Conex();
-
-            comando.Connection = conn;
-            try
-            {
-                conn.Open();
-                SqlDataAdapter daCliente = new SqlDataAdapter();
-                daCliente.SelectCommand = comando;
-                DataTable dt = new DataTable();
-                daCliente.Fill(dt);
-
-                return dt;
-            }
-            catch (Exception erro)
-            {
-                throw erro;
-            }
-            finally
-            {
-                conn.Close();
-            }
+            Utilitario.LimparCampos(this);
         }
 
-        public virtual int RetornaCodigoContaMaisUm(string query)
+        /// <summary>
+        /// Gera o próximo ID de qualquer tabela de forma segura
+        /// </summary>
+        public virtual int ProximoId(string query)
         {
-            var conn = Conexao.Conex();
-            object codigo = 0;
-            SqlCommand cmd = new SqlCommand(query, conn);
-            try
-            {
-                conn.Open();
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = query.ToString();
-
-                codigo = cmd.ExecuteScalar();
-
-            }
-            catch (SqlException erro)
-            {
-                throw new Exception(erro.Message);
-            }
-            finally
-            {
-                if ((cmd != null))
-                {
-                    cmd.Dispose();
-                }
-                if (conn.State != ConnectionState.Closed)
-                {
-                    conn.Close();
-                    conn.Dispose();
-                }
-            }
-            return (codigo == null || codigo == DBNull.Value) ? 1 : (Convert.ToInt32(codigo) + 1);
+            using var conn = Conexao.Conex();
+            var max = conn.ExecuteScalar<int?>(query);
+            return (max ?? 0) + 1;
         }
-        private void BasePesquisa_KeyDown(object sender, KeyEventArgs e)
+
+        /// <summary>
+        /// Executa uma consulta e retorna DataTable (para grids)
+        /// </summary>
+        public virtual DataTable ExecutarConsulta(string sql, object parametros = null)
         {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            var dt = new DataTable();
+            dt.Load(conn.ExecuteReader(sql, parametros));
+            return dt;
+        }
+
+        /// <summary>
+        /// Executa comando INSERT/UPDATE/DELETE
+        /// </summary>
+        public virtual int ExecutarComando(string sql, object parametros)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            return conn.Execute(sql, parametros);
+        }
+
+        /// <summary>
+        /// Busca um registro único e retorna como objeto (Dapper)
+        /// </summary>
+        public virtual T BuscarUnico<T>(string sql, object parametros = null)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            return conn.QueryFirstOrDefault<T>(sql, parametros);
+        }
+
+        // ==============================================================
+        // EVENTOS GLOBAIS DO FORMULÁRIO
+        // ==============================================================
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
             if (e.KeyCode == Keys.Escape)
             {
-                this.Close();
-                if (MessageBox.Show("Deseja sair?", "Atenção", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
+                if (MessageBox.Show("Deseja realmente sair?", "Sair", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     this.Close();
-                }
             }
-        }
-
-        public virtual void carregaGrid2Localizar(SqlCommand criterioSQL, DataGridView DatagridParametro)
-        {
-            var conn = Conexao.Conex();
-            criterioSQL.Connection = conn;
-            try
-            {
-                conn.Open();
-                System.Data.DataTable tabela = new System.Data.DataTable();
-                SqlDataAdapter adapter = new SqlDataAdapter();
-                adapter.SelectCommand = criterioSQL;
-                adapter.Fill(tabela);
-
-                if (tabela.Rows.Count > 0)
-                {
-                    DatagridParametro.DataSource = tabela;
-                }
-                else
-                {
-                    MessageBox.Show("Nenhum registro encontrado.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-                    //txtPesquisa.Focus();
-                    //txtPesquisa.Text = string.Empty;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ex.Message.ToString();
-            }
-            finally { conn.Close(); }
-        }
-        private void BasePesquisa_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13)
+            else if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
-                SendKeys.Send("{tab}");
+                this.SelectNextControl(this.ActiveControl, true, true, true, true);
             }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            // Aplica efeito de foco em todos os KryptonTextBox
+            Utilitario.AplicarEfeitoFoco(this);
+        }
+
+        // ==============================================================
+        // MÉTODOS ANTIGOS MANTIDOS POR COMPATIBILIDADE (opcional)
+        // ==============================================================
+
+        [Obsolete("Use LimparCampos() em vez disso")]
+        public virtual void LimparCamposObsoleto()
+        {
+            LimparCampos();
+        }
+
+        [Obsolete("Use ProximoId() em vez disso")]
+        public virtual int RetornaCodigoContaMaisUm(string query)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            var result = conn.ExecuteScalar(query);
+            return (result == null || result == DBNull.Value) ? 1 : (Convert.ToInt32(result) + 1);
+        }
+
+        [Obsolete("Use ExecutarConsulta() em vez disso")]
+        public virtual DataTable LocalizarGeral(SqliteCommand comando)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            comando.Connection = conn;
+            conn.Open();
+
+            var dt = new DataTable();
+            dt.Load(comando.ExecuteReader());  // <--- ESSA É A FORMA CORRETA E MODERNA
+
+            return dt;
         }
 
         private void btnSair_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void rbtDescricao_KeyDown(object sender, KeyEventArgs e)
-        {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
-        }
-
-        private void rbtCodigo_KeyDown(object sender, KeyEventArgs e)
-        {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
         }
     }
 }

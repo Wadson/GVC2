@@ -8,13 +8,16 @@ namespace GVC.MODEL
 {
     public class ItemVendaModel
     {
-        //public int ItemVendaID { get; set; }
-        public int ItemVendaID { get; set; } 
-        public int VendaID { get; set; }
-        public int ProdutoID { get; set; }
+        public long ItemVendaID { get; set; }
+        public long VendaID { get; set; }
+        public long ProdutoID { get; set; }
         public int Quantidade { get; set; }
         public decimal PrecoUnitario { get; set; }
-        public decimal Subtotal { get; set; }
+        //public decimal Subtotal { get; set; }
+        public decimal DescontoItem { get; set; } = 0;
+        public string NomeProduto { get; set; }
+        public decimal Subtotal { get; set; }// Coluna computada (PERSISTED)
         public VendaModel Venda { get; set; }
+        
     }
 }

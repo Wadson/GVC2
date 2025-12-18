@@ -1,18 +1,22 @@
-﻿using System;
+﻿using GVC.BLL;
+using GVC.DAL;
+using GVC.DALL;
+using GVC.MODEL;
+using Krypton.Toolkit;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
-using GVC.BLL;
-using GVC.DALL;
 
 namespace GVC.View
 {
-    public partial class FrmEntradaEstoque : GVC.FrmModeloForm
+    public partial class FrmEntradaEstoque : KryptonForm
     {
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string produtoSelecionado { get; set; }
         public FrmEntradaEstoque()
         {
@@ -26,7 +30,7 @@ namespace GVC.View
             FrmLocalizarProduto frmLocalizarProduto = new FrmLocalizarProduto(this, txtNomeProduto.Text)
             {
                 Owner = this,
-                produtoSelecionado = txtNomeProduto.Text
+                ProdutoSelecionado = txtNomeProduto.Text
             };
             frmLocalizarProduto.ShowDialog();
             frmLocalizarProduto.Text = "Localizar Produtos";
@@ -47,7 +51,7 @@ namespace GVC.View
             FrmLocalizarProduto frmLocalizarProduto = new FrmLocalizarProduto(this, txtNomeProduto.Text)
             {
                 Owner = this,
-                produtoSelecionado = txtNomeProduto.Text
+                ProdutoSelecionado = txtNomeProduto.Text
             };
             frmLocalizarProduto.ShowDialog();
             frmLocalizarProduto.Text = "Localizar Produtos";
@@ -60,40 +64,67 @@ namespace GVC.View
 
         private void btnSalva_Click(object sender, EventArgs e)
         {
-            if (txtNomeProduto.Text == string.Empty ||
-               !int.TryParse(txtQuantidade.Text, out int quantidade) ||
-               !decimal.TryParse(txtPrecoCusto.Text, out decimal precoCusto) ||
-               !decimal.TryParse(txtPrecoDeVenda.Text, out decimal precoVenda))
+            // Validações
+            if (string.IsNullOrWhiteSpace(txtNomeProduto.Text))
             {
-                MessageBox.Show("Preencha todos os campos corretamente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("O nome do produto é obrigatório.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNomeProduto.Focus();
                 return;
             }
 
-            int produtoID = Convert.ToInt32(txtProdutoID.Text);
-            decimal lucro = precoVenda - precoCusto;
-            DateTime dataRegistro = dtpDataDeEntrada.Value;
-
-            // Atualiza o estoque
-            ProdutosDal produtoDal = new ProdutosDal();
-            produtoDal.AtualizarEstoque(produtoID, quantidade);
-
-            // Registra no histórico de preços
-            HistoricoPrecoBLL historico = new HistoricoPrecoBLL
+            if (!decimal.TryParse(txtPrecoCusto.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out decimal precoCusto))
             {
-                ProdutoID = produtoID,
-                DataRegistro = DateTime.Now,
-                PrecoCusto = precoCusto,
-                Lucro = lucro,
-                PrecoVenda = precoVenda
-            };
+                MessageBox.Show("Preço de custo inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            DALL.HistoricoProdutoDALL historicoDAL = new DALL.HistoricoProdutoDALL();
-            historicoDAL.InserirHistorico(historico);
+            if (!decimal.TryParse(txtPrecoDeVenda.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out decimal precoVenda))
+            {
+                MessageBox.Show("Preço de venda inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            MessageBox.Show("Entrada de estoque registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ((FrmManutProduto)Application.OpenForms["FrmManutProduto"]).HabilitarTimer(true);
-            Utilitario.LimpaCampoKrypton(this);
-            txtReferencia.Focus();
+            if (!long.TryParse(txtQuantidade.Text, out long estoque))
+            {
+                MessageBox.Show("Estoque inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Monta o objeto completo
+                var produto = new ProdutosModel
+                {
+                    ProdutoID = long.Parse(txtProdutoID.Text),
+                    NomeProduto = txtNomeProduto.Text.Trim(),
+                    Referencia = txtReferencia.Text.Trim(),
+                    PrecoCusto = precoCusto,
+                    Lucro = precoVenda - precoCusto,
+                    PrecoDeVenda = precoVenda,
+                    Estoque = estoque,
+                    DataDeEntrada = dtpDataDeEntrada.Value.Date,
+                    Status = "Ativo", // ou pegue do ComboBox                   
+                };
+
+                ProdutosBLL bll = new ProdutosBLL();
+                bool sucesso = bll.Alterar(produto); // ← Agora passa o objeto inteiro
+
+                if (sucesso)
+                {
+                    MessageBox.Show("Entrada de estoque registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Atualiza a lista principal
+                    var frmManut = Application.OpenForms["FrmManutProduto"] as FrmManutProduto;
+                    frmManut?.HabilitarTimer(true);
+
+                    Utilitario.LimparCampos(this);
+                    txtReferencia.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao salvar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
        
@@ -103,14 +134,23 @@ namespace GVC.View
 
         private void btnNovo_Click(object sender, EventArgs e)
         {
-            Utilitario.LimpaCampoKrypton(this);
+            Utilitario.LimparCampos(this);
             txtNomeProduto.Focus();
         }
 
         private void txtReferencia_Leave(object sender, EventArgs e)
         {
-            string referencia = txtReferencia.Text;
-            Utilitario.PesquisarProdutoPorReferencia2(referencia, txtReferencia, txtNomeProduto, txtProdutoID);
+            Utilitario.PesquisarProdutoPorReferencia(
+            referencia: txtReferencia.Text.Trim(),
+            txtReferencia: txtReferencia,
+            txtNomeProduto: txtNomeProduto,
+            txtProdutoID: txtProdutoID,
+            txtPrecoVenda: txtPrecoDeVenda  // opcional
+             );
+
+            // Foco no próximo campo
+            if (!string.IsNullOrEmpty(txtProdutoID.Text))
+                txtQuantidade.Focus();
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -119,19 +159,3 @@ namespace GVC.View
         }
     }
 }
-
-
-/*
- * Resumo do Funcionamento
-O usuário escolhe um produto e informa a quantidade recebida.
-Digita os preços de custo e venda.
-O lucro é calculado automaticamente.
-Ao salvar:
-O estoque do produto é atualizado.
-O histórico de preços é registrado.
-Exibe uma mensagem de sucesso.
-Próximos Passos
-Criar um botão para adicionar um novo produto caso ele ainda não esteja cadastrado.
-Criar uma tela de consulta do histórico de compras.
-Se precisar de ajustes ou quiser adicionar mais funcionalidades, me avise! 🚀
- * */

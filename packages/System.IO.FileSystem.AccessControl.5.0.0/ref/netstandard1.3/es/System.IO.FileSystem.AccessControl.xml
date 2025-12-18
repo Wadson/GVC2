@@ -299,8 +299,10 @@
       <returns>Objeto <see cref="T:System.Type" /> que representa la enumeración <see cref="T:System.Security.AccessControl.FileSystemRights" />.</returns>
     </member>
     <member name="M:System.Security.AccessControl.FileSystemSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)">
-      <summary>[CRÍTICO PARA LA SEGURIDAD] Inicializa una nueva instancia de la clase <see cref="T:System.Security.AccessControl.FileSystemAccessRule" /> que representa una nueva regla de control de acceso para el usuario indicado con los derechos de acceso, el control de acceso y los marcadores especificados.</summary>
-      <returns>Nuevo objeto <see cref="T:System.Security.AccessControl.FileSystemAccessRule" /> que representa una nueva regla de control de acceso para el usuario indicado con los derechos de acceso, el control de acceso y los marcadores especificados.</returns>
+      <summary>[CRÍTICO PARA LA SEGURIDAD] Inicializa una nueva instancia de la clase <see cref="T:System.Security.AccessControl.FileSystemAccessRule" /> que representa una nueva regla de control de acceso para el
+	  indicado con los derechos de acceso, el control de acceso y los marcadores especificados.</summary>
+      <returns>Nuevo objeto <see cref="T:System.Security.AccessControl.FileSystemAccessRule" /> que representa una nueva regla de control de acceso para el
+	  indicado con los derechos de acceso, el control de acceso y los marcadores especificados.</returns>
       <param name="identityReference">Objeto <see cref="T:System.Security.Principal.IdentityReference" /> que representa una cuenta de usuario.</param>
       <param name="accessMask">Entero que especifica un tipo de acceso.</param>
       <param name="isInherited">true si se hereda la regla de acceso; de lo contrario, false.    </param>

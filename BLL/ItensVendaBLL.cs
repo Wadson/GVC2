@@ -1,7 +1,7 @@
 ﻿using GVC.MODEL;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace GVC.BLL
 {
     internal class ItensVendaBLL
     {
-        ItemVendaDAL itensvendasdall = null;
+        ItemVendaDal itensvendasdall = null;
         // ************************LISTA USUARIO*********************************************
         public DataTable Listar()
         {
@@ -46,8 +46,8 @@ namespace GVC.BLL
         {
             try
             {
-                //itensvendasdall = new ItemVendaDAL();
-                //itensvendasdall.excluirItensVenda(itensvenda);
+                itensvendasdall = new ItemVendaDal();
+                itensvendasdall.Excluir(itensvenda);
             }
             catch (Exception erro)
             {
@@ -70,14 +70,14 @@ namespace GVC.BLL
 
         public ItemVendaModel PesquisaItemVenda(string pesquisa)
         {
-            var conn = Conexao.Conex();
+            using var conn = GVC.Helpers.Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM ItemVenda WHERE ItemVendaID like @Pesquisa + '%'", conn);
+                SqliteCommand sql = new SqliteCommand("SELECT * FROM ItemVenda WHERE ItemVendaID like @Pesquisa + '%'", conn);
                 sql.Parameters.AddWithValue("@Pesquisa", pesquisa);
 
                 conn.Open();
-                SqlDataReader datareader;
+                SqliteDataReader datareader;
                 ItemVendaModel obj_Itensvenda = new ItemVendaModel();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 

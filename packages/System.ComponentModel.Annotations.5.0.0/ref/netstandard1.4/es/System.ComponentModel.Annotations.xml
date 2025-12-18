@@ -200,8 +200,11 @@
       <summary>Inicializa una nueva instancia de la clase <see cref="T:System.ComponentModel.DataAnnotations.DisplayAttribute" />.</summary>
     </member>
     <member name="P:System.ComponentModel.DataAnnotations.DisplayAttribute.AutoGenerateField">
-      <summary>Obtiene o establece un valor que indica si la interfaz de usuario se debe generar automáticamente para mostrar este campo.</summary>
-      <returns>true si la interfaz de usuario se debe generar automáticamente para mostrar este campo; de lo contrario, false.</returns>
+      <summary>Obtiene o establece un valor que indica si la interfaz de
+	  
+	  se debe generar automáticamente para mostrar este campo.</summary>
+      <returns>true si la interfaz de
+	  se debe generar automáticamente para mostrar este campo; de lo contrario, false.</returns>
       <exception cref="T:System.InvalidOperationException">Se intentó obtener el valor de propiedad antes de establecerse.</exception>
     </member>
     <member name="P:System.ComponentModel.DataAnnotations.DisplayAttribute.AutoGenerateFilter">

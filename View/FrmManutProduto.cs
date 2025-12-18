@@ -1,6 +1,8 @@
-﻿using ComponentFactory.Krypton.Toolkit;
-using GVC.BLL;
+﻿using GVC.BLL;
+using GVC.DAL;
 using GVC.DALL;
+using GVC.MODEL;
+using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,19 +17,19 @@ using Image = System.Drawing.Image;
 
 namespace GVC.View
 {
-    public partial class FrmManutProduto : GVC.FrmBaseManutencao
+    public partial class FrmManutProduto : KryptonForm
     {
         private new string StatusOperacao;
-       
-        public FrmManutProduto(string statusOperacao)
-        {            
-            InitializeComponent();
+        private readonly ProdutosBLL _produtosBll = new ProdutosBLL();
 
-            //Centraliza o Label dentro do Panel
-            label28.Location = new Point(
-                (kryptonPanel2.Width - label28.Width) / 2,
-                (kryptonPanel2.Height - label28.Height) / 2);
-            this.StatusOperacao = statusOperacao;
+        public FrmManutProduto(string statusOperacao)
+        {
+            InitializeComponent();
+            // Personalização do título
+            this.Text = "Manutenção de Produtos";
+            this.StateCommon.Header.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254); 
+            this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+            this.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
         }
 
         public void HabilitarTimer(bool habilitar)
@@ -36,197 +38,286 @@ namespace GVC.View
         }
         public void ListarProduto()
         {
-            ProdutoBLL objetoBll = new ProdutoBLL();
-            dataGridPesquisar.DataSource = objetoBll.Listar();
-            PersonalizarDataGridView(dataGridPesquisar);
-            Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
+            ProdutosBLL objetoBll = new ProdutosBLL();
+            dgvProdutos.DataSource = objetoBll.ListarTodos();
+            PersonalizarDataGridView();
+            Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvProdutos);
         }
-        public void PersonalizarDataGridView(KryptonDataGridView dgv)
+        public void PersonalizarDataGridView()
         {
-            // Renomear colunas
-            dgv.Columns[0].Name = "ProdutoID";
-            dgv.Columns[1].Name = "Referencia";
-            dgv.Columns[2].Name = "Produto";
-            dgv.Columns[3].Name = "Preco de Custo";
-            dgv.Columns[4].Name = "Lucro";
-            dgv.Columns[5].Name = "Preco De Venda";
-            dgv.Columns[6].Name = "Estoque";
-            dgv.Columns[7].Name = "Dta. Entrada";
-            dgv.Columns[8].Name = "Status";            
-            
-          
-            // Ajustar colunas automaticamente
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            // 1. Desliga o auto‑resize global
+            dgvProdutos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-            // Tornar o grid somente leitura
-            dgv.ReadOnly = true;
+            // 🔹 1.1 REORDENAR COLUNAS antes de fazer qualquer configuração
+            ReordenarColunas();
 
-            // Centralizar colunas de IDs e Quantidade
-            dgv.Columns["ProdutoID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgv.Columns["Estoque"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            // 🔹 1.2 OCULTAR COLUNAS
+            string[] colunasParaOcultar = { "ProdutoID", "FornecedorID", "DataDeEntrada" };
+            foreach (var nome in colunasParaOcultar)
+            {
+                if (dgvProdutos.Columns[nome] != null)
+                {
+                    dgvProdutos.Columns[nome].Visible = false;
+                }
+            }
 
-            dgv.Columns["Preco De Venda"].DefaultCellStyle.Font = new Font("Arial", 10F, FontStyle.Italic); // Fonte Arial, 12, Negrito
-            dgv.Columns["Preco De Venda"].DefaultCellStyle.ForeColor = System.Drawing.Color.DarkGreen; // Cor da fonte: Verde Escuro
-            dgv.Columns["Preco De Venda"].DefaultCellStyle.Format = "N2"; // Formato de moeda
-            dgv.Columns["Preco De Venda"].DefaultCellStyle.BackColor = System.Drawing.Color.LightBlue; // Cor de fundo Azul Claro
-            dgv.Columns["Preco De Venda"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight; // Alinhamento à direita
+            // 2. Cabeçalhos bonitos (mantendo apenas as colunas visíveis)
+            if (dgvProdutos.Columns["NomeProduto"] != null)
+                dgvProdutos.Columns["NomeProduto"].HeaderText = "Nome Produto";
+            if (dgvProdutos.Columns["Referencia"] != null)
+                dgvProdutos.Columns["Referencia"].HeaderText = "Referência";
+            if (dgvProdutos.Columns["PrecoCusto"] != null)
+                dgvProdutos.Columns["PrecoCusto"].HeaderText = "Preço Custo";
+            if (dgvProdutos.Columns["Lucro"] != null)
+                dgvProdutos.Columns["Lucro"].HeaderText = "Lucro";
+            if (dgvProdutos.Columns["PrecoDeVenda"] != null)
+                dgvProdutos.Columns["PrecoDeVenda"].HeaderText = "Preço Venda";
+            if (dgvProdutos.Columns["Estoque"] != null)
+                dgvProdutos.Columns["Estoque"].HeaderText = "Estoque";
+            if (dgvProdutos.Columns["DataValidade"] != null)
+                dgvProdutos.Columns["DataValidade"].HeaderText = "Validade";
+            if (dgvProdutos.Columns["NomeFornecedor"] != null)
+                dgvProdutos.Columns["NomeFornecedor"].HeaderText = "Fornecedor";
+            if (dgvProdutos.Columns["Marca"] != null)
+                dgvProdutos.Columns["Marca"].HeaderText = "Marca";
 
+            // 3. Colunas fixas (largura definida e não mudam)
+            var colunasFixas = new (string nome, int largura)[]
+            {
+        ("NomeProduto", 400),
+        ("PrecoCusto", 80),
+        ("Lucro", 80),
+        ("PrecoDeVenda", 80),
+        ("Estoque", 80),
+        ("DataValidade", 100)
+            };
 
+            foreach (var (nome, largura) in colunasFixas)
+            {
+                if (dgvProdutos.Columns[nome] != null)
+                {
+                    var col = dgvProdutos.Columns[nome];
+                    col.Width = largura;
+                    col.Resizable = DataGridViewTriState.False;
+                    col.ReadOnly = true;
+                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                }
+            }
 
-            // Ocultar a coluna ProdutoID
-            dgv.Columns["ProdutoID"].Visible = false;
+            // 🔹 3.1 CONFIGURAÇÃO ESPECIAL PARA COLUNA "FORNECEDOR" (mais larga)
+            if (dgvProdutos.Columns["NomeFornecedor"] != null)
+            {
+                var colFornecedor = dgvProdutos.Columns["NomeFornecedor"];
+                colFornecedor.Width = 200;
+                colFornecedor.MinimumWidth = 150;
+                colFornecedor.Resizable = DataGridViewTriState.True;
+                colFornecedor.ReadOnly = true;
+                colFornecedor.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            }
+
+            // 4. Colunas dinâmicas (ajustam conforme conteúdo)
+            var colunasAuto = new string[]
+            {
+        "Referencia",
+        "Marca"
+            };
+
+            foreach (var nome in colunasAuto)
+            {
+                if (dgvProdutos.Columns[nome] != null)
+                {
+                    var col = dgvProdutos.Columns[nome];
+                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    col.ReadOnly = true;
+                }
+            }
+
+            // 🔹 5. Congela algumas colunas (APÓS garantir a ordem)
+            // Primeiro defina DisplayIndex para garantir a ordem
+            if (dgvProdutos.Columns["NomeProduto"] != null)
+            {
+                dgvProdutos.Columns["NomeProduto"].DisplayIndex = 0; // Primeira coluna visível
+                dgvProdutos.Columns["NomeProduto"].Frozen = true;    // Agora pode congelar
+            }
+
+            // 6. Estilo do cabeçalho
+            dgvProdutos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvProdutos.ColumnHeadersHeight = 35;
+            dgvProdutos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Regular);
+            dgvProdutos.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dgvProdutos.RowHeadersWidth = 30;
+
+            // 7. Formatações especiais (igual ao anterior)
+            if (dgvProdutos.Columns["PrecoCusto"] != null)
+            {
+                dgvProdutos.Columns["PrecoCusto"].DefaultCellStyle.Format = "N2";
+                dgvProdutos.Columns["PrecoCusto"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+            if (dgvProdutos.Columns["Lucro"] != null)
+            {
+                dgvProdutos.Columns["Lucro"].DefaultCellStyle.Format = "N2";
+                dgvProdutos.Columns["Lucro"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+            if (dgvProdutos.Columns["PrecoDeVenda"] != null)
+            {
+                dgvProdutos.Columns["PrecoDeVenda"].DefaultCellStyle.Font = new System.Drawing.Font("Arial", 10F, FontStyle.Bold);
+                dgvProdutos.Columns["PrecoDeVenda"].DefaultCellStyle.ForeColor = Color.DarkGreen;
+                dgvProdutos.Columns["PrecoDeVenda"].DefaultCellStyle.BackColor = Color.LightYellow;
+            }
+            if (dgvProdutos.Columns["Estoque"] != null)
+            {
+                dgvProdutos.Columns["Estoque"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            if (dgvProdutos.Columns["DataValidade"] != null)
+            {
+                dgvProdutos.Columns["DataValidade"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                dgvProdutos.Columns["DataValidade"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvProdutos.Columns["NomeFornecedor"] != null)
+            {
+                dgvProdutos.Columns["NomeFornecedor"].DefaultCellStyle.Font =
+                    new System.Drawing.Font("Segoe UI", 9F, FontStyle.Regular);
+                dgvProdutos.Columns["NomeFornecedor"].DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleLeft;
+            }
+
+            // 8. Força o grid a respeitar tudo
+            dgvProdutos.PerformLayout();
         }
+
+        // 🔹 Método para reordenar as colunas
+        private void ReordenarColunas()
+        {
+            // Ordem desejada das colunas (da esquerda para direita)
+            string[] ordemColunas =
+            {
+        "ProdutoID",           // Oculto, mas fica à esquerda
+        "NomeProduto",         // Primeira coluna visível (congelada)
+        "Referencia",
+        "PrecoCusto",
+        "Lucro",
+        "PrecoDeVenda",
+        "Estoque",
+        "DataDeEntrada",       // Oculto
+        "DataValidade",
+        "NomeFornecedor",
+        "Marca",
+        "FornecedorID"         // Oculto
+    };
+
+            // Aplica a ordem
+            for (int i = 0; i < ordemColunas.Length; i++)
+            {
+                if (dgvProdutos.Columns.Contains(ordemColunas[i]))
+                {
+                    dgvProdutos.Columns[ordemColunas[i]].DisplayIndex = i;
+                }
+            }
+        }
+
 
         private void CarregaDados()
         {
-            FrmCadProdutos frm = new  FrmCadProdutos(StatusOperacao);
+            FrmCadProdutos frm = new FrmCadProdutos(StatusOperacao);
 
+            // Se for NOVO, não precisa de linha selecionada
             if (StatusOperacao == "NOVO")
             {
-                frm.lblStatus.Text = "NOVO CADASTRO";
-                frm.lblStatus.ForeColor = Color.FromArgb(8, 142, 254);
+                frm.btnSalva.Text = "&Salvar";
                 StatusOperacao = "NOVO";
+
+                // Personalização do título
+                frm.Text = "Novo Produto";
+                frm.StateCommon.Header.Content.ShortText.Color1 = Color.Green;
+                frm.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+                frm.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
+
+                HabilitarTimer(true);
                 frm.ShowDialog();
-
-                ((FrmManutProduto)System.Windows.Forms.Application.OpenForms["FrmManutProduto"]).HabilitarTimer(true);
+                return;
             }
+
+            // Para ALTERAR ou EXCLUSÃO, precisa ter linha selecionada
+            if (dgvProdutos.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um registro primeiro.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Carregar dados do produto selecionado
+            var produto = (ProdutosModel)dgvProdutos.CurrentRow.DataBoundItem;
+
+            frm.txtProdutoID.Text = produto.ProdutoID.ToString();
+            frm.txtReferencia.Text = produto.Referencia ?? "";
+            frm.txtNomeProduto.Text = produto.NomeProduto;
+            frm.txtPrecoCusto.Text = produto.PrecoCusto.ToString("N2");
+            frm.txtLucro.Text = produto.Lucro.ToString("N2");
+            frm.txtPrecoDeVenda.Text = produto.PrecoDeVenda.ToString("N2");
+            frm.txtEstoque.Text = produto.Estoque.ToString();
+            frm.txtUnidade.Text = produto.Unidade ?? "";
+            frm.txtMarca.Text = produto.Marca ?? "";
+            frm.txtDataValidade.Text = produto.DataValidade.HasValue ? produto.DataValidade.Value.ToString("dd/MM/yyyy") : "";
+            frm.txtGtinEan.Text = produto.GtinEan ?? "";
+            frm.txtFornecedor.Text = produto.Fornecedor ?? "";
+            frm.txtFornecedorID.Text = produto.FornecedorID.ToString();
+            frm.cmbSituacao.Text = produto.Situacao ?? "";
+            frm.cmbStatus.Text = produto.Status;
+
+            // Carregar imagem
+            if (!string.IsNullOrWhiteSpace(produto.Imagem) && File.Exists(produto.Imagem))
+            {
+                try
+                {
+                    frm.pbImagem.Image?.Dispose();
+                    using (var fs = new FileStream(produto.Imagem, FileMode.Open, FileAccess.Read))
+                        frm.pbImagem.Image = Image.FromStream(fs);
+                    frm.txtEnderecoImagem.Text = produto.Imagem;
+                    frm.pbImagem.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+                catch { }
+            }
+
             if (StatusOperacao == "ALTERAR")
-            {
-                try
-                {
-                    // Verificar se a DataGridView contém alguma linha
-                    if (dataGridPesquisar.Rows.Count == 0)
-                    {
-                        // Lançar exceção personalizada
-                        //throw new Exception("A DataGridView está vazia. Não há dados para serem processados.");
-                        MessageBox.Show("A DataGridView está vazia. Não há dados para serem processados.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-                    }
-                    else
-                    {
-                        // Exemplo: Acessar a primeira célula de cada linha
-                        //  var valor = row.Cells[0].Value;
-                        frm.txtProdutoID.Text = dataGridPesquisar.CurrentRow.Cells["ProdutoID"].Value.ToString();
-                        frm.txtNomeProduto.Text = dataGridPesquisar.CurrentRow.Cells["Produto"].Value.ToString();
-                        frm.txtPrecoCusto.Text = dataGridPesquisar.CurrentRow.Cells["Preco de Custo"].Value.ToString();
-                        frm.txtLucro.Text = dataGridPesquisar.CurrentRow.Cells["Lucro"].Value.ToString();
-                        frm.txtPrecoDeVenda.Text = dataGridPesquisar.CurrentRow.Cells["Preco de Venda"].Value.ToString();
-                        frm.txtEstoque.Text = dataGridPesquisar.CurrentRow.Cells["Estoque"].Value.ToString();                        
-                        frm.dtpDataDeEntrada.Text = dataGridPesquisar.CurrentRow.Cells["Dta. Entrada"].Value.ToString();
-                        frm.cmbStatus.Text = dataGridPesquisar.CurrentRow.Cells["Status"].Value.ToString();
-                        frm.txtReferencia.Text = dataGridPesquisar.CurrentRow.Cells["Referencia"].Value.ToString();                       
-                        
-
-                        frm.lblStatus.Text = "ALTERAR REGISTRO";
-                        frm.ForeColor = Color.Orange;
-                        StatusOperacao = "ALTERAR";                        
-                        frm.btnNovo.Enabled = false;
-                        frm.btnSalva.Text = "&Alterar";
-                        frm.ShowDialog();
-                        ((FrmManutProduto)System.Windows.Forms.Application.OpenForms["FrmManutProduto"]).HabilitarTimer(true);
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    // Exibir uma mensagem de erro para o usuário
-                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            if (StatusOperacao == "EXCLUSÃO")
-            {
-                try
-                {
-                    // Verificar se a DataGridView contém alguma linha
-                    if (dataGridPesquisar.Rows.Count == 0)
-                    {
-                        // Lançar exceção personalizada
-                        //throw new Exception("A DataGridView está vazia. Não há dados para serem processados.");
-                        MessageBox.Show("A DataGridView está vazia. Não há dados para serem processados.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                    }
-                    else
-                    {
-                        // Exemplo: Acessar a primeira célula de cada linha
-                        //  var valor = row.Cells[0].Value;
-                        frm.txtProdutoID.Text = dataGridPesquisar.CurrentRow.Cells["ProdutoID"].Value.ToString();
-                        frm.txtNomeProduto.Text = dataGridPesquisar.CurrentRow.Cells["Produto"].Value.ToString();
-                        frm.txtPrecoCusto.Text = dataGridPesquisar.CurrentRow.Cells["Preco de Custo"].Value.ToString();
-                        frm.txtLucro.Text = dataGridPesquisar.CurrentRow.Cells["Lucro"].Value.ToString();
-                        frm.txtPrecoDeVenda.Text = dataGridPesquisar.CurrentRow.Cells["Preco de Venda"].Value.ToString();
-                        frm.txtEstoque.Text = dataGridPesquisar.CurrentRow.Cells["Estoque"].Value.ToString();
-                        frm.dtpDataDeEntrada.Text = dataGridPesquisar.CurrentRow.Cells["Dta. Entrada"].Value.ToString();
-                        frm.cmbStatus.Text = dataGridPesquisar.CurrentRow.Cells["Status"].Value.ToString();
-                        frm.txtReferencia.Text = dataGridPesquisar.CurrentRow.Cells["Referencia"].Value.ToString();
-
-                        frm.lblStatus.Text = "EXCLUSÃO DE REGISTRO";
-                        frm.ForeColor = Color.Red;                         
-                        frm.btnSalva.Text = "&Excluir";
-
-                        frm.btnNovo.Enabled = false;                       
-
-                        // Desabilitar os campos
-                        frm.txtProdutoID.Enabled = false;
-                        frm.txtNomeProduto.Enabled = false;
-                        frm.txtReferencia.Enabled = false;                      
-                        frm.txtPrecoCusto.Enabled = false;
-                        frm.txtLucro.Enabled = false;
-                        frm.txtPrecoDeVenda.Enabled = false;
-                        frm.dtpDataDeEntrada.Enabled = false;   
-                        frm.cmbStatus.Enabled = false;
-                        frm.txtReferencia.Enabled = false;
-                       
-
-                        frm.ShowDialog();
-                        ((FrmManutProduto)System.Windows.Forms.Application.OpenForms["FrmManutProduto"]).HabilitarTimer(true);
-                    }                   
-                }
-                catch (Exception ex)
-                {
-                    // Exibir uma mensagem de erro para o usuário
-                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }           
-        }
-        private void txtPesquisa_TextChanged(object sender, EventArgs e)
-        {
-            string nome = "%" + txtPesquisa.Text + "%";
-            ProdutosDal dao = new ProdutosDal();
-
-            if (rbtCodigo.Checked)
             {               
-                dataGridPesquisar.DataSource = dao.PesquisarProdutoPorCodido(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
+                frm.btnSalva.Text = "&Alterar";
+                frm.btnNovo.Enabled = false;
+                // Personalização do título
+                frm.Text = "Alterar Produto";
+                frm.StateCommon.Header.Content.ShortText.Color1 = Color.Orange;
+                frm.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+                frm.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
             }
-            else
-            {               
-                dataGridPesquisar.DataSource = dao.PesquisarProdutoPorNome(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
+            else if (StatusOperacao == "EXCLUSÃO")
+            {                
+                frm.btnSalva.Text = "&Excluir";
+
+                // Personalização do título
+                frm.Text = "Excluir Produto";
+                frm.StateCommon.Header.Content.ShortText.Color1 = Color.Red;
+                frm.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+                frm.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
+                // Desabilitar campos
+                frm.btnNovo.Enabled = false;
+                frm.txtNomeProduto.Enabled = false;
+                frm.txtReferencia.Enabled = false;
+                frm.txtPrecoCusto.Enabled = false;
+                frm.txtLucro.Enabled = false;
+                frm.txtPrecoDeVenda.Enabled = false;
+                frm.txtEstoque.Enabled = false;
+                frm.txtUnidade.Enabled = false;
+                frm.txtMarca.Enabled = false;
+                frm.txtDataValidade.Enabled = false;
+                frm.txtGtinEan.Enabled = false;
+                frm.txtFornecedor.Enabled = false;
+                frm.cmbSituacao.Enabled = false;
+                frm.cmbStatus.Enabled = false;
+                frm.btnLocalizarImagem.Enabled = false;
             }
-            PersonalizarDataGridView(dataGridPesquisar);
+
+            frm.ShowDialog();
         }
 
-        private void btnNovo_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "NOVO";
-            CarregaDados();
-        }
-
-        private void btnAlterar_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "ALTERAR";
-            CarregaDados();
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "EXCLUSÃO";
-            CarregaDados();
-        }
-
-        private void btnSair_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -241,7 +332,7 @@ namespace GVC.View
 
         private void dataGridPesquisar_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if ((dataGridPesquisar.Columns[e.ColumnIndex].Name == "PrecoCusto" || dataGridPesquisar.Columns[e.ColumnIndex].Name == "PrecoVenda") && e.Value != null)
+            if ((dgvProdutos.Columns[e.ColumnIndex].Name == "PrecoCusto" || dgvProdutos.Columns[e.ColumnIndex].Name == "PrecoVenda") && e.Value != null)
             {
                 decimal valor = (decimal)e.Value;
                 e.Value = valor.ToString("C", CultureInfo.CurrentCulture);
@@ -249,10 +340,10 @@ namespace GVC.View
             }
         }
 
-        private void btnEstoque_Click(object sender, EventArgs e)
+        private void rbtDescricao_CheckedChanged(object sender, EventArgs e)
         {
-            FrmEntradaEstoque frm = new FrmEntradaEstoque();
-            frm.ShowDialog();
+            txtPesquisa.Text = "";
+            txtPesquisa.Focus();
         }
 
         private void rbtCodigo_CheckedChanged(object sender, EventArgs e)
@@ -261,10 +352,61 @@ namespace GVC.View
             txtPesquisa.Focus();
         }
 
-        private void rbtDescricao_CheckedChanged(object sender, EventArgs e)
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
         {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
+            string nome = "%" + txtPesquisa.Text + "%";
+            ProdutoDALL dao = new ProdutoDALL();
+
+            if (rbtCodigo.Checked)
+            {
+                dgvProdutos.DataSource = dao.PesquisarProdutoPorCodigo(nome);
+                Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvProdutos);
+            }
+            else
+            {
+                dgvProdutos.DataSource = dao.PesquisarProdutoPorNome(nome);
+                Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvProdutos);
+            }
+            PersonalizarDataGridView();
+        }
+
+        private void btnNovo_Click(object sender, EventArgs e)
+        {
+            StatusOperacao = "NOVO";
+            CarregaDados();
+        }
+
+        private void btnAlterar_Click(object sender, EventArgs e)
+        {
+            if (dgvProdutos.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um usuário para alterar!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            StatusOperacao = "ALTERAR";
+            CarregaDados();
+        }
+
+        private void btnExcluir_Click(object sender, EventArgs e)
+        {
+            if (dgvProdutos.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um usuário para excluir!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            StatusOperacao = "EXCLUSÃO";
+            CarregaDados();
+        }
+
+        private void btnEstoque_Click(object sender, EventArgs e)
+        {
+            FrmEntradaEstoque frm = new FrmEntradaEstoque();
+            frm.ShowDialog();
+        }
+
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

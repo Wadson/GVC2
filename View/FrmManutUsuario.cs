@@ -1,4 +1,4 @@
-﻿using ComponentFactory.Krypton.Toolkit;
+﻿using Krypton.Toolkit;
 using GVC.BLL;
 using GVC.DALL;
 using GVC.View;
@@ -11,197 +11,211 @@ using System.Drawing;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Text;
 
 namespace GVC
 {
-    public partial class FrmManutUsuario : GVC.FrmBaseManutencao
+    public partial class FrmManutUsuario : KryptonForm
     {
-        private new string StatusOperacao;        
+        private string StatusOperacao { get; set; }
         public FrmManutUsuario(string statusOperacao)
         {
-            InitializeComponent();            
-
+            InitializeComponent();
             this.StatusOperacao = statusOperacao;
-            //Centraliza o Label dentro do Panel
-            label28.Location = new Point(
-                (kryptonPanel2.Width - label28.Width) / 2,
-                (kryptonPanel2.Height - label28.Height) / 2);
-
+            // Personalização do título
+            this.Text = "Manutenção de Usuários";
+            this.StateCommon.Header.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
+            this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+            this.StateCommon.Header.Content.ShortText.Font = new Font("Segoe UI", 12);
         }
-      
+
         private void CarregaDados()
         {
             FrmCadUser cadUsuarios = new FrmCadUser(StatusOperacao);
 
+            if (StatusOperacao != "NOVO" && dgvUsuarios.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um usuário primeiro!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }            
             try
             {
                 if (StatusOperacao == "NOVO")
                 {
-                    cadUsuarios.lblStatus.Text = "NOVO CADASTRO DE USUÁRIO";
-                    cadUsuarios.lblStatus.ForeColor = Color.FromArgb(8, 142, 254);
-                    StatusOperacao = "NOVO";  
+                    //cadUsuarios.Text = "Novo Cadastro";
+                    cadUsuarios.ForeColor = Color.FromArgb(8, 142, 254);
+                    StatusOperacao = "NOVO";
                     cadUsuarios.ShowDialog();
-
-                    ((FrmManutUsuario)Application.OpenForms["FrmManutUsuario"]).HabilitarTimer(true);
                 }
-                if(StatusOperacao == "ALTERAR")
+                else if (StatusOperacao == "ALTERAR")
                 {
-                    cadUsuarios.txtUsarioID.Text =     dataGridPesquisar.CurrentRow.Cells["UsuarioID"].Value.ToString();
-                    cadUsuarios.txtNomeUsuario.Text =      dataGridPesquisar.CurrentRow.Cells["Usuario"].Value.ToString();
-                    cadUsuarios.txtEmail.Text =         dataGridPesquisar.CurrentRow.Cells["Email"].Value.ToString();
-                    cadUsuarios.txtSenha.Text =         dataGridPesquisar.CurrentRow.Cells["Senha"].Value.ToString();
-                    cadUsuarios.cmbTipoUsuario.Text =    dataGridPesquisar.CurrentRow.Cells["Tipo de Usuario"].Value.ToString();
-                    cadUsuarios.txtCPF.Text = dataGridPesquisar.CurrentRow.Cells["CPF"].Value.ToString();
-                    cadUsuarios.dtpDataNascimento.Value = Convert.ToDateTime(dataGridPesquisar.CurrentRow.Cells["Data de Nascimento"].Value.ToString());
-
-                    cadUsuarios.lblStatus.Text = "ALTERAR REGISTRO";
-                    cadUsuarios.lblStatus.ForeColor = Color.Orange;   
+                    CarregarCamposComuns(cadUsuarios);
+                    //cadUsuarios.Text = "Alterar Registro";
                     StatusOperacao = "ALTERAR";
-                    
                     cadUsuarios.btnSalvar.Text = "Alterar";
                     cadUsuarios.btnNovo.Enabled = false;
-                                        cadUsuarios.ShowDialog();
-                    ((FrmManutUsuario)Application.OpenForms["FrmManutUsuario"]).HabilitarTimer(true);
+                    cadUsuarios.ShowDialog();
                 }
-                if (StatusOperacao == "EXCLUSÃO")
+                else if (StatusOperacao == "EXCLUSÃO")
                 {
-                    cadUsuarios.txtUsarioID.Text = dataGridPesquisar.CurrentRow.Cells["UsuarioID"].Value.ToString();
-                    cadUsuarios.txtNomeUsuario.Text = dataGridPesquisar.CurrentRow.Cells["Usuario"].Value.ToString();
-                    cadUsuarios.txtEmail.Text = dataGridPesquisar.CurrentRow.Cells["Email"].Value.ToString();
-                    cadUsuarios.txtSenha.Text = dataGridPesquisar.CurrentRow.Cells["Senha"].Value.ToString();
-                    cadUsuarios.cmbTipoUsuario.Text = dataGridPesquisar.CurrentRow.Cells["Tipo de Usuario"].Value.ToString();
-                    cadUsuarios.txtCPF.Text = dataGridPesquisar.CurrentRow.Cells["CPF"].Value.ToString();
-                    cadUsuarios.dtpDataNascimento.Value = Convert.ToDateTime(dataGridPesquisar.CurrentRow.Cells["Data de Nascimento"].Value.ToString());
-
-                    cadUsuarios.lblStatus.Text = "EXCLUSÃO DE REGISTRO";
-                    cadUsuarios.lblStatus.ForeColor = Color.Red;
+                    CarregarCamposComuns(cadUsuarios);
+                    //cadUsuarios.Text = "Excluir Registro";
                     StatusOperacao = "EXCLUSÃO";
-
                     cadUsuarios.btnSalvar.Text = "Excluir";
-                    cadUsuarios.btnNovo.Enabled = false;                    
-                    
 
-                    cadUsuarios.txtUsarioID.Enabled = false;
+
+                    cadUsuarios.btnNovo.Enabled = false;
                     cadUsuarios.txtNomeUsuario.Enabled = false;
                     cadUsuarios.txtEmail.Enabled = false;
-                    cadUsuarios.txtSenha.Enabled  = false;
+                    cadUsuarios.txtNovaSenha.Enabled = false;
                     cadUsuarios.cmbTipoUsuario.Enabled = false;
                     cadUsuarios.txtRepitaSenha.Enabled = false;
+                    cadUsuarios.txtCPF.Enabled = false;
+                    cadUsuarios.dtpDataNascimento.Enabled = false;
+                    cadUsuarios.txtNomeCompleto.Enabled = false;
                     cadUsuarios.ShowDialog();
-                    ((FrmManutUsuario)Application.OpenForms["FrmManutUsuario"]).HabilitarTimer(true);
-                }                
+                }
+
+                var frmManutUsuario = Application.OpenForms["FrmManutUsuario"] as FrmManutUsuario;
+                if (frmManutUsuario != null)
+                {
+                    frmManutUsuario.HabilitarTimer(true);
+                }
                 ListaUsuario();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Erro..." + ex.Message);
             }
-           //((FrmManutUsuario)Application.OpenForms["FrmManutUsuario"]).HabilitarTimer(true);
         }
+
+        private void CarregarCamposComuns(FrmCadUser cadUsuarios)
+        {
+            int usuarioID = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["UsuarioID"].Value.ToString());
+            cadUsuarios.UsuarioID = usuarioID;
+            cadUsuarios.txtNomeCompleto.Text = dgvUsuarios.CurrentRow.Cells["NomeCompleto"].Value.ToString();
+            cadUsuarios.txtNomeUsuario.Text = dgvUsuarios.CurrentRow.Cells["NomeUsuario"].Value.ToString();
+            cadUsuarios.txtEmail.Text = dgvUsuarios.CurrentRow.Cells["Email"].Value.ToString();
+            // Não carregar senha para segurança
+            cadUsuarios.cmbTipoUsuario.Text = dgvUsuarios.CurrentRow.Cells["TipoUsuario"].Value.ToString();
+            cadUsuarios.txtCPF.Text = dgvUsuarios.CurrentRow.Cells["CPF"].Value.ToString();
+            cadUsuarios.dtpDataNascimento.Value = Convert.ToDateTime(dgvUsuarios.CurrentRow.Cells["DataNascimento"].Value.ToString());
+            cadUsuarios.lblDataCadastro.Text = "Data de Cadastro: " + Convert.ToDateTime(dgvUsuarios.CurrentRow.Cells["DataCriacao"].Value.ToString()).ToString("dd/MM/yyyy");
+        }
+
         private void FrmManutUsuario_Load(object sender, EventArgs e)
         {
             ListaUsuario();
+            dgvUsuarios.CellFormatting += dataGridPesquisar_CellFormatting;
         }
-        public void PersonalizarDataGridView(KryptonDataGridView dgv)
-        {          
-            //Alinhar o as colunas            
-            //dataGridPesquisar.Columns["Estoque"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopCenter;
 
-            // Ajustar colunas automaticamente
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        public void PersonalizarDataGridView()
+        {
+            // 1. Desliga o auto‑resize global
+            dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvUsuarios.ReadOnly = true;
+            dgvUsuarios.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Tornar o grid somente leitura
-            dgv.ReadOnly = true;
+            // 2. Cabeçalhos bonitos
+            if (dgvUsuarios.Columns["UsuarioID"] != null) dgvUsuarios.Columns["UsuarioID"].HeaderText = "Código";
+            if (dgvUsuarios.Columns["NomeCompleto"] != null) dgvUsuarios.Columns["NomeCompleto"].HeaderText = "Nome";
+            if (dgvUsuarios.Columns["NomeUsuario"] != null) dgvUsuarios.Columns["NomeUsuario"].HeaderText = "Usuário";
+            if (dgvUsuarios.Columns["Email"] != null) dgvUsuarios.Columns["Email"].HeaderText = "E-mail";
+            if (dgvUsuarios.Columns["Senha"] != null) dgvUsuarios.Columns["Senha"].HeaderText = "Senha";
+            if (dgvUsuarios.Columns["TipoUsuario"] != null) dgvUsuarios.Columns["TipoUsuario"].HeaderText = "Tipo";
+            if (dgvUsuarios.Columns["CPF"] != null) dgvUsuarios.Columns["CPF"].HeaderText = "CPF";
+            if (dgvUsuarios.Columns["DataNascimento"] != null) dgvUsuarios.Columns["DataNascimento"].HeaderText = "Nascimento";
 
-            // Estilo das bordas das células
-            dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            // 3. Colunas fixas (largura definida e não mudam)
+            var colunasFixas = new (string nome, int largura)[]
+            {
+        ("UsuarioID", 80),
+        ("NomeCompleto", 250),
+        ("NomeUsuario", 250),
+        ("Email", 250),
+        ("TipoUsuario", 100),
+        ("CPF", 120),
+        ("DataNascimento", 120),
+        ("DataCriacao", 120)
+            };
 
-            //// Estilo da seleção das células
-            //dgv.DefaultCellStyle.SelectionBackColor = Color.DarkTurquoise;
-            //dgv.DefaultCellStyle.SelectionForeColor = Color.White;
+            foreach (var (nome, largura) in colunasFixas)
+            {
+                if (dgvUsuarios.Columns[nome] != null)
+                {
+                    var col = dgvUsuarios.Columns[nome];
+                    col.Width = largura;
+                    col.Resizable = DataGridViewTriState.False;
+                    col.ReadOnly = true;
+                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None; // 🔑 fixa
+                }
+            }
 
-            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //dgv.MultiSelect = false;
-            // Esconder a coluna de cabeçalho de linha
-            //dgv.RowHeadersVisible = false;
+            // 4. Colunas dinâmicas (ajustam conforme conteúdo)
+            var colunasAuto = new string[]
+            {
+                "Senha" // se quiser deixar ajustável, mas oculta depois
+            };
 
-            // Cor do grid
-            //dgv.GridColor = Color.Black;
+            foreach (var nome in colunasAuto)
+            {
+                if (dgvUsuarios.Columns[nome] != null)
+                {
+                    var col = dgvUsuarios.Columns[nome];
+                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    col.ReadOnly = true;
+                }
+            }
 
-            dgv.Columns[0].Name = "UsuarioID"   ;
-            dgv.Columns[1].Name = "Usuario" ;
-            dgv.Columns[2].Name = "Email"       ;
-            dgv.Columns[3].Name = "Senha"        ;
-            dgv.Columns[4].Name = "Tipo de Usuario" ;
-            dgv.Columns[5].Name = "Cpf";
-            dgv.Columns[6].Name = "Data de Nascimento";
+            // 5. Congela algumas colunas
+            if (dgvUsuarios.Columns["UsuarioID"] != null) dgvUsuarios.Columns["UsuarioID"].Frozen = true;
+            if (dgvUsuarios.Columns["NomeCompleto"] != null) dgvUsuarios.Columns["NomeCompleto"].Frozen = true;
 
-            // Ocultar a coluna, mas ainda manter o acesso aos valores
-            dataGridPesquisar.Columns["UsuarioID"].Visible = false;
+            // 6. Estilo do cabeçalho
+            dgvUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvUsuarios.ColumnHeadersHeight = 35;
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dgvUsuarios.RowHeadersWidth = 30;
+
+            // 7. Formatações especiais
+            if (dgvUsuarios.Columns["CPF"] != null)
+            {
+                dgvUsuarios.Columns["CPF"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            if (dgvUsuarios.Columns["DataNascimento"] != null)
+            {
+                dgvUsuarios.Columns["DataNascimento"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                dgvUsuarios.Columns["DataNascimento"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            // 8. Ocultar colunas sensíveis
+            if (dgvUsuarios.Columns["UsuarioID"] != null) dgvUsuarios.Columns["UsuarioID"].Visible = false;
+            if (dgvUsuarios.Columns["Senha"] != null) dgvUsuarios.Columns["Senha"].Visible = false;
+
+            // 9. Força o grid a respeitar tudo
+            dgvUsuarios.PerformLayout();
         }
+
 
         public void ListaUsuario()
         {
             UsuarioBLL usuariosBll = new UsuarioBLL();
-            dataGridPesquisar.DataSource = usuariosBll.Listar();
-            PersonalizarDataGridView(dataGridPesquisar);
-            Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
+            dgvUsuarios.DataSource = usuariosBll.Listar();
+            PersonalizarDataGridView();
+            Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvUsuarios);
         }
+
         public void HabilitarTimer(bool habilitar)
         {
             timer1.Enabled = habilitar;
         }
-       
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             ListaUsuario();
             timer1.Enabled = false;
-        }
-
-        private void btnSair_Click(object sender, EventArgs e)
-        {            
-        }
-        private void btnNovo_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "NOVO";
-           CarregaDados();
-        }
-        private void btnAlterar_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "ALTERAR";            
-            CarregaDados();   
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "EXCLUSÃO";           
-            CarregaDados();
-        }
-
-        private void txtPesquisa_TextChanged(object sender, EventArgs e)
-        {
-            string textoPesquisa = txtPesquisa.Text.ToLower();
-
-            string nome = "%" + txtPesquisa.Text + "%";
-            UsuarioDALL dao = new UsuarioDALL();
-
-            if (rbtCodigo.Checked)
-            {               
-                dataGridPesquisar.DataSource = dao.PesquisarPorCodigo(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
-            }
-            else
-            {              
-                dataGridPesquisar.DataSource = dao.PesquisarPorNome(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
-            }
-        }
-
-        private void rbtCodigo_CheckedChanged(object sender, EventArgs e)
-        {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
         }
 
         private void rbtDescricao_CheckedChanged(object sender, EventArgs e)
@@ -210,48 +224,124 @@ namespace GVC
             txtPesquisa.Focus();
         }
 
-        private void FrmManutUsuario_FormClosed(object sender, FormClosedEventArgs e)
-        {            
+        private void rbtCodigo_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPesquisa.Text = "";
+            txtPesquisa.Focus();
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            string textoPesquisa = txtPesquisa.Text.ToLower();           
+            UsuarioDal dao = new UsuarioDal();
+
+            if (rbtCodigo.Checked)
+            {
+                if (int.TryParse(textoPesquisa, out int codigo)) // só tenta se for número
+                {
+                    dgvUsuarios.DataSource = dao.PesquisarPorCodigo(codigo);
+                    PersonalizarDataGridView();
+                }
+                else
+                {
+                    dgvUsuarios.DataSource = null; // limpa se não for número válido
+                }
+            }
+            else
+            {
+                string nome = "%" + textoPesquisa + "%";
+                dgvUsuarios.DataSource = dao.PesquisarPorNome(nome);
+                PersonalizarDataGridView();
+            }
+            Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvUsuarios);
+        }
+
+        private void btnNovo_Click(object sender, EventArgs e)
+        {
+            StatusOperacao = "NOVO";
+            CarregaDados();
+        }
+
+        private void btnAlterar_Click(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um usuário para alterar!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            StatusOperacao = "ALTERAR";
+            CarregaDados();
+        }
+
+        private void btnExcluir_Click(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.CurrentRow == null)
+            {
+                MessageBox.Show("Selecione um usuário para excluir!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            StatusOperacao = "EXCLUSÃO";
+            CarregaDados();
+        }
+
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void dataGridPesquisar_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value == null) return;
+            string columnName = dgvUsuarios.Columns[e.ColumnIndex].Name;
+            string raw = e.Value.ToString();
+            string Digitos(string s) => new string(s.Where(char.IsDigit).ToArray());
+            if (columnName == "CPF")
+            {
+                string cpf = Digitos(raw);
+                if (cpf.Length == 11 && ulong.TryParse(cpf, out ulong n11))
+                {
+                    e.Value = n11.ToString(@"000\.000\.000\-00");
+                    e.FormattingApplied = true;
+                    return;
+                }
+                if (!string.IsNullOrEmpty(cpf))
+                {
+                    e.Value = cpf;
+                    e.FormattingApplied = true;
+                    return;
+                }
+            }
+            if (columnName == "DataNascimento" || columnName == "DataCriacao")
+            {
+                try
+                {
+                    if (e.Value is DateTime dt)
+                    {
+                        e.Value = dt.ToString("dd/MM/yyyy");
+                        e.FormattingApplied = true;
+                        return;
+                    }
+                    else if (DateTime.TryParse(e.Value.ToString(), out DateTime parsedDate))
+                    {
+                        e.Value = parsedDate.ToString("dd/MM/yyyy");
+                        e.FormattingApplied = true;
+                        return;
+                    }
+                }
+                catch
+                {
+                    // Mantém o valor original
+                }
+            }
+        }
+
+        private void FrmManutUsuario_Shown(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is KryptonTextBox kryptonTxt)
+                    Utilitario.AplicarCorFoco(kryptonTxt);
+            }
         }
     }
 }
-/*
- * // Set the background to red for negative values in the Balance column.
-        if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Balance"))
-        {
-            Int32 intValue;
-            if (Int32.TryParse((String)e.Value, out intValue) &&
-                (intValue < 0))
-            {
-                e.CellStyle.BackColor = Color.Red;
-                e.CellStyle.SelectionBackColor = Color.DarkRed;
-            }
-        }
-
-        // Replace string values in the Priority column with images.
-        if (dataGridView1.Columns[e.ColumnIndex].Name.Equals("Priority"))
-        {
-            // Ensure that the value is a string.
-            String stringValue = e.Value as string;
-            if (stringValue == null) return;
-
-            // Set the cell ToolTip to the text value.
-            DataGridViewCell cell = dataGridView1[e.ColumnIndex, e.RowIndex];
-            cell.ToolTipText = stringValue;
-
-            // Replace the string value with the image value.
-            switch (stringValue)
-            {
-                case "high":
-                    e.Value = highPriImage;
-                    break;
-                case "medium":
-                    e.Value = mediumPriImage;
-                    break;
-                case "low":
-                    e.Value = lowPriImage;
-                    break;
-            }
-        }
-    }
- * */

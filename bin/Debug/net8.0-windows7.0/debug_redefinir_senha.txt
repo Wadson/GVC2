@@ -1,0 +1,56 @@
+=== debug_redefinir_senha ===
+Data: 2025-12-07T21:55:17
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 0
+confirmarSenha_LengthInTextElements: 0
+
+=== debug_redefinir_senha ===
+Data: 2025-12-07T22:01:25
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 8
+confirmarSenha_LengthInTextElements: 0
+
+=== debug_redefinir_senha ===
+Data: 2025-12-07T22:01:31
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 8
+confirmarSenha_LengthInTextElements: 0
+
+=== debug_redefinir_senha ===
+Data: 2025-12-08T06:08:40
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 6
+confirmarSenha_LengthInTextElements: 0
+
+=== debug_redefinir_senha ===
+Data: 2025-12-08T06:09:03
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 6
+confirmarSenha_LengthInTextElements: 0
+
+=== debug_redefinir_senha ===
+Data: 2025-12-08T06:18:39
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 6
+confirmarSenha_LengthInTextElements: 6
+
+=== debug_redefinir_senha ===
+Data: 2025-12-08T06:46:45
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 3
+confirmarSenha_LengthInTextElements: 3
+
+=== debug_redefinir_senha ===
+Data: 2025-12-08T06:46:59
+tokenFonte: txtToken
+tokenLen: 32
+novaSenha_LengthInTextElements: 6
+confirmarSenha_LengthInTextElements: 6
+

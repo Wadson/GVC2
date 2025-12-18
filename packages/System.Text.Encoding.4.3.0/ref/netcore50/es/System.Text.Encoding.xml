@@ -223,7 +223,10 @@
       <filterpriority>1</filterpriority>
     </member>
     <member name="T:System.Text.DecoderReplacementFallback">
-      <summary>Proporciona un mecanismo de control de errores, denominado reserva, para una secuencia codificada de bytes de entrada que no se puede convertir en un carácter de salida.La reserva emite una cadena de reemplazo especificada por el usuario en lugar de una secuencia descodificada de bytes de entrada.Esta clase no puede heredarse.</summary>
+      <summary>Proporciona un mecanismo de control de errores, denominado reserva, para una secuencia codificada de bytes de entrada que no se puede convertir en un carácter de salida.La reserva emite una cadena de reemplazo especificada por el
+	  
+
+en lugar de una secuencia descodificada de bytes de entrada.Esta clase no puede heredarse.</summary>
       <filterpriority>2</filterpriority>
     </member>
     <member name="M:System.Text.DecoderReplacementFallback.#ctor">

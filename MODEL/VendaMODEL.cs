@@ -8,12 +8,15 @@ namespace GVC.MODEL
 {
     public class VendaModel
     {
-        //public int VendaID { get; set; }
-        public int VendaID { get; set; } // Usando GUID como chave primária
+        public long VendaID { get; set; }
+        public long ClienteID { get; set; }
+        public long? FormaPgtoID { get; set; }
         public DateTime DataVenda { get; set; }
-        public int ClienteID { get; set; }
         public decimal ValorTotal { get; set; }
-        public string FormaPgto { get; set; }
+        public decimal Desconto { get; set; } = 0;
+        public string Observacoes { get; set; }
+        public string StatusVenda { get; set; } = "Finalizada";
+
 
         public List<ItemVendaModel> ItensVendidos { get; set; }
         public List<ParcelaModel> Parcelas { get; set; }

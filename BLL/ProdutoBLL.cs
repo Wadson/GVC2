@@ -1,95 +1,49 @@
-﻿using GVC.DALL;
-using GVC.MODEL;
-using System;
+﻿// ==================================================
+// 3. BLL - ProdutosBLL.cs
+// ==================================================
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+using GVC.MODEL;
+using GVC.DAL;
 
 namespace GVC.BLL
 {
-    internal class ProdutoBLL
+    public class ProdutosBLL
     {
-        ProdutosDal produtodall = null;
+        private readonly ProdutoDALL _dal = new ProdutoDALL();
 
-        public DataTable Listar()
+        public List<ProdutosModel> ListarTodos() => _dal.ListarTodos();
+
+        public ProdutosModel? BuscarPorId(long id) => _dal.BuscarPorId(id);
+
+        public long Inserir(ProdutosModel produto)
         {
-            DataTable dtable = new DataTable();
-            try
-            {
-                produtodall = new ProdutosDal();
-                dtable = produtodall.listarProdutos();
-            }
-            catch (Exception erro)
-            {
-                throw erro;
-            }
-            return dtable;
+            // Validações básicas de negócio (você pode expandir)
+            if (string.IsNullOrWhiteSpace(produto.NomeProduto))
+                throw new Exception("Nome do produto é obrigatório.");
+
+            if (produto.PrecoCusto < 0)
+                throw new Exception("Preço de custo não pode ser negativo.");
+
+            if (produto.PrecoDeVenda < 0)
+                throw new Exception("Preço de venda não pode ser negativo.");
+
+            return _dal.Inserir(produto);
         }
 
-        public void Salvar(ProdutosModel produto)
+        public bool Alterar(ProdutosModel produto)
         {
-            produtodall = new ProdutosDal();
-            produtodall.SalvarProduto(produto);
-            try
-            {
-               
-            }
-            catch (SqlException erro)
-            {
-                throw erro;
-            }
+            if (produto.ProdutoID <= 0)
+                throw new Exception("ID do produto inválido.");
+
+            return _dal.Alterar(produto);
         }
-        public void Alterar(ProdutosModel produto)
+
+        public bool Excluir(long id)
         {
-            try
-            {
-                produtodall = new ProdutosDal();
-                produtodall.AlterarProduto(produto);
-            }
-            catch (SqlException erro)
-            {
-                throw erro;
-            }
-        }
-        public void Excluir(ProdutosModel produto)
-        {
-            try
-            {
-                produtodall = new ProdutosDal();
-                produtodall.ExcluirProduto(produto);
-            }
-            catch (SqlException erro)
-            {
-                throw erro;
-            }
-        }
-        public void PesquisarPorNome(ProdutosModel produto, string ParametroNome )
-        {
-            try
-            {
-                produtodall = new ProdutosDal();
-                produtodall.PesquisarProdutoPorNome(ParametroNome);
-            }
-            catch (SqlException erro)
-            {
-                throw erro;
-            }
-        }
-        public void PesquisarPorCodigo(ProdutosModel produto, string ParametroCodigo)
-        {
-            try
-            {
-                produtodall = new ProdutosDal();
-                produtodall.PesquisarProdutoPorCodido(ParametroCodigo);
-            }
-            catch (SqlException erro)
-            {
-                throw erro;
-            }
+            if (id <= 0)
+                throw new Exception("ID inválido.");
+
+            return _dal.Excluir(id);
         }
     }
 }

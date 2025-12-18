@@ -28,460 +28,464 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvVendas = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.dgvPagamentosParciais = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.dgvItensVenda = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.dgvParcelas = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.btnExcluirPagamentoParcial = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.btnExcluirVenda = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.btnExcluirParcelas = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.btnExcluirItensVenda = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.btnSair = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvVendas)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPagamentosParciais)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItensVenda)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvParcelas)).BeginInit();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            dgvVendas = new Krypton.Toolkit.KryptonDataGridView();
+            dgvPagamentosParciais = new Krypton.Toolkit.KryptonDataGridView();
+            dgvItensVenda = new Krypton.Toolkit.KryptonDataGridView();
+            dgvParcelas = new Krypton.Toolkit.KryptonDataGridView();
+            btnExcluirPagamentoParcial = new Krypton.Toolkit.KryptonButton();
+            btnExcluirVenda = new Krypton.Toolkit.KryptonButton();
+            btnExcluirParcelas = new Krypton.Toolkit.KryptonButton();
+            btnExcluirItensVenda = new Krypton.Toolkit.KryptonButton();
+            label28 = new Label();
+            label1 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            btnSair = new Krypton.Toolkit.KryptonButton();
+            kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
+            ((System.ComponentModel.ISupportInitialize)dgvVendas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPagamentosParciais).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvItensVenda).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvParcelas).BeginInit();
+            SuspendLayout();
             // 
             // dgvVendas
             // 
-            this.dgvVendas.AllowUserToAddRows = false;
-            this.dgvVendas.AllowUserToDeleteRows = false;
-            this.dgvVendas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvVendas.Location = new System.Drawing.Point(-1, 52);
-            this.dgvVendas.Name = "dgvVendas";
-            this.dgvVendas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvVendas.Size = new System.Drawing.Size(387, 154);
-            this.dgvVendas.TabIndex = 596;
+            dgvVendas.AllowUserToAddRows = false;
+            dgvVendas.AllowUserToDeleteRows = false;
+            dgvVendas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVendas.Location = new Point(-1, 52);
+            dgvVendas.Name = "dgvVendas";
+            dgvVendas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueDarkMode;
+            dgvVendas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvVendas.Size = new Size(387, 154);
+            dgvVendas.TabIndex = 596;
             // 
             // dgvPagamentosParciais
             // 
-            this.dgvPagamentosParciais.AllowUserToAddRows = false;
-            this.dgvPagamentosParciais.AllowUserToDeleteRows = false;
-            this.dgvPagamentosParciais.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPagamentosParciais.Location = new System.Drawing.Point(406, 52);
-            this.dgvPagamentosParciais.Name = "dgvPagamentosParciais";
-            this.dgvPagamentosParciais.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPagamentosParciais.Size = new System.Drawing.Size(362, 154);
-            this.dgvPagamentosParciais.TabIndex = 597;
+            dgvPagamentosParciais.AllowUserToAddRows = false;
+            dgvPagamentosParciais.AllowUserToDeleteRows = false;
+            dgvPagamentosParciais.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPagamentosParciais.Location = new Point(406, 52);
+            dgvPagamentosParciais.Name = "dgvPagamentosParciais";
+            dgvPagamentosParciais.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueDarkMode;
+            dgvPagamentosParciais.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPagamentosParciais.Size = new Size(362, 154);
+            dgvPagamentosParciais.TabIndex = 597;
             // 
             // dgvItensVenda
             // 
-            this.dgvItensVenda.AllowUserToAddRows = false;
-            this.dgvItensVenda.AllowUserToDeleteRows = false;
-            this.dgvItensVenda.Location = new System.Drawing.Point(406, 281);
-            this.dgvItensVenda.Name = "dgvItensVenda";
-            this.dgvItensVenda.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvItensVenda.Size = new System.Drawing.Size(362, 154);
-            this.dgvItensVenda.TabIndex = 599;
+            dgvItensVenda.AllowUserToAddRows = false;
+            dgvItensVenda.AllowUserToDeleteRows = false;
+            dgvItensVenda.Location = new Point(406, 281);
+            dgvItensVenda.Name = "dgvItensVenda";
+            dgvItensVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueDarkMode;
+            dgvItensVenda.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvItensVenda.Size = new Size(362, 154);
+            dgvItensVenda.TabIndex = 599;
             // 
             // dgvParcelas
             // 
-            this.dgvParcelas.AllowUserToAddRows = false;
-            this.dgvParcelas.AllowUserToDeleteRows = false;
-            this.dgvParcelas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvParcelas.Location = new System.Drawing.Point(-1, 281);
-            this.dgvParcelas.Name = "dgvParcelas";
-            this.dgvParcelas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvParcelas.Size = new System.Drawing.Size(387, 154);
-            this.dgvParcelas.TabIndex = 600;
+            dgvParcelas.AllowUserToAddRows = false;
+            dgvParcelas.AllowUserToDeleteRows = false;
+            dgvParcelas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvParcelas.Location = new Point(-1, 281);
+            dgvParcelas.Name = "dgvParcelas";
+            dgvParcelas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueDarkMode;
+            dgvParcelas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvParcelas.Size = new Size(387, 154);
+            dgvParcelas.TabIndex = 600;
             // 
             // btnExcluirPagamentoParcial
             // 
-            this.btnExcluirPagamentoParcial.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.Cluster;
-            this.btnExcluirPagamentoParcial.Location = new System.Drawing.Point(655, 212);
-            this.btnExcluirPagamentoParcial.Name = "btnExcluirPagamentoParcial";
-            this.btnExcluirPagamentoParcial.OverrideDefault.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Back.ColorAngle = 45F;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.ColorAngle = 45F;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.Rounding = 20;
-            this.btnExcluirPagamentoParcial.OverrideDefault.Border.Width = 1;
-            this.btnExcluirPagamentoParcial.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2010Silver;
-            this.btnExcluirPagamentoParcial.Size = new System.Drawing.Size(113, 25);
-            this.btnExcluirPagamentoParcial.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.StateCommon.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.StateCommon.Back.ColorAngle = 45F;
-            this.btnExcluirPagamentoParcial.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirPagamentoParcial.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirPagamentoParcial.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirPagamentoParcial.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirPagamentoParcial.StateCommon.Border.Rounding = 0;
-            this.btnExcluirPagamentoParcial.StateCommon.Border.Width = 1;
-            this.btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
-            this.btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
-            this.btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluirPagamentoParcial.StatePressed.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirPagamentoParcial.StatePressed.Back.ColorAngle = 135F;
-            this.btnExcluirPagamentoParcial.StatePressed.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirPagamentoParcial.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirPagamentoParcial.StatePressed.Border.ColorAngle = 135F;
-            this.btnExcluirPagamentoParcial.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirPagamentoParcial.StatePressed.Border.Rounding = 20;
-            this.btnExcluirPagamentoParcial.StatePressed.Border.Width = 1;
-            this.btnExcluirPagamentoParcial.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirPagamentoParcial.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirPagamentoParcial.StateTracking.Back.ColorAngle = 45F;
-            this.btnExcluirPagamentoParcial.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirPagamentoParcial.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirPagamentoParcial.StateTracking.Border.ColorAngle = 45F;
-            this.btnExcluirPagamentoParcial.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirPagamentoParcial.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirPagamentoParcial.StateTracking.Border.Rounding = 20;
-            this.btnExcluirPagamentoParcial.StateTracking.Border.Width = 1;
-            this.btnExcluirPagamentoParcial.TabIndex = 628;
-            this.btnExcluirPagamentoParcial.Values.Text = "&Excluir";
-            this.btnExcluirPagamentoParcial.Click += new System.EventHandler(this.btnExcluirPagamentoParcial_Click);
+            btnExcluirPagamentoParcial.ButtonStyle = Krypton.Toolkit.ButtonStyle.Cluster;
+            btnExcluirPagamentoParcial.CornerRoundingRadius = -1F;
+            btnExcluirPagamentoParcial.Location = new Point(655, 212);
+            btnExcluirPagamentoParcial.Name = "btnExcluirPagamentoParcial";
+            btnExcluirPagamentoParcial.OverrideDefault.Back.Color1 = Color.Red;
+            btnExcluirPagamentoParcial.OverrideDefault.Back.Color2 = Color.Red;
+            btnExcluirPagamentoParcial.OverrideDefault.Back.ColorAngle = 45F;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.Color1 = Color.Red;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.Color2 = Color.Red;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.ColorAngle = 45F;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.Rounding = 20F;
+            btnExcluirPagamentoParcial.OverrideDefault.Border.Width = 1;
+            btnExcluirPagamentoParcial.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            btnExcluirPagamentoParcial.Size = new Size(113, 25);
+            btnExcluirPagamentoParcial.StateCommon.Back.Color1 = Color.Red;
+            btnExcluirPagamentoParcial.StateCommon.Back.Color2 = Color.Red;
+            btnExcluirPagamentoParcial.StateCommon.Back.ColorAngle = 45F;
+            btnExcluirPagamentoParcial.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirPagamentoParcial.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirPagamentoParcial.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirPagamentoParcial.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirPagamentoParcial.StateCommon.Border.Width = 1;
+            btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnExcluirPagamentoParcial.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnExcluirPagamentoParcial.StatePressed.Back.Color1 = Color.Red;
+            btnExcluirPagamentoParcial.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirPagamentoParcial.StatePressed.Back.ColorAngle = 135F;
+            btnExcluirPagamentoParcial.StatePressed.Border.Color1 = Color.Red;
+            btnExcluirPagamentoParcial.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirPagamentoParcial.StatePressed.Border.ColorAngle = 135F;
+            btnExcluirPagamentoParcial.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirPagamentoParcial.StatePressed.Border.Rounding = 20F;
+            btnExcluirPagamentoParcial.StatePressed.Border.Width = 1;
+            btnExcluirPagamentoParcial.StateTracking.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnExcluirPagamentoParcial.StateTracking.Back.Color2 = Color.FromArgb(6, 174, 244);
+            btnExcluirPagamentoParcial.StateTracking.Back.ColorAngle = 45F;
+            btnExcluirPagamentoParcial.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirPagamentoParcial.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirPagamentoParcial.StateTracking.Border.ColorAngle = 45F;
+            btnExcluirPagamentoParcial.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirPagamentoParcial.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirPagamentoParcial.StateTracking.Border.Rounding = 20F;
+            btnExcluirPagamentoParcial.StateTracking.Border.Width = 1;
+            btnExcluirPagamentoParcial.TabIndex = 628;
+            btnExcluirPagamentoParcial.Values.Text = "&Excluir";
+            btnExcluirPagamentoParcial.Click += btnExcluirPagamentoParcial_Click;
             // 
             // btnExcluirVenda
             // 
-            this.btnExcluirVenda.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.Cluster;
-            this.btnExcluirVenda.Location = new System.Drawing.Point(273, 212);
-            this.btnExcluirVenda.Name = "btnExcluirVenda";
-            this.btnExcluirVenda.OverrideDefault.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.OverrideDefault.Back.ColorAngle = 45F;
-            this.btnExcluirVenda.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.OverrideDefault.Border.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.OverrideDefault.Border.ColorAngle = 45F;
-            this.btnExcluirVenda.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirVenda.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirVenda.OverrideDefault.Border.Rounding = 20;
-            this.btnExcluirVenda.OverrideDefault.Border.Width = 1;
-            this.btnExcluirVenda.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2010Silver;
-            this.btnExcluirVenda.Size = new System.Drawing.Size(113, 25);
-            this.btnExcluirVenda.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.StateCommon.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.StateCommon.Back.ColorAngle = 45F;
-            this.btnExcluirVenda.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirVenda.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirVenda.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirVenda.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirVenda.StateCommon.Border.Rounding = 0;
-            this.btnExcluirVenda.StateCommon.Border.Width = 1;
-            this.btnExcluirVenda.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
-            this.btnExcluirVenda.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
-            this.btnExcluirVenda.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluirVenda.StatePressed.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirVenda.StatePressed.Back.ColorAngle = 135F;
-            this.btnExcluirVenda.StatePressed.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirVenda.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirVenda.StatePressed.Border.ColorAngle = 135F;
-            this.btnExcluirVenda.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirVenda.StatePressed.Border.Rounding = 20;
-            this.btnExcluirVenda.StatePressed.Border.Width = 1;
-            this.btnExcluirVenda.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirVenda.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirVenda.StateTracking.Back.ColorAngle = 45F;
-            this.btnExcluirVenda.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirVenda.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirVenda.StateTracking.Border.ColorAngle = 45F;
-            this.btnExcluirVenda.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirVenda.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirVenda.StateTracking.Border.Rounding = 20;
-            this.btnExcluirVenda.StateTracking.Border.Width = 1;
-            this.btnExcluirVenda.TabIndex = 629;
-            this.btnExcluirVenda.Values.Text = "&Excluir";
-            this.btnExcluirVenda.Click += new System.EventHandler(this.btnExcluirVenda_Click);
+            btnExcluirVenda.ButtonStyle = Krypton.Toolkit.ButtonStyle.Cluster;
+            btnExcluirVenda.CornerRoundingRadius = -1F;
+            btnExcluirVenda.Location = new Point(273, 212);
+            btnExcluirVenda.Name = "btnExcluirVenda";
+            btnExcluirVenda.OverrideDefault.Back.Color1 = Color.Red;
+            btnExcluirVenda.OverrideDefault.Back.Color2 = Color.Red;
+            btnExcluirVenda.OverrideDefault.Back.ColorAngle = 45F;
+            btnExcluirVenda.OverrideDefault.Border.Color1 = Color.Red;
+            btnExcluirVenda.OverrideDefault.Border.Color2 = Color.Red;
+            btnExcluirVenda.OverrideDefault.Border.ColorAngle = 45F;
+            btnExcluirVenda.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirVenda.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirVenda.OverrideDefault.Border.Rounding = 20F;
+            btnExcluirVenda.OverrideDefault.Border.Width = 1;
+            btnExcluirVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            btnExcluirVenda.Size = new Size(113, 25);
+            btnExcluirVenda.StateCommon.Back.Color1 = Color.Red;
+            btnExcluirVenda.StateCommon.Back.Color2 = Color.Red;
+            btnExcluirVenda.StateCommon.Back.ColorAngle = 45F;
+            btnExcluirVenda.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirVenda.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirVenda.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirVenda.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirVenda.StateCommon.Border.Width = 1;
+            btnExcluirVenda.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnExcluirVenda.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnExcluirVenda.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnExcluirVenda.StatePressed.Back.Color1 = Color.Red;
+            btnExcluirVenda.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirVenda.StatePressed.Back.ColorAngle = 135F;
+            btnExcluirVenda.StatePressed.Border.Color1 = Color.Red;
+            btnExcluirVenda.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirVenda.StatePressed.Border.ColorAngle = 135F;
+            btnExcluirVenda.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirVenda.StatePressed.Border.Rounding = 20F;
+            btnExcluirVenda.StatePressed.Border.Width = 1;
+            btnExcluirVenda.StateTracking.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnExcluirVenda.StateTracking.Back.Color2 = Color.FromArgb(6, 174, 244);
+            btnExcluirVenda.StateTracking.Back.ColorAngle = 45F;
+            btnExcluirVenda.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirVenda.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirVenda.StateTracking.Border.ColorAngle = 45F;
+            btnExcluirVenda.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirVenda.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirVenda.StateTracking.Border.Rounding = 20F;
+            btnExcluirVenda.StateTracking.Border.Width = 1;
+            btnExcluirVenda.TabIndex = 629;
+            btnExcluirVenda.Values.Text = "&Excluir";
+            btnExcluirVenda.Click += btnExcluirVenda_Click;
             // 
             // btnExcluirParcelas
             // 
-            this.btnExcluirParcelas.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.Cluster;
-            this.btnExcluirParcelas.Location = new System.Drawing.Point(273, 441);
-            this.btnExcluirParcelas.Name = "btnExcluirParcelas";
-            this.btnExcluirParcelas.OverrideDefault.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.OverrideDefault.Back.ColorAngle = 45F;
-            this.btnExcluirParcelas.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.OverrideDefault.Border.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.OverrideDefault.Border.ColorAngle = 45F;
-            this.btnExcluirParcelas.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirParcelas.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirParcelas.OverrideDefault.Border.Rounding = 20;
-            this.btnExcluirParcelas.OverrideDefault.Border.Width = 1;
-            this.btnExcluirParcelas.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2010Silver;
-            this.btnExcluirParcelas.Size = new System.Drawing.Size(113, 25);
-            this.btnExcluirParcelas.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.StateCommon.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.StateCommon.Back.ColorAngle = 45F;
-            this.btnExcluirParcelas.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirParcelas.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirParcelas.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirParcelas.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirParcelas.StateCommon.Border.Rounding = 0;
-            this.btnExcluirParcelas.StateCommon.Border.Width = 1;
-            this.btnExcluirParcelas.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
-            this.btnExcluirParcelas.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
-            this.btnExcluirParcelas.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluirParcelas.StatePressed.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirParcelas.StatePressed.Back.ColorAngle = 135F;
-            this.btnExcluirParcelas.StatePressed.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirParcelas.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirParcelas.StatePressed.Border.ColorAngle = 135F;
-            this.btnExcluirParcelas.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirParcelas.StatePressed.Border.Rounding = 20;
-            this.btnExcluirParcelas.StatePressed.Border.Width = 1;
-            this.btnExcluirParcelas.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirParcelas.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirParcelas.StateTracking.Back.ColorAngle = 45F;
-            this.btnExcluirParcelas.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirParcelas.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirParcelas.StateTracking.Border.ColorAngle = 45F;
-            this.btnExcluirParcelas.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirParcelas.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirParcelas.StateTracking.Border.Rounding = 20;
-            this.btnExcluirParcelas.StateTracking.Border.Width = 1;
-            this.btnExcluirParcelas.TabIndex = 630;
-            this.btnExcluirParcelas.Values.Text = "&Excluir";
-            this.btnExcluirParcelas.Click += new System.EventHandler(this.btnExcluirParcelas_Click);
+            btnExcluirParcelas.ButtonStyle = Krypton.Toolkit.ButtonStyle.Cluster;
+            btnExcluirParcelas.CornerRoundingRadius = -1F;
+            btnExcluirParcelas.Location = new Point(273, 441);
+            btnExcluirParcelas.Name = "btnExcluirParcelas";
+            btnExcluirParcelas.OverrideDefault.Back.Color1 = Color.Red;
+            btnExcluirParcelas.OverrideDefault.Back.Color2 = Color.Red;
+            btnExcluirParcelas.OverrideDefault.Back.ColorAngle = 45F;
+            btnExcluirParcelas.OverrideDefault.Border.Color1 = Color.Red;
+            btnExcluirParcelas.OverrideDefault.Border.Color2 = Color.Red;
+            btnExcluirParcelas.OverrideDefault.Border.ColorAngle = 45F;
+            btnExcluirParcelas.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirParcelas.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirParcelas.OverrideDefault.Border.Rounding = 20F;
+            btnExcluirParcelas.OverrideDefault.Border.Width = 1;
+            btnExcluirParcelas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            btnExcluirParcelas.Size = new Size(113, 25);
+            btnExcluirParcelas.StateCommon.Back.Color1 = Color.Red;
+            btnExcluirParcelas.StateCommon.Back.Color2 = Color.Red;
+            btnExcluirParcelas.StateCommon.Back.ColorAngle = 45F;
+            btnExcluirParcelas.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirParcelas.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirParcelas.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirParcelas.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirParcelas.StateCommon.Border.Width = 1;
+            btnExcluirParcelas.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnExcluirParcelas.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnExcluirParcelas.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnExcluirParcelas.StatePressed.Back.Color1 = Color.Red;
+            btnExcluirParcelas.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirParcelas.StatePressed.Back.ColorAngle = 135F;
+            btnExcluirParcelas.StatePressed.Border.Color1 = Color.Red;
+            btnExcluirParcelas.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirParcelas.StatePressed.Border.ColorAngle = 135F;
+            btnExcluirParcelas.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirParcelas.StatePressed.Border.Rounding = 20F;
+            btnExcluirParcelas.StatePressed.Border.Width = 1;
+            btnExcluirParcelas.StateTracking.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnExcluirParcelas.StateTracking.Back.Color2 = Color.FromArgb(6, 174, 244);
+            btnExcluirParcelas.StateTracking.Back.ColorAngle = 45F;
+            btnExcluirParcelas.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirParcelas.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirParcelas.StateTracking.Border.ColorAngle = 45F;
+            btnExcluirParcelas.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirParcelas.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirParcelas.StateTracking.Border.Rounding = 20F;
+            btnExcluirParcelas.StateTracking.Border.Width = 1;
+            btnExcluirParcelas.TabIndex = 630;
+            btnExcluirParcelas.Values.Text = "&Excluir";
+            btnExcluirParcelas.Click += btnExcluirParcelas_Click;
             // 
             // btnExcluirItensVenda
             // 
-            this.btnExcluirItensVenda.ButtonStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.Cluster;
-            this.btnExcluirItensVenda.Location = new System.Drawing.Point(655, 441);
-            this.btnExcluirItensVenda.Name = "btnExcluirItensVenda";
-            this.btnExcluirItensVenda.OverrideDefault.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.OverrideDefault.Back.ColorAngle = 45F;
-            this.btnExcluirItensVenda.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.OverrideDefault.Border.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.OverrideDefault.Border.ColorAngle = 45F;
-            this.btnExcluirItensVenda.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirItensVenda.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirItensVenda.OverrideDefault.Border.Rounding = 20;
-            this.btnExcluirItensVenda.OverrideDefault.Border.Width = 1;
-            this.btnExcluirItensVenda.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2010Silver;
-            this.btnExcluirItensVenda.Size = new System.Drawing.Size(113, 25);
-            this.btnExcluirItensVenda.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.StateCommon.Back.Color2 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.StateCommon.Back.ColorAngle = 45F;
-            this.btnExcluirItensVenda.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirItensVenda.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirItensVenda.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirItensVenda.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirItensVenda.StateCommon.Border.Rounding = 0;
-            this.btnExcluirItensVenda.StateCommon.Border.Width = 1;
-            this.btnExcluirItensVenda.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
-            this.btnExcluirItensVenda.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
-            this.btnExcluirItensVenda.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExcluirItensVenda.StatePressed.Back.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirItensVenda.StatePressed.Back.ColorAngle = 135F;
-            this.btnExcluirItensVenda.StatePressed.Border.Color1 = System.Drawing.Color.Red;
-            this.btnExcluirItensVenda.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnExcluirItensVenda.StatePressed.Border.ColorAngle = 135F;
-            this.btnExcluirItensVenda.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirItensVenda.StatePressed.Border.Rounding = 20;
-            this.btnExcluirItensVenda.StatePressed.Border.Width = 1;
-            this.btnExcluirItensVenda.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirItensVenda.StateTracking.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirItensVenda.StateTracking.Back.ColorAngle = 45F;
-            this.btnExcluirItensVenda.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnExcluirItensVenda.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnExcluirItensVenda.StateTracking.Border.ColorAngle = 45F;
-            this.btnExcluirItensVenda.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnExcluirItensVenda.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnExcluirItensVenda.StateTracking.Border.Rounding = 20;
-            this.btnExcluirItensVenda.StateTracking.Border.Width = 1;
-            this.btnExcluirItensVenda.TabIndex = 631;
-            this.btnExcluirItensVenda.Values.Text = "&Excluir";
-            this.btnExcluirItensVenda.Click += new System.EventHandler(this.btnExcluirItensVenda_Click);
+            btnExcluirItensVenda.ButtonStyle = Krypton.Toolkit.ButtonStyle.Cluster;
+            btnExcluirItensVenda.CornerRoundingRadius = -1F;
+            btnExcluirItensVenda.Location = new Point(655, 441);
+            btnExcluirItensVenda.Name = "btnExcluirItensVenda";
+            btnExcluirItensVenda.OverrideDefault.Back.Color1 = Color.Red;
+            btnExcluirItensVenda.OverrideDefault.Back.Color2 = Color.Red;
+            btnExcluirItensVenda.OverrideDefault.Back.ColorAngle = 45F;
+            btnExcluirItensVenda.OverrideDefault.Border.Color1 = Color.Red;
+            btnExcluirItensVenda.OverrideDefault.Border.Color2 = Color.Red;
+            btnExcluirItensVenda.OverrideDefault.Border.ColorAngle = 45F;
+            btnExcluirItensVenda.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirItensVenda.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirItensVenda.OverrideDefault.Border.Rounding = 20F;
+            btnExcluirItensVenda.OverrideDefault.Border.Width = 1;
+            btnExcluirItensVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            btnExcluirItensVenda.Size = new Size(113, 25);
+            btnExcluirItensVenda.StateCommon.Back.Color1 = Color.Red;
+            btnExcluirItensVenda.StateCommon.Back.Color2 = Color.Red;
+            btnExcluirItensVenda.StateCommon.Back.ColorAngle = 45F;
+            btnExcluirItensVenda.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirItensVenda.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirItensVenda.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirItensVenda.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirItensVenda.StateCommon.Border.Width = 1;
+            btnExcluirItensVenda.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnExcluirItensVenda.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnExcluirItensVenda.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnExcluirItensVenda.StatePressed.Back.Color1 = Color.Red;
+            btnExcluirItensVenda.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirItensVenda.StatePressed.Back.ColorAngle = 135F;
+            btnExcluirItensVenda.StatePressed.Border.Color1 = Color.Red;
+            btnExcluirItensVenda.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnExcluirItensVenda.StatePressed.Border.ColorAngle = 135F;
+            btnExcluirItensVenda.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirItensVenda.StatePressed.Border.Rounding = 20F;
+            btnExcluirItensVenda.StatePressed.Border.Width = 1;
+            btnExcluirItensVenda.StateTracking.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnExcluirItensVenda.StateTracking.Back.Color2 = Color.FromArgb(6, 174, 244);
+            btnExcluirItensVenda.StateTracking.Back.ColorAngle = 45F;
+            btnExcluirItensVenda.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnExcluirItensVenda.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnExcluirItensVenda.StateTracking.Border.ColorAngle = 45F;
+            btnExcluirItensVenda.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnExcluirItensVenda.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnExcluirItensVenda.StateTracking.Border.Rounding = 20F;
+            btnExcluirItensVenda.StateTracking.Border.Width = 1;
+            btnExcluirItensVenda.TabIndex = 631;
+            btnExcluirItensVenda.Values.Text = "&Excluir";
+            btnExcluirItensVenda.Click += btnExcluirItensVenda_Click;
             // 
             // label28
             // 
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label28.ForeColor = System.Drawing.Color.Green;
-            this.label28.Location = new System.Drawing.Point(141, 25);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(88, 24);
-            this.label28.TabIndex = 632;
-            this.label28.Text = "VENDAS";
+            label28.AutoSize = true;
+            label28.Font = new Font("Microsoft Sans Serif", 14.25F);
+            label28.ForeColor = Color.Green;
+            label28.Location = new Point(141, 25);
+            label28.Name = "label28";
+            label28.Size = new Size(88, 24);
+            label28.TabIndex = 632;
+            label28.Text = "VENDAS";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label1.ForeColor = System.Drawing.Color.Green;
-            this.label1.Location = new System.Drawing.Point(478, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(233, 24);
-            this.label1.TabIndex = 633;
-            this.label1.Text = "PAGAMENTOS PARCIAIS";
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft Sans Serif", 14.25F);
+            label1.ForeColor = Color.Green;
+            label1.Location = new Point(478, 25);
+            label1.Name = "label1";
+            label1.Size = new Size(233, 24);
+            label1.TabIndex = 633;
+            label1.Text = "PAGAMENTOS PARCIAIS";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label3.ForeColor = System.Drawing.Color.Green;
-            this.label3.Location = new System.Drawing.Point(120, 254);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 24);
-            this.label3.TabIndex = 635;
-            this.label3.Text = "PARCELAS";
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft Sans Serif", 14.25F);
+            label3.ForeColor = Color.Green;
+            label3.Location = new Point(120, 254);
+            label3.Name = "label3";
+            label3.Size = new Size(109, 24);
+            label3.TabIndex = 635;
+            label3.Text = "PARCELAS";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label4.ForeColor = System.Drawing.Color.Green;
-            this.label4.Location = new System.Drawing.Point(524, 254);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(136, 24);
-            this.label4.TabIndex = 636;
-            this.label4.Text = "ITENS VENDA";
+            label4.AutoSize = true;
+            label4.Font = new Font("Microsoft Sans Serif", 14.25F);
+            label4.ForeColor = Color.Green;
+            label4.Location = new Point(524, 254);
+            label4.Name = "label4";
+            label4.Size = new Size(136, 24);
+            label4.TabIndex = 636;
+            label4.Text = "ITENS VENDA";
             // 
             // btnSair
             // 
-            this.btnSair.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btnSair.Location = new System.Drawing.Point(578, 491);
-            this.btnSair.Name = "btnSair";
-            this.btnSair.OverrideDefault.Back.Color1 = System.Drawing.Color.White;
-            this.btnSair.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.OverrideDefault.Back.ColorAngle = 45F;
-            this.btnSair.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.OverrideDefault.Border.ColorAngle = 45F;
-            this.btnSair.OverrideDefault.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnSair.OverrideDefault.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnSair.OverrideDefault.Border.Rounding = 1;
-            this.btnSair.OverrideDefault.Border.Width = 1;
-            this.btnSair.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            this.btnSair.Size = new System.Drawing.Size(190, 30);
-            this.btnSair.StateCommon.Back.Color1 = System.Drawing.Color.White;
-            this.btnSair.StateCommon.Back.Color2 = System.Drawing.Color.White;
-            this.btnSair.StateCommon.Back.ColorAngle = 45F;
-            this.btnSair.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnSair.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnSair.StateCommon.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnSair.StateCommon.Border.Rounding = 1;
-            this.btnSair.StateCommon.Border.Width = 1;
-            this.btnSair.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSair.StatePressed.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StatePressed.Back.Color2 = System.Drawing.Color.White;
-            this.btnSair.StatePressed.Back.ColorAngle = 135F;
-            this.btnSair.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(145)))), ((int)(((byte)(198)))));
-            this.btnSair.StatePressed.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(121)))), ((int)(((byte)(206)))));
-            this.btnSair.StatePressed.Border.ColorAngle = 135F;
-            this.btnSair.StatePressed.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnSair.StatePressed.Border.Rounding = 1;
-            this.btnSair.StatePressed.Border.Width = 1;
-            this.btnSair.StateTracking.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StateTracking.Back.Color2 = System.Drawing.Color.White;
-            this.btnSair.StateTracking.Back.ColorAngle = 45F;
-            this.btnSair.StateTracking.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
-            this.btnSair.StateTracking.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.btnSair.StateTracking.Border.ColorAngle = 45F;
-            this.btnSair.StateTracking.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.btnSair.StateTracking.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.btnSair.StateTracking.Border.Rounding = 1;
-            this.btnSair.StateTracking.Border.Width = 1;
-            this.btnSair.StateTracking.Content.ShortText.Color1 = System.Drawing.Color.White;
-            this.btnSair.TabIndex = 637;
-            this.btnSair.Values.Text = "&Sair";
-            this.btnSair.Click += new System.EventHandler(this.btnSair_Click);
+            btnSair.Anchor = AnchorStyles.Left;
+            btnSair.CornerRoundingRadius = 1F;
+            btnSair.Location = new Point(578, 491);
+            btnSair.Name = "btnSair";
+            btnSair.OverrideDefault.Back.Color1 = Color.White;
+            btnSair.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
+            btnSair.OverrideDefault.Back.ColorAngle = 45F;
+            btnSair.OverrideDefault.Border.Color1 = Color.FromArgb(8, 142, 254);
+            btnSair.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnSair.OverrideDefault.Border.ColorAngle = 45F;
+            btnSair.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnSair.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnSair.OverrideDefault.Border.Rounding = 1F;
+            btnSair.OverrideDefault.Border.Width = 1;
+            btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
+            btnSair.Size = new Size(190, 30);
+            btnSair.StateCommon.Back.Color1 = Color.White;
+            btnSair.StateCommon.Back.Color2 = Color.White;
+            btnSair.StateCommon.Back.ColorAngle = 45F;
+            btnSair.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnSair.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnSair.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnSair.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnSair.StateCommon.Border.Rounding = 1F;
+            btnSair.StateCommon.Border.Width = 1;
+            btnSair.StateCommon.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
+            btnSair.StateCommon.Content.ShortText.Color2 = Color.FromArgb(8, 142, 254);
+            btnSair.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSair.StatePressed.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnSair.StatePressed.Back.Color2 = Color.White;
+            btnSair.StatePressed.Back.ColorAngle = 135F;
+            btnSair.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
+            btnSair.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnSair.StatePressed.Border.ColorAngle = 135F;
+            btnSair.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnSair.StatePressed.Border.Rounding = 1F;
+            btnSair.StatePressed.Border.Width = 1;
+            btnSair.StateTracking.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnSair.StateTracking.Back.Color2 = Color.White;
+            btnSair.StateTracking.Back.ColorAngle = 45F;
+            btnSair.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnSair.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnSair.StateTracking.Border.ColorAngle = 45F;
+            btnSair.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnSair.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnSair.StateTracking.Border.Rounding = 1F;
+            btnSair.StateTracking.Border.Width = 1;
+            btnSair.StateTracking.Content.ShortText.Color1 = Color.White;
+            btnSair.TabIndex = 637;
+            btnSair.Values.Text = "&Sair";
+            btnSair.Click += btnSair_Click;
+            // 
+            // kryptonPalette1
+            // 
+            kryptonPalette1.ButtonSpecs.FormClose.Image = Properties.Resources.Exit;
+            kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImagePressed = Properties.Resources.Sairr;
+            kryptonPalette1.ButtonSpecs.FormClose.ImageStates.ImageTracking = Properties.Resources.Sairr;
+            kryptonPalette1.ButtonSpecs.FormMax.Image = Properties.Resources.Maximize;
+            kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImagePressed = Properties.Resources.Minimiza24;
+            kryptonPalette1.ButtonSpecs.FormMax.ImageStates.ImageTracking = Properties.Resources.Minimiza24;
+            kryptonPalette1.ButtonSpecs.FormMin.Image = Properties.Resources.Minimize;
+            kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImagePressed = Properties.Resources.Minimizar24;
+            kryptonPalette1.ButtonSpecs.FormMin.ImageStates.ImageTracking = Properties.Resources.Minimizar24;
+            kryptonPalette1.ButtonSpecs.FormRestore.Image = Properties.Resources.Maximize;
+            kryptonPalette1.ButtonSpecs.FormRestore.ImageStates.ImagePressed = Properties.Resources.Minimiza24;
+            kryptonPalette1.ButtonSpecs.FormRestore.ImageStates.ImageTracking = Properties.Resources.Maximize;
+            kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color1 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Back.Color2 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            kryptonPalette1.ButtonStyles.ButtonForm.StateNormal.Border.Width = 0;
+            kryptonPalette1.ButtonStyles.ButtonForm.StatePressed.Back.Color1 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StatePressed.Back.Color2 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            kryptonPalette1.ButtonStyles.ButtonForm.StatePressed.Border.Width = 0;
+            kryptonPalette1.ButtonStyles.ButtonForm.StateTracking.Back.Color1 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StateTracking.Back.Color2 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.ButtonStyles.ButtonForm.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            kryptonPalette1.ButtonStyles.ButtonForm.StateTracking.Border.Width = 0;
+            kryptonPalette1.FormStyles.FormMain.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.FormStyles.FormMain.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.FormStyles.FormMain.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            kryptonPalette1.FormStyles.FormMain.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.None;
+            kryptonPalette1.FormStyles.FormMain.StateCommon.Border.Rounding = 12F;
+            kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
+            kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
+            kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new Padding(10, -1, -1, -1);
             // 
             // FrmExclusaoOrfaos
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(780, 533);
-            this.Controls.Add(this.btnSair);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label28);
-            this.Controls.Add(this.btnExcluirItensVenda);
-            this.Controls.Add(this.btnExcluirParcelas);
-            this.Controls.Add(this.btnExcluirVenda);
-            this.Controls.Add(this.btnExcluirPagamentoParcial);
-            this.Controls.Add(this.dgvParcelas);
-            this.Controls.Add(this.dgvItensVenda);
-            this.Controls.Add(this.dgvPagamentosParciais);
-            this.Controls.Add(this.dgvVendas);
-            this.Name = "FrmExclusaoOrfaos";
-            this.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
-            this.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.Text = "MANUTENÇÃO DE REGISTROS ORFÃOS";
-            this.Load += new System.EventHandler(this.FrmExclusaoOrfao_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvVendas)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPagamentosParciais)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItensVenda)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvParcelas)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            BackColor = Color.FromArgb(252, 252, 250);
+            ClientSize = new Size(780, 533);
+            Controls.Add(btnSair);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label1);
+            Controls.Add(label28);
+            Controls.Add(btnExcluirItensVenda);
+            Controls.Add(btnExcluirParcelas);
+            Controls.Add(btnExcluirVenda);
+            Controls.Add(btnExcluirPagamentoParcial);
+            Controls.Add(dgvParcelas);
+            Controls.Add(dgvItensVenda);
+            Controls.Add(dgvPagamentosParciais);
+            Controls.Add(dgvVendas);
+            Name = "FrmExclusaoOrfaos";
+            Palette = kryptonPalette1;
+            PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
+            StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
+            StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            Text = "MANUTENÇÃO DE REGISTROS ORFÃOS";
+            Load += FrmExclusaoOrfao_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvVendas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPagamentosParciais).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvItensVenda).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvParcelas).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
         #endregion
-        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvVendas;
-        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvPagamentosParciais;
-        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvItensVenda;
-        private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvParcelas;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnExcluirPagamentoParcial;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnExcluirVenda;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnExcluirParcelas;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnExcluirItensVenda;
+        private Krypton.Toolkit.KryptonDataGridView dgvVendas;
+        private Krypton.Toolkit.KryptonDataGridView dgvPagamentosParciais;
+        private Krypton.Toolkit.KryptonDataGridView dgvItensVenda;
+        private Krypton.Toolkit.KryptonDataGridView dgvParcelas;
+        private Krypton.Toolkit.KryptonButton btnExcluirPagamentoParcial;
+        private Krypton.Toolkit.KryptonButton btnExcluirVenda;
+        private Krypton.Toolkit.KryptonButton btnExcluirParcelas;
+        private Krypton.Toolkit.KryptonButton btnExcluirItensVenda;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private ComponentFactory.Krypton.Toolkit.KryptonButton btnSair;
+        private Krypton.Toolkit.KryptonButton btnSair;
+        private Krypton.Toolkit.KryptonPalette kryptonPalette1;
     }
 }

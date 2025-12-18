@@ -10,26 +10,26 @@ namespace GVC.BLL
 {
     internal class VendaBLL
     {
-        VendaDAL vendaDALL = null;
-        public void Salvar(VendaDAL vendas)
+        VendaDal vendaDALL = null;
+        // Salva venda completa (venda + itens + parcelas)
+        public int SalvarVendaCompleta(VendaModel venda, List<ItemVendaModel> itens, List<ParcelaModel>? parcelas = null)
         {
-            
             try
             {
-                //vendaDALL = new VendaDAL();
-                //vendaDALL.SalvarVenda(vendas);
+                return vendaDALL.AddVendaCompleta(venda, itens, parcelas);
             }
-            catch (Exception erro)
+            catch (Exception ex)
             {
-                throw erro;
+                throw new Exception("Erro ao salvar venda completa.", ex);
             }
         }
+
         public void Excluir(VendaModel vendas)
         {
             try
             {
-                //vendaDALL = new VendaDAL();
-                //vendaDALL.excluirVenda(vendas);
+                vendaDALL = new VendaDal();
+                vendaDALL.DeleteVenda(vendas);
             }
             catch (Exception erro)
             {
@@ -40,8 +40,8 @@ namespace GVC.BLL
         {
             try
             {
-                //vendaDALL = new VendaDALL();
-                //vendaDALL.atualizaVenda(vendas);
+                vendaDALL = new VendaDal();
+                vendaDALL.UpdateVenda(vendas);
             }
             catch (Exception erro)
             {

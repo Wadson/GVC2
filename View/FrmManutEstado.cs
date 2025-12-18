@@ -1,4 +1,4 @@
-﻿using ComponentFactory.Krypton.Toolkit;
+﻿using Krypton.Toolkit;
 using GVC.BLL;
 using GVC.DALL;
 using System;
@@ -8,19 +8,19 @@ using GVC.View;
 
 namespace GVC
 {
-    public partial class FrmManutEstado : GVC.FrmBaseManutencao
+    public partial class FrmManutEstado : KryptonForm
     {
-        private new string StatusOperacao;
+        private string StatusOperacao;
         public FrmManutEstado(string statusOperacao)
         {
             InitializeComponent();
-            PersonalizarDataGridView(dataGridPesquisar);
+            PersonalizarDataGridView(dgvPesquisar);
             this.StatusOperacao = statusOperacao;
-            //Centraliza o Label dentro do Panel
-            label28.Location = new Point(
-                (kryptonPanel2.Width - label28.Width) / 2,
-                (kryptonPanel2.Height - label28.Height) / 2);
-
+            // Personalização do título
+            this.Text = "Manutenção de Estados";
+            this.StateCommon.Header.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
+            this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+            this.StateCommon.Header.Content.ShortText.Font = new Font("Segoe UI", 12);
         }
         public void PersonalizarDataGridView(KryptonDataGridView dgv)
         {
@@ -28,9 +28,11 @@ namespace GVC
             if (dgv.Columns.Count > 0)
             {
                 // Redimensionar as colunas manualmente
-                dgv.Columns["EstadoID"].Width = 100;
-                dgv.Columns["NomeEstado"].Width = 800;
-                dgv.Columns["Uf"].Width = 100;
+                dgv.Columns["EstadoID"].Width = 60;
+                dgv.Columns["EstadoID"].Width = 60;
+                dgv.Columns["Nome"].Width = 500;
+                dgv.Columns["Uf"].Width = 50;
+                dgv.Columns["Regiao"].Width = 60;
 
                 // Centralizar cabeçalhos das colunas
                 foreach (DataGridViewColumn column in dgv.Columns)
@@ -42,7 +44,7 @@ namespace GVC
                     {
                         column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                     }
-                    else if (column.Name == "NomeEstado")
+                    else if (column.Name == "Nome")
                     {
                         column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft; // Alinhar à esquerda
                     }
@@ -51,129 +53,145 @@ namespace GVC
         }
         private void CarregaDados()
         {
-            FrmCadEstado frm = new FrmCadEstado(StatusOperacao);
+            //FrmCadEstado frm = new FrmCadEstado(StatusOperacao);
 
             try
             {
                 if (StatusOperacao == "NOVO")
                 {
-                    frm.lblStatus.Text = "NOVO CADASTRO DE ESTADO";
-                    frm.lblStatus.ForeColor = Color.FromArgb(8, 142, 254);
-                    StatusOperacao = "NOVO";
-                    frm.ShowDialog();
+                    //frm.lblStatus.Text = "NOVO CADASTRO DE ESTADO";
+                    //frm.lblStatus.ForeColor = Color.FromArgb(8, 142, 254);
+                    //StatusOperacao = "NOVO";
+                    //frm.ShowDialog();
 
-                    ((FrmManutEstado)Application.OpenForms["FrmManutEstado"]).HabilitarTimer(true);
+                    //var frmManutEstado = Application.OpenForms["FrmManutEstado"] as FrmManutEstado;
+                    //if (frmManutEstado != null)
+                    //{
+                    //    frmManutEstado.HabilitarTimer(true);
+                    //}
+
                 }
-                if(StatusOperacao == "ALTERAR")
+                if (StatusOperacao == "ALTERAR")
                 {
-                    frm.txtEstadoID.Text =     dataGridPesquisar.CurrentRow.Cells["EstadoID"].Value.ToString();
-                    frm.txtNomeEstado.Text =      dataGridPesquisar.CurrentRow.Cells["NomeEstado"].Value.ToString();
-                    frm.txtUf.Text =         dataGridPesquisar.CurrentRow.Cells["Uf"].Value.ToString();
+                    //frm.txtEstadoID.Text = dgvPesquisar.CurrentRow.Cells["EstadoID"].Value.ToString();
+                    //frm.txtEstadoID.Text = dgvPesquisar.CurrentRow.Cells["EstadoID"].Value.ToString();
+                    //frm.txtNomeEstado.Text = dgvPesquisar.CurrentRow.Cells["Nome"].Value.ToString();
+                    //frm.txtUf.Text = dgvPesquisar.CurrentRow.Cells["Uf"].Value.ToString();
+                    //frm.txtUf.Text = dgvPesquisar.CurrentRow.Cells["Regiao"].Value.ToString();
 
-                    frm.lblStatus.Text = "ALTERAR REGISTRO";
-                    frm.lblStatus.ForeColor = Color.Orange;   
-                    StatusOperacao = "ALTERAR";
+                    //frm.lblStatus.Text = "ALTERAR REGISTRO";
+                    //frm.lblStatus.ForeColor = Color.Orange;
+                    //StatusOperacao = "ALTERAR";
 
-                    frm.btnSalvar.Text = "Alterar";
-                    frm.btnNovo.Enabled = false;
-                    frm.ShowDialog();
-                    ((FrmManutEstado)Application.OpenForms["FrmManutEstado"]).HabilitarTimer(true);
+                    //frm.btnSalvar.Text = "Alterar";
+                    //frm.btnNovo.Enabled = false;
+                    //frm.ShowDialog();
+                    //var frmManutEstado = Application.OpenForms["FrmManutEstado"] as FrmManutEstado;
+                    //if (frmManutEstado != null)
+                    //{
+                    //    frmManutEstado.HabilitarTimer(true);
+                    //}
                 }
                 if (StatusOperacao == "EXCLUSÃO")
                 {
-                    frm.txtEstadoID.Text = dataGridPesquisar.CurrentRow.Cells["EstadoID"].Value.ToString();
-                    frm.txtNomeEstado.Text = dataGridPesquisar.CurrentRow.Cells["NomeEstado"].Value.ToString();
-                    frm.txtUf.Text = dataGridPesquisar.CurrentRow.Cells["Uf"].Value.ToString();
+                //    frm.txtEstadoID.Text = dgvPesquisar.CurrentRow.Cells["EstadoID"].Value.ToString();
+                //    frm.txtNomeEstado.Text = dgvPesquisar.CurrentRow.Cells["Nome"].Value.ToString();
+                //    frm.txtUf.Text = dgvPesquisar.CurrentRow.Cells["Uf"].Value.ToString();
 
-                    frm.lblStatus.Text = "EXCLUSÃO DE REGISTRO";
-                    frm.lblStatus.ForeColor = Color.Orange;
-                    StatusOperacao = "EXCLUSÃO";
+                //    frm.lblStatus.Text = "EXCLUSÃO DE REGISTRO";
+                //    frm.lblStatus.ForeColor = Color.Orange;
+                //    StatusOperacao = "EXCLUSÃO";
 
-                    frm.btnSalvar.Text = "Excluir";
-                    frm.btnNovo.Enabled = false;
-                    frm.ShowDialog();
-                    ((FrmManutEstado)Application.OpenForms["FrmManutEstado"]).HabilitarTimer(true);
+                //    frm.btnSalvar.Text = "Excluir";
+                //    frm.btnNovo.Enabled = false;
+                //    frm.ShowDialog();
+
+                //    var frmManutEstado = Application.OpenForms["FrmManutEstado"] as FrmManutEstado;
+                //    if (frmManutEstado != null)
+                //    {
+                //        frmManutEstado.HabilitarTimer(true);
+                //    }
                 }
-         
+
                 Listar();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Erro..." + ex.Message);
             }
-           //((FrmManutUsuario)Application.OpenForms["FrmManutUsuario"]).HabilitarTimer(true);
         }
         private void FrmManutUsuario_Load(object sender, EventArgs e)
         {
-            Listar();            
+            Listar();
         }
-       
-
         public void Listar()
         {
             EstadoBLL estadobll = new EstadoBLL();
-            dataGridPesquisar.DataSource = estadobll.Listar();
-            PersonalizarDataGridView(dataGridPesquisar);
-            Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
+            dgvPesquisar.DataSource = estadobll.Listar();
+            PersonalizarDataGridView(dgvPesquisar);
+            Utilitario.AtualizarTotalKrypton(toolStripStatusLabelTotalRegistros, dgvPesquisar);
         }
         public void HabilitarTimer(bool habilitar)
         {
             timer1.Enabled = habilitar;
         }
-       
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             Listar();
             timer1.Enabled = false;
         }
-
-        private void btnNovo_Click(object sender, EventArgs e)
+        private void rbtDescricao_CheckedChanged(object sender, EventArgs e)
         {
-            StatusOperacao = "NOVO";
-           CarregaDados();
-        }
-        private void btnAlterar_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "ALTERAR";            
-            CarregaDados();   
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            StatusOperacao = "EXCLUSÃO";           
-            CarregaDados();
-        }
-
-        private void txtPesquisa_TextChanged(object sender, EventArgs e)
-        {
-            string textoPesquisa = txtPesquisa.Text.ToLower();
-
-            string nome = "%" + txtPesquisa.Text + "%";
-            EstadoDALL dao = new EstadoDALL();
-
-            if (rbtCodigo.Checked)
-            {               
-                dataGridPesquisar.DataSource = dao.PesquisarPorCodigo(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
-            }
-            else
-            {              
-                dataGridPesquisar.DataSource = dao.PesquisarPorNome(nome);
-                Utilitario.AtualizarTotalRegistros(lblTotalRegistros, dataGridPesquisar);
-            }
+            txtPesquisar.Text = "";
+            txtPesquisar.Focus();
         }
 
         private void rbtCodigo_CheckedChanged(object sender, EventArgs e)
         {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
+            txtPesquisar.Text = "";
+            txtPesquisar.Focus();
         }
 
-        private void rbtDescricao_CheckedChanged(object sender, EventArgs e)
+        private void txtPesquisar_TextChanged(object sender, EventArgs e)
         {
-            txtPesquisa.Text = "";
-            txtPesquisa.Focus();
+            EstadoDal dao = new EstadoDal();
+
+            if (rbtCodigo.Checked)
+            {
+                // pesquisa numérica pura
+                if (int.TryParse(txtPesquisar.Text, out int id))
+                    dgvPesquisar.DataSource = dao.PesquisarPorCodigo(id);
+                else
+                    dgvPesquisar.DataSource = null;
+            }
+            else
+            {
+                // pesquisa textual normal
+                string nome = "%" + txtPesquisar.Text + "%";
+                dgvPesquisar.DataSource = dao.PesquisarPorNome(nome);
+            }
+        }
+
+        private void btnNovo_Click(object sender, EventArgs e)
+        {
+            StatusOperacao = "ALTERAR";
+            CarregaDados();
+        }
+
+        private void btnAlterar_Click(object sender, EventArgs e)
+        {
+            StatusOperacao = "ALTERAR";
+            CarregaDados();
+        }
+        private void btnExcluir_Click(object sender, EventArgs e)
+        {
+            StatusOperacao = "EXCLUSÃO";
+            CarregaDados();
+        }
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

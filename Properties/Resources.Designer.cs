@@ -163,6 +163,16 @@ namespace GVC.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap copia_de_seguranca {
+            get {
+                object obj = ResourceManager.GetObject("copia_de_seguranca", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cpfAzul24 {
             get {
                 object obj = ResourceManager.GetObject("cpfAzul24", resourceCulture);
@@ -323,6 +333,16 @@ namespace GVC.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Logo___Maria_Brandão_Essencia_Radiante {
+            get {
+                object obj = ResourceManager.GetObject("Logo___Maria_Brandão_Essencia_Radiante", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Logogg64 {
             get {
                 object obj = ResourceManager.GetObject("Logogg64", resourceCulture);
@@ -386,6 +406,16 @@ namespace GVC.Properties {
         internal static System.Drawing.Bitmap Novo24 {
             get {
                 object obj = ResourceManager.GetObject("Novo24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pasta {
+            get {
+                object obj = ResourceManager.GetObject("pasta", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

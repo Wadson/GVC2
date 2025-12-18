@@ -13,4 +13,102 @@
   <PropertyGroup>
     <EnableSecurityDebugging>false</EnableSecurityDebugging>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="CustomTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="FrmModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MUI\FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MUI\FrmRecuperarSenhaOffline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TexBoxPersonalizado.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TexBoxTelefoneFormatado.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="View\FrmBackup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmBaixarConta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmBaixarParcela.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmBaseManutencao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadProdutos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadUsuario .cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmContasAReceber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmEntradaEstoque.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmEstornarPagamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmExclusaoOrfaos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmFerramentas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarCidade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarEstado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarProduto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutCidade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutEstado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutProduto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmModeloUI .cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmRelatorios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmTelaPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmVendas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\Sobre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

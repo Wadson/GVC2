@@ -6,178 +6,150 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Security.Cryptography;
+using Krypton.Toolkit;
 
 namespace GVC.MUI
 {
-    public partial class FrmLogin : GVC.FrmModeloForm
+    public partial class FrmLogin : KryptonForm
     {
-        public FrmLogin()
-        {
-            InitializeComponent();            
-        }
         // Propriedades estáticas para armazenar os dados do usuário
         public static string UsuarioConectado { get; set; }
         public static string NivelAcesso { get; set; }
+
+        public FrmLogin()
+        {
+            InitializeComponent();
+
+            //Utilitario.AdicionarEfeitoFocoEmTodos(this);
+            Utilitario.ConfigurarEnterComoTab(this);
+
+            this.KeyPreview = true; // habilita o preview das teclas
+        }
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-        private void PersonalizaCampos(TextBox activeTextBox, PictureBox activePictureBox, Panel activePanel)
+        private void AtivarCampo(KryptonTextBox textBox, PictureBox pictureBox, Panel panel, Image imagemAtiva)
         {
-            // Configurar os demais campos de texto, painéis e imagens como inativos antes de personalizar o ativo
             ResetarCampos();
 
-            // Configurar o campo de texto ativo, painel ativo e imagem ativa
-            activeTextBox.Clear();
-            activePanel.BackColor = Color.FromArgb(8, 142, 254);
-            activeTextBox.ForeColor = Color.FromArgb(78, 184, 206);
+            pictureBox.Image = imagemAtiva;
+            panel.BackColor = Color.FromArgb(8, 142, 254);
+            textBox.ForeColor = Color.FromArgb(78, 184, 206);
 
-            // Definir a imagem correta com base no TextBox ativo
-            if (activeTextBox == txtUserName)
-            {
-                activePictureBox.Image = Properties.Resources.UsuarioBlue24;
-            }
-            else if (activeTextBox == txtEmail)
-            {
-                activePictureBox.Image = Properties.Resources.EmailAzul24;
-            }
-            else if (activeTextBox == txtPassword)
-            {
-                activePictureBox.Image = Properties.Resources.SenhasBlue24;
-            }
+            // Fundo verde claro
+            textBox.StateCommon.Back.Color1 = Color.FromArgb(200, 255, 200);
+        }
+
+        private void DesativarCampo(KryptonTextBox textBox, PictureBox pictureBox, Panel panel, Image imagemInativa)
+        {
+            pictureBox.Image = imagemInativa;
+            panel.BackColor = Color.White;
+            textBox.ForeColor = Color.White;
+
+            // Fundo branco
+            textBox.StateCommon.Back.Color1 = Color.White;
         }
 
         private void ResetarCampos()
         {
-            // Resetar todos os campos de texto, painéis e imagens para inativos
+            // Usuário
             pictureBoxUser.Image = Properties.Resources.Usuario24;
             panel1.BackColor = Color.White;
-            txtUserName.ForeColor = Color.White;
+            txtUsuario.ForeColor = Color.White;
+            txtUsuario.StateCommon.Back.Color1 = Color.White;
 
-            pictureBoxEmail.Image = Properties.Resources.EmailBranco24;
-            panel2.BackColor = Color.White;
-            txtEmail.ForeColor = Color.White;
-
+            // Senha
             pictureBoxRepetePassWord.Image = Properties.Resources.Senhas24;
             panel3.BackColor = Color.White;
-            txtPassword.ForeColor = Color.White;
+            txtSenha.ForeColor = Color.White;
+            txtSenha.StateCommon.Back.Color1 = Color.White;
         }
 
-        private void txtUserName_Click(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtUserName, pictureBoxUser, panel1);
-        }
-
-        private void txtPasssword_Click(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtEmail, pictureBoxEmail, panel2);
-        }
-
-        private void txtRepetPass_Click(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtPassword, pictureBoxRepetePassWord, panel3);
-        }
-
-        private void txtUserName_Enter(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtUserName, pictureBoxUser, panel1);
-        }
-
-        private void txtPasssword_Enter(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtEmail, pictureBoxEmail, panel2);
-        }
-
-        private void txtRepetPass_Enter(object sender, EventArgs e)
-        {
-            PersonalizaCampos(txtPassword, pictureBoxRepetePassWord, panel3);
-        }
-
-        private void txtUserName_Leave(object sender, EventArgs e)
-        {
-            ResetarCampos();
-        }
-
-        private void txtPasssword_Leave(object sender, EventArgs e)
-        {
-            ResetarCampos();
-        }
 
         private void txtRepetPass_Leave(object sender, EventArgs e)
         {
             ResetarCampos();
         }
 
-        private void ObterDadosUsuario(string email, string senhaHash)
+        private void ObterDadosUsuario(string usuario, string senhaHash)
         {
-            // Consulta SQL para obter os dados do usuário
-            string query = "SELECT NomeUsuario, TipoUsuario FROM Usuario WHERE Email = @Email AND Senha = @Senha";
+            string query = "SELECT NomeUsuario, TipoUsuario FROM Usuarios WHERE NomeUsuario = @Usuario AND Senha = @Senha";
 
-            using (var con = Conexao.Conex())  // A conexão com o banco de dados
+            using (var con = GVC.Helpers.Conexao.Conex())
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqliteCommand cmd = new SqliteCommand(query, con))
                 {
-                    // Adicionando parâmetros para evitar SQL Injection
-                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Usuario", usuario);
                     cmd.Parameters.AddWithValue("@Senha", senhaHash);
 
                     con.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    SqliteDataReader reader = cmd.ExecuteReader();
 
-                    if (reader.Read())  // Se o usuário for encontrado
+                    if (reader.Read())
                     {
-                        // Atribuindo os dados do usuário às propriedades estáticas
                         UsuarioConectado = reader["NomeUsuario"].ToString();
                         NivelAcesso = reader["TipoUsuario"].ToString();
                     }
-
-                    con.Close();
                 }
             }
         }
 
-
-
-        private bool ValidarLogin(string username, string email, string password)
+        private string ValidarLogin(string usuario, string password)
         {
-            bool loginValido = false;
+            string senhaHash = GerarHashSHA256(password);
 
-            // Aqui você faz a consulta no banco de dados para validar o usuário
-            string senhaHash = GerarHashSHA256(password);  // Gera o hash da senha
-
-            string query = "SELECT NomeUsuario, TipoUsuario FROM Usuario WHERE Email = @Email AND Senha = @Senha";
-
-            using (var con = Conexao.Conex())  // A conexão com o banco de dados
+            using (var con = GVC.Helpers.Conexao.Conex())
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                // Primeiro: verificar se o usuário existe
+                string queryUsuario = "SELECT Senha, TipoUsuario FROM Usuarios WHERE NomeUsuario = @Usuario";
+                using (SqliteCommand cmd = new SqliteCommand(queryUsuario, con))
                 {
-                    // Adicionando parâmetros para evitar SQL Injection
-                    cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.Parameters.AddWithValue("@Senha", senhaHash);
+                    cmd.Parameters.AddWithValue("@Usuario", usuario);
 
                     con.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    var reader = cmd.ExecuteReader();
 
-                    if (reader.Read())  // Se o usuário for encontrado
+                    if (!reader.Read())
                     {
-                        // Atribuindo os dados do usuário às propriedades estáticas
-                        UsuarioConectado = reader["NomeUsuario"].ToString();
-                        NivelAcesso = reader["TipoUsuario"].ToString();
+                        // Usuário não encontrado → mas vamos checar se a senha existe em algum usuário
+                        con.Close();
 
-                        loginValido = true;  // Login bem-sucedido
+                        string querySenha = "SELECT 1 FROM Usuarios WHERE Senha = @Senha";
+                        using (var cmdSenha = new SqliteCommand(querySenha, con))
+                        {
+                            cmdSenha.Parameters.AddWithValue("@Senha", senhaHash);
+                            con.Open();
+                            var senhaReader = cmdSenha.ExecuteReader();
+
+                            if (!senhaReader.Read())
+                            {
+                                return "Usuário e senha incorretos!";
+                            }
+                            else
+                            {
+                                return "Usuário incorreto!";
+                            }
+                        }
                     }
-                    else
+
+                    // Usuário existe → verificar senha
+                    string senhaBanco = reader["Senha"].ToString();
+                    string tipoUsuario = reader["TipoUsuario"].ToString();
+
+                    if (senhaBanco != senhaHash)
                     {
-                        loginValido = false;  // Login falhou
+                        return "Senha incorreta!";
                     }
 
-                    con.Close();
+                    // Se chegou aqui, login válido
+                    UsuarioConectado = usuario;
+                    NivelAcesso = tipoUsuario;
+                    return "OK";
                 }
             }
-
-            return loginValido;
         }
 
 
@@ -201,32 +173,30 @@ namespace GVC.MUI
                 return builder.ToString();
             }
         }
-
-
-
-
-
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string username = txtUserName.Text.Trim();
-            string email = txtEmail.Text.Trim();
-            string password = txtPassword.Text;
+            string usuario = txtUsuario.Text.Trim();
+            string password = txtSenha.Text;
 
-            if (ValidarLogin(username, email, password))  // Chama a validação
+            string resultado = ValidarLogin(usuario, password);
+
+            if (resultado == "OK")
             {
-                MessageBox.Show("Login realizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Login realizado com sucesso!", "Sucesso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // O nome do usuário e nível de acesso já foram atribuídos nas propriedades estáticas do FrmLogin
                 this.Hide();
-                FrmPrincipal frm = new FrmPrincipal();
+                FrmTelaPrincipal frm = new FrmTelaPrincipal();
                 frm.Show();
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+
             }
             else
             {
-                MessageBox.Show("Usuário ou senha incorretos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(resultado, "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -240,5 +210,69 @@ namespace GVC.MUI
             FrmRecuperarSenhaOffline frmRecuperarSenhaOffline = new FrmRecuperarSenhaOffline();
             frmRecuperarSenhaOffline.ShowDialog();
         }
+
+        private void FrmLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                // Exemplo: fecha o formulário
+                this.Close();
+                e.Handled = true;
+            }
+        }
+        private void txtUsuario_Enter(object sender, EventArgs e)
+        {
+            AtivarCampo(txtUsuario, pictureBoxUser, panel1,
+                Properties.Resources.UsuarioBlue24);
+        }
+
+        private void txtUsuario_Leave(object sender, EventArgs e)
+        {
+            DesativarCampo(txtUsuario, pictureBoxUser, panel1,
+                   Properties.Resources.Usuario24);
+        }
+        private void txtSenha_Enter(object sender, EventArgs e)
+        {
+            AtivarCampo(txtSenha, pictureBoxRepetePassWord, panel3,
+                Properties.Resources.SenhasBlue24);
+        }
+        private void txtSenha_Leave(object sender, EventArgs e)
+        {
+            DesativarCampo(txtSenha, pictureBoxRepetePassWord, panel3,
+                  Properties.Resources.Senhas24);
+        }   
+
+        private void txtUsuario_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Impede que o Enter dentro do campo acione o login
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                // Opcional: mover para o próximo campo
+                txtSenha.Focus();
+            }
+        }
+
+        private void txtSenha_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Impede que o Enter dentro do campo acione o login
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                // Opcional: acionar o botão de login só aqui
+                btnLogin.PerformClick();
+            }
+        }
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
+            txtUsuario.Focus();
+        }
+
+       
     }
 }

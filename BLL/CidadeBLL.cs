@@ -2,17 +2,18 @@
 using GVC.MODEL;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GVC.Helpers;
 
 namespace GVC.BLL
 {
     internal class CidadeBLL
     {
-        CidadeDALL CidadeDal = null;
+        CidadeDal CidadeDal = null;
         // ************************LISTA USUARIO*********************************************
         public DataTable Listar()
         {
@@ -20,7 +21,7 @@ namespace GVC.BLL
             
             try
             {
-                CidadeDal = new CidadeDALL();
+                CidadeDal = new CidadeDal();
                 dtable = CidadeDal.Listar_Cidades();
             }
             catch (Exception erro)
@@ -34,8 +35,8 @@ namespace GVC.BLL
         {
             try
             {
-                CidadeDal = new CidadeDALL();
-                CidadeDal.gravaCidades(cidades);
+                CidadeDal = new CidadeDal();
+                CidadeDal.Salvar(cidades);
             }
             catch (Exception erro)
             {
@@ -47,8 +48,8 @@ namespace GVC.BLL
         {
             try
             {
-                CidadeDal = new  CidadeDALL();
-                CidadeDal.ExcluiCidade(cidades);
+                CidadeDal = new  CidadeDal();
+                CidadeDal.Excluir(cidades);
             }
             catch (Exception erro)
             {
@@ -57,12 +58,11 @@ namespace GVC.BLL
         }
 
         public void Atualizar(CidadeMODEL cidades)
-        {
-           
+        {           
             try
             {
-                CidadeDal = new CidadeDALL();
-                CidadeDal.AtualizaCidade(cidades);
+                CidadeDal = new CidadeDal();
+                CidadeDal.Atualizar(cidades);
             }
             catch (Exception erro)
             {
@@ -74,16 +74,16 @@ namespace GVC.BLL
             var conn = Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM Cidade WHERE NomeCidade like '" + pesquisa + "%'", conn);
+                SqliteCommand sql = new SqliteCommand("SELECT * FROM Cidade WHERE Nome like '" + pesquisa + "%'", conn);
                 conn.Open();
-                SqlDataReader datareader;
+                SqliteDataReader datareader;
                 CidadeMODEL obj_cidade = new CidadeMODEL();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (datareader.Read())
                 {
                     obj_cidade.CidadeID = Convert.ToInt32(datareader["CidadeID"]);
-                    obj_cidade.NomeCidade = datareader["NomeCidade"].ToString();
+                    obj_cidade.Nome = datareader["Nome"].ToString();
                 }
                 return obj_cidade;
             }

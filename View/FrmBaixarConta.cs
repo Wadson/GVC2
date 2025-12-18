@@ -2,37 +2,37 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+using Krypton.Toolkit;
 using GVC.View;
-using static GVC.View.FrmContaReceberr;
 
 namespace GVC
 {
     public partial class FrmBaixarConta : KryptonForm
     {
-        private Parcela _parcela;       
-        public FrmBaixarConta(Parcela parcela)
+       
+        
+
+        public FrmBaixarConta()
         {
             InitializeComponent();
-           
-            _parcela = parcela;            
+       
             CarregarDadosParcela();
             txtValorPago.Leave += new EventHandler(txtValorPago_Leave);
         }
         private void CarregarDadosParcela()
         {
-            txtParcelaID.Text = _parcela.ParcelaID.ToString();
-            txtNumeroParcela.Text = _parcela.NumeroParcela.ToString();
-            txtValorParcela.Text = _parcela.ValorParcela.ToString("N2");
-            dtpDataVencimento.Value = _parcela.DataVencimento;
-            txtSaldoRestante.Text = _parcela.SaldoRestante.ToString("N2");
-            txtValorPago.Text = _parcela.ValorPago.ToString("N2");
+            //txtParcelaID.Text = _parcela.ParcelaID.ToString();
+            //txtNumeroParcela.Text = _parcela.NumeroParcela.ToString();
+            //txtValorParcela.Text = _parcela.ValorParcela.ToString("N2");
+            //dtpDataVencimento.Value = _parcela.DataVencimento;
+            //txtSaldoRestante.Text = _parcela.SaldoRestante.ToString("N2");
+            //txtValorPago.Text = _parcela.ValorPago.ToString("N2");
         }
 
         private void FrmBaixarConta_KeyDown(object sender, KeyEventArgs e)
@@ -66,17 +66,17 @@ namespace GVC
             decimal valorPagoAtual = 0;
             decimal saldoRestanteAtual = 0;
 
-            using (var conn = Conexao.Conex())
+            using (var conn = GVC.Helpers.Conexao.Conex())
             {
                 conn.Open();
 
                 // Buscar os valores atuais da parcela
                 string selectParcelaQuery = "SELECT ValorRecebido, SaldoRestante FROM Parcela WHERE ParcelaID = @ParcelaID";
 
-                using (SqlCommand cmdSelect = new SqlCommand(selectParcelaQuery, conn))
+                using (SqliteCommand cmdSelect = new SqliteCommand(selectParcelaQuery, conn))
                 {
                     cmdSelect.Parameters.AddWithValue("@ParcelaID", parcelaID);
-                    using (SqlDataReader reader = cmdSelect.ExecuteReader())
+                    using (SqliteDataReader reader = cmdSelect.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -98,16 +98,16 @@ namespace GVC
             // Atualizar a tabela Parcela
             string updateParcelaQuery = "UPDATE Parcela SET Pago = @Pago, ValorRecebido = @ValorRecebido, SaldoRestante = @SaldoRestante WHERE ParcelaID = @ParcelaID";
 
-            using (var conn = Conexao.Conex())
+            using (var conn = GVC.Helpers.Conexao.Conex())
             {
                 conn.Open();
 
-                using (SqlTransaction transaction = conn.BeginTransaction())
+                using (SqliteTransaction transaction = conn.BeginTransaction())
                 {
                     try
                     {
                         // Inserir na tabela PagamentoParcial
-                        using (SqlCommand cmdPagamentoParcial = new SqlCommand(insertPagamentoParcialQuery, conn, transaction))
+                        using (SqliteCommand cmdPagamentoParcial = new SqliteCommand(insertPagamentoParcialQuery, conn, transaction))
                         {
                             cmdPagamentoParcial.Parameters.AddWithValue("@ParcelaID", parcelaID);
                             cmdPagamentoParcial.Parameters.AddWithValue("@ValorPago", valorPagoParcial);
@@ -116,7 +116,7 @@ namespace GVC
                         }
 
                         // Atualizar tabela Parcela
-                        using (SqlCommand cmdParcela = new SqlCommand(updateParcelaQuery, conn, transaction))
+                        using (SqliteCommand cmdParcela = new SqliteCommand(updateParcelaQuery, conn, transaction))
                         {
                             cmdParcela.Parameters.AddWithValue("@Pago", pago);
                             cmdParcela.Parameters.AddWithValue("@ValorRecebido", novoValorPago);

@@ -2,7 +2,7 @@
 using GVC.MODEL;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace GVC.BLL
 {
     internal class EstadoBLL
     {
-        EstadoDALL estadoDal = null;
+        EstadoDal estadoDal = null;
         // ************************LISTA USUARIO*********************************************
         public DataTable Listar()
         {
@@ -20,7 +20,7 @@ namespace GVC.BLL
             
             try
             {
-                estadoDal = new EstadoDALL();
+                estadoDal = new EstadoDal();
                 dtable = estadoDal.Listar();
             }
             catch (Exception erro)
@@ -34,7 +34,7 @@ namespace GVC.BLL
         {
             try
             {
-                estadoDal = new EstadoDALL();
+                estadoDal = new EstadoDal();
                 estadoDal.Salvar(estado);
             }
             catch (Exception erro)
@@ -47,7 +47,7 @@ namespace GVC.BLL
         {
             try
             {
-                estadoDal = new EstadoDALL();
+                estadoDal = new EstadoDal();
                 estadoDal.Excluir(estado);
             }
             catch (Exception erro)
@@ -61,7 +61,7 @@ namespace GVC.BLL
            
             try
             {
-                estadoDal = new EstadoDALL();
+                estadoDal = new EstadoDal();
                 estadoDal.Atualizar(estado);
             }
             catch (Exception erro)
@@ -71,19 +71,19 @@ namespace GVC.BLL
         }
         public EstadoMODEL Pesquisar(string pesquisa)
         {
-            var conn = Conexao.Conex();
+            using var conn = GVC.Helpers.Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT EstadoID, NomeEstado, Uf FROM Estado WHERE NomeEstado like '" + pesquisa + "%'", conn);
+                SqliteCommand sql = new SqliteCommand("SELECT CodigoUf, Nome, Uf FROM Estado WHERE Nome like '" + pesquisa + "%'", conn);
                 conn.Open();
-                SqlDataReader datareader;
+                SqliteDataReader datareader;
                 EstadoMODEL obj_estado = new EstadoMODEL();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (datareader.Read())
                 {
                     obj_estado.EstadoID = Convert.ToInt32(datareader["EstadoID"]);
-                    obj_estado.NomeEstado = datareader["NomeEstado"].ToString();
+                    obj_estado.Nome = datareader["Nome"].ToString();
                     obj_estado.UF = datareader["Uf"].ToString();
                 }
                 return obj_estado;

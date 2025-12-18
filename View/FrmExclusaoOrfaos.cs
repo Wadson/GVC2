@@ -1,5 +1,7 @@
 ﻿using GVC.BLL;
 using GVC.DALL;
+using GVC.MODEL;
+using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,22 +9,21 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static GVC.View.FrmContaReceberr;
 
 namespace GVC.View
 {
-    public partial class FrmExclusaoOrfaos : GVC.FrmModeloForm
+    public partial class FrmExclusaoOrfaos : KryptonForm
     {
         public FrmExclusaoOrfaos()
         {
             InitializeComponent();
         }
-        private void CarregarDados()
+        private void AtualizarDataGridView()
         {
-            AtualizarDataGrid(dgvVendas, () => new VendaDAL().ListarVenda());
+            AtualizarDataGrid(dgvVendas, () => new VendaDal().ListarVendas());
             AtualizarDataGrid(dgvPagamentosParciais, () => new PagamentoParcialDal().ListarPagamentosParciais());
-            AtualizarDataGrid(dgvParcelas, () => new ParcelaDAL().ListarParcelas());
-            AtualizarDataGrid(dgvItensVenda, () => new ItemVendaDAL().ListarItensVenda());
+            AtualizarDataGrid(dgvParcelas, () => new ParcelaDal().ListarParcelas());
+            AtualizarDataGrid(dgvItensVenda, () => new ItemVendaDal().ListarItensVenda());
         }
 
         /// <summary>
@@ -30,125 +31,120 @@ namespace GVC.View
         /// </summary>
         private void AtualizarDataGrid(DataGridView dgv, Func<object> listarDados) =>
             dgv.DataSource = listarDados();
-
-        /// <summary>
-        /// Método genérico para excluir registros com confirmação e recarregar os dados.
-        /// </summary>
-        private void ExcluirRegistro(DataGridView dgv, string colunaID, Action<int> metodoExclusao, Action atualizarGrid, string nomeEntidade)
-        {
-            if (dgv.SelectedRows.Count == 0)
-            {
-                MessageBox.Show($"Selecione um(a) {nomeEntidade.ToLower()} para excluir.", $"Excluir {nomeEntidade}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (MessageBox.Show($"Deseja excluir o(a) {nomeEntidade.ToLower()} selecionado(a)?", $"Excluir {nomeEntidade}", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-
-            try
-            {
-                int registroID = Convert.ToInt32(dgv.SelectedRows[0].Cells[colunaID].Value);
-                metodoExclusao(registroID);
-
-                MessageBox.Show($"{nomeEntidade} excluído(a) com sucesso.", $"Excluir {nomeEntidade}", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                atualizarGrid();  // Recarrega os dados após exclusão
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao excluir {nomeEntidade.ToLower()}: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+       
 
         // Handlers dos botões de exclusão
-        private void btnExcluirVenda_Click(object sender, EventArgs e) =>
-            ExcluirRegistro(dgvVendas, "VendaID", id => new VendaDAL().DeleteVenda(id), () => AtualizarDataGrid(dgvVendas, () => new VendaDAL().ListarVenda()), "Venda");
-
-        private void btnExcluirPagamentoParcial_Click(object sender, EventArgs e) =>
-            ExcluirRegistro(dgvPagamentosParciais, "PagamentoParcialID", id => new PagamentoParcialDal().ExcluirPagamentosParciaisPorParcelaID(id),
-                            () => AtualizarDataGrid(dgvPagamentosParciais, () => new PagamentoParcialDal().ListarPagamentosParciais()), "Pagamento Parcial");
-
-        private void btnExcluirParcelas_Click(object sender, EventArgs e) =>
-            ExcluirRegistro(dgvParcelas, "ParcelaID", id => new ParcelaDAL().DeleteParcela(id),
-                            () => AtualizarDataGrid(dgvParcelas, () => new ParcelaDAL().ListarParcelas()), "Parcela");
-
-        private void btnExcluirItensVenda_Click(object sender, EventArgs e) =>
-            ExcluirRegistro(dgvItensVenda, "ItemVendaID", id => new ItemVendaDAL().ExcluirItensPorVendaID(id),
-                            () => AtualizarDataGrid(dgvItensVenda, () => new ItemVendaDAL().ListarItensVenda()), "Item de Venda");
-
-        private void btnSair_Click(object sender, EventArgs e) => Close();
-
-        private void FrmExclusaoOrfao_Load(object sender, EventArgs e) => CarregarDados();
-        //****************************************************************************************************
-        /// <summary>
-        /// Exclui todos os registros selecionados no DataGridView com confirmação.
-        /// </summary>
-        private void ExcluirRegistrosSelecionados(DataGridView dgv, string colunaID, Action<int> metodoExclusao, Action atualizarGrid, string nomeEntidade)
+        private void btnExcluirVenda_Click(object sender, EventArgs e)
         {
-            if (dgv.SelectedRows.Count == 0)
-            {
-                MessageBox.Show($"Selecione pelo menos um(a) {nomeEntidade.ToLower()} para excluir.", $"Excluir {nomeEntidade}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            int quantidadeSelecionada = dgv.SelectedRows.Count;
-
-            if (MessageBox.Show($"Deseja excluir os {quantidadeSelecionada} {nomeEntidade.ToLower()}(s) selecionado(s)?",
-                                $"Excluir {nomeEntidade}(s)", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-
+            int quantidadeSelecionada = dgvVendas.SelectedRows.Count;
             int excluidosComSucesso = 0;
             int falhas = 0;
 
-            foreach (DataGridViewRow row in dgv.SelectedRows)
+            // Supondo que você tenha um DataGridView chamado 'dgvVendas'
+            foreach (DataGridViewRow row in dgvVendas.SelectedRows)
             {
-                try
-                {
-                    int registroID = Convert.ToInt32(row.Cells[colunaID].Value);
-                    metodoExclusao(registroID);
-                    excluidosComSucesso++;
-                }
-                catch (Exception ex)
-                {
-                    falhas++;
-                    // Log do erro pode ser adicionado aqui se necessário
-                    Console.WriteLine($"Falha ao excluir {nomeEntidade.ToLower()} com ID {row.Cells[colunaID].Value}: {ex.Message}");
-                }
+                var vendaID = Convert.ToInt32(row.Cells["VendaID"].Value);
+
+                VendaModel vendaModel = new VendaModel();
+                vendaModel.VendaID = vendaID;
+
+                VendaDal vendaDAL = new VendaDal();
+                vendaDAL.DeleteVenda(vendaModel);
             }
-
-            atualizarGrid(); // Recarrega os dados após a exclusão
-
+            // Exibe a mensagem de sucesso
             string mensagem = $"Total selecionados: {quantidadeSelecionada}\nExcluídos com sucesso: {excluidosComSucesso}\nFalhas: {falhas}";
-            MessageBox.Show(mensagem, $"Resultado da exclusão de {nomeEntidade}(s)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(mensagem, $"Resultado da exclusão de vendas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Atualize o DataGridView após a exclusão
+            AtualizarDataGridView();
         }
 
-        private void ExcluirRegistro<T>(DataGridView dgv, string colunaID, Action<int> metodoExclusao, Action listarDados)
+        private void btnExcluirPagamentoParcial_Click(object sender, EventArgs e)
         {
-            if (dgv.SelectedRows.Count > 0)
-            {
-                if (MessageBox.Show("Deseja excluir a conta selecionada?", "Excluir conta", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    try
-                    {
-                        int registroID = Convert.ToInt32(dgv.SelectedRows[0].Cells[colunaID].Value);
-                        metodoExclusao(registroID);
+            int quantidadeSelecionada = dgvPagamentosParciais.SelectedRows.Count;
+            int excluidosComSucesso = 0;
+            int falhas = 0;
 
-                        MessageBox.Show("Conta excluída com sucesso.", "Excluir conta", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Recarregar os dados
-                        listarDados();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Erro ao excluir a conta: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
+            // Supondo que você tenha um DataGridView chamado 'dgvVendas'
+            foreach (DataGridViewRow row in dgvPagamentosParciais.SelectedRows)
             {
-                MessageBox.Show("Selecione uma conta para excluir.", "Excluir conta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                var pagamentoParcialID = Convert.ToInt32(row.Cells["PagamentoParcialID"].Value);
+
+                PagamentoParcialModel pagamentoParcialModel = new PagamentoParcialModel();
+                pagamentoParcialModel.PagamentoID = pagamentoParcialID;
+
+                PagamentoParcialDal pagamentoParcialDal = new PagamentoParcialDal();
+                pagamentoParcialDal.Excluir(pagamentoParcialModel);
             }
-        }     
+            // Exibe a mensagem de sucesso
+            string mensagem = $"Total selecionados: {quantidadeSelecionada}\nExcluídos com sucesso: {excluidosComSucesso}\nFalhas: {falhas}";
+            MessageBox.Show(mensagem, $"Resultado da exclusão de pagamentos parciais", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Atualize o DataGridView após a exclusão
+            AtualizarDataGridView();
+        }
+
+        private void btnExcluirParcelas_Click(object sender, EventArgs e)
+        {
+            int quantidadeSelecionada = dgvParcelas.SelectedRows.Count;
+            int excluidosComSucesso = 0;
+            int falhas = 0;
+
+            // Supondo que você tenha um DataGridView chamado 'dgvVendas'
+            foreach (DataGridViewRow row in dgvParcelas.SelectedRows)
+            {
+                var parcelaID = Convert.ToInt32(row.Cells["ParcelaID"].Value);
+
+                ParcelaModel parcelaModel = new ParcelaModel();
+                parcelaModel.ParcelaID = parcelaID;
+
+                ParcelaDal parcelaDAL = new ParcelaDal();
+                parcelaDAL.Excluir(parcelaModel);
+            }
+            // Exibe a mensagem de sucesso
+            string mensagem = $"Total selecionados: {quantidadeSelecionada}\nExcluídos com sucesso: {excluidosComSucesso}\nFalhas: {falhas}";
+            MessageBox.Show(mensagem, $"Resultado da exclusão das parcelas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Atualize o DataGridView após a exclusão
+            AtualizarDataGridView();
+
+        }
+
+        private void btnExcluirItensVenda_Click(object sender, EventArgs e)
+        {
+            int quantidadeSelecionada = dgvItensVenda.SelectedRows.Count;
+            int excluidosComSucesso = 0;
+            int falhas = 0;
+
+            // Supondo que você tenha um DataGridView chamado 'dgvVendas'
+            foreach (DataGridViewRow row in dgvItensVenda.SelectedRows)
+            {
+                var itemVendaID = Convert.ToInt32(row.Cells["ItemVendaID"].Value);
+
+                ItemVendaModel itemVendaModel = new ItemVendaModel();
+                itemVendaModel.ItemVendaID = itemVendaID;
+
+                ItemVendaDal itemvendaDAL = new ItemVendaDal();
+                itemvendaDAL.Excluir(itemVendaModel);
+            }
+            // Exibe a mensagem de sucesso
+            string mensagem = $"Total selecionados: {quantidadeSelecionada}\nExcluídos com sucesso: {excluidosComSucesso}\nFalhas: {falhas}";
+            MessageBox.Show(mensagem, $"Resultado da exclusão de Itens de Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Atualize o DataGridView após a exclusão
+            AtualizarDataGridView();
+        }
+
+        // Botão de sair
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        // Carrega os dados ao abrir o formulário
+        private void FrmExclusaoOrfao_Load(object sender, EventArgs e)
+        {
+            AtualizarDataGridView();
+        }
 
     }
 }

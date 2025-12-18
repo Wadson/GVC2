@@ -1,0 +1,5 @@
+=== DEBUG ObterUsuarioPorCPFDataNascimento ===
+Pesquisa CPF (limpo): 69795061291
+Pesquisa Data (ISO): 1982-12-16
+Resultados encontrados:
+UsuarioID=4, Email=wadsonwadson@hotmail.com, DataNascimento='1982-10-16 11:43:43.5915072' (len=27)

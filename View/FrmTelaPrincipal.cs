@@ -6,10 +6,9 @@ using System.Drawing;
 using System.IO;
 using System.Timers;
 using System.Windows.Forms;
-using static GVC.View.FrmContaReceberr;
-using ComponentFactory.Krypton.Toolkit;
+using Krypton.Toolkit;
 using System;
-using GVC.Relatorios;
+
 
 namespace GVC.View
 {
@@ -19,11 +18,9 @@ namespace GVC.View
         public FrmTelaPrincipal()
         {
             InitializeComponent();
-            StatusOperacao = "";
+            StatusOperacao = ""; 
         }
         private string StatusOperacao = "";
-        private FrmContaReceberr _frmContaReceberr;
-        private Parcela _parcela;
         private void AbrirFormEnPanel(object Form)
         {
             if (this.panelConteiner.Controls.Count > 0)
@@ -39,20 +36,11 @@ namespace GVC.View
 
         private void btnUsuario_Click(object sender, EventArgs e)
         {
-            FrmManutUsuario frm = new FrmManutUsuario(StatusOperacao);
-            AbrirFormEnPanel(frm);
         }
 
         private void btnCliente_Click(object sender, EventArgs e)
         {
             FrmManutCliente frm = new FrmManutCliente(StatusOperacao);
-            StatusOperacao = "NOVO";
-            AbrirFormEnPanel(frm);
-        }
-
-        private void btnFornecedor_Click(object sender, EventArgs e)
-        {
-            FrmManutFornecedor frm = new FrmManutFornecedor(StatusOperacao);
             StatusOperacao = "NOVO";
             AbrirFormEnPanel(frm);
         }
@@ -66,8 +54,9 @@ namespace GVC.View
 
         private void btnVendas_Click(object sender, EventArgs e)
         {
-            FrmPedidoVendaNovo frm = new FrmPedidoVendaNovo();
-            AbrirFormEnPanel(frm);
+            //FrmPedidoVendaNovo frm = new FrmPedidoVendaNovo();
+            FrmVendas frm = new FrmVendas();
+            frm.Show();
         }
 
         private void btnFerramentas_Click(object sender, EventArgs e)
@@ -78,32 +67,29 @@ namespace GVC.View
 
         private void btnContaReceber_Click(object sender, EventArgs e)
         {
-            // Suponha que você tenha uma instância de Parcela
-            Parcela parcela = new Parcela();
-            // Chama o construtor de FrmContaReceberr com os parâmetros necessários
-            FrmContaReceberr frm = new FrmContaReceberr(parcela);
+            FrmContasAReceber frm = new FrmContasAReceber();
             AbrirFormEnPanel(frm);
         }
-        
+
 
         private void btnSair_Click(object sender, EventArgs e)
         {
-            this.Close();
         }
 
         private void btnRelatorios_Click(object sender, EventArgs e)
         {
-            FrmMenuRelatorio frm = new FrmMenuRelatorio();
-            AbrirFormEnPanel(frm);
         }
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            // Atualiza a data e hora
+            if (this.IsDisposed || !this.IsHandleCreated)
+                return;
+
             this.Invoke(new Action(() =>
             {
                 lblData.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 lblHoraAtual.Text = DateTime.Now.ToString("HH:mm:ss");
             }));
+
         }
         private void AtualizaBarraStatus()
         {
@@ -111,6 +97,7 @@ namespace GVC.View
             string currentPath = Path.GetDirectoryName(Application.ExecutablePath);
 
             // Atualiza a label de usuário na barra de status
+
             string usuarioLogado = FrmLogin.UsuarioConectado;
             string nivelAcesso = FrmLogin.NivelAcesso;
             lblUsuarioLogadoo.Text = $"{usuarioLogado}";
@@ -140,8 +127,6 @@ namespace GVC.View
         {
             AtualizaBarraStatus();
         }
-
-
         private void loginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmLogin frmLogin = new FrmLogin();
@@ -154,35 +139,98 @@ namespace GVC.View
             frmLogin.ShowDialog();
         }
 
-        private void btnLogoff_Click(object sender, EventArgs e)
-        {
-            Application.Restart();
-        }
-
         private void cidadeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCadCidade frmCadCidade = new FrmCadCidade(StatusOperacao);
-            StatusOperacao = "NOVO";
-            frmCadCidade.ShowDialog();
+            //FrmCadCidade frmCadCidade = new FrmCadCidade(StatusOperacao);
+            //StatusOperacao = "NOVO";
+            //frmCadCidade.ShowDialog();
         }
 
-        private void btnEstado_Click(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            FrmManutEstado frmManutEstado = new FrmManutEstado(StatusOperacao);
-            StatusOperacao = "NOVO";
-            AbrirFormEnPanel(frmManutEstado);
+            lblHoraAtuall.Text = DateTime.Now.ToString("HH:mm:ss");
         }
 
-        private void btnCidade_Click(object sender, EventArgs e)
+        private void cidadeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             FrmManutCidade frmManutCidade = new FrmManutCidade(StatusOperacao);
             StatusOperacao = "NOVO";
             AbrirFormEnPanel(frmManutCidade);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void clientesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            lblHoraAtuall.Text = DateTime.Now.ToString("HH:mm:ss");
+            FrmManutCliente frm = new FrmManutCliente(StatusOperacao);
+            StatusOperacao = "NOVO";
+            AbrirFormEnPanel(frm);
+        }
+
+        private void estadoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmManutEstado frm = new FrmManutEstado(StatusOperacao);
+            StatusOperacao = "NOVO";
+            AbrirFormEnPanel(frm);
+        }
+
+        private void fornecedoresToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmManutProduto frm = new FrmManutProduto(StatusOperacao);
+            StatusOperacao = "NOVO";
+            AbrirFormEnPanel(frm);
+        }
+
+        private void produtosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmManutProduto frm = new FrmManutProduto(StatusOperacao);
+            StatusOperacao = "NOVO";
+            AbrirFormEnPanel(frm);
+        }
+
+        private void btnUsuario_Click_1(object sender, EventArgs e)
+        {
+            FrmManutUsuario frm = new FrmManutUsuario(StatusOperacao);
+            StatusOperacao = "NOVO";
+            AbrirFormEnPanel(frm);
+        }
+
+        private void btnLogoff_Click(object sender, EventArgs e)
+        {
+            // Fecha a tela principal
+            this.Hide();
+
+            // Limpa dados do usuário conectado
+            FrmLogin.UsuarioConectado = null;
+            FrmLogin.NivelAcesso = null;
+
+            // Volta para a tela de login
+            FrmLogin frmLogin = new FrmLogin();
+            frmLogin.ShowDialog();
+
+            // Se o login for cancelado, fecha o sistema
+            if (frmLogin.DialogResult != DialogResult.OK)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                // Se o login foi feito novamente, reabre a tela principal
+                this.Show();
+            }
+        }
+
+        private void FrmTelaPrincipal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Dispose();
+            }
+        }
+
+        private void btnFornecedor_Click(object sender, EventArgs e)
+        {
+            FrmManutFornecedor frm = new FrmManutFornecedor(StatusOperacao);            
+            AbrirFormEnPanel(frm);
         }
     }
 }

@@ -12,10 +12,24 @@ namespace GVC.BLL
     {
         private PagamentoParcialDal _dal;
 
+        PagamentoParcialDal pagamentoParcialDAL = null;
+        public void Excluir(PagamentoParcialModel pagamentoParcial)
+        {
+            try
+            {
+                pagamentoParcialDAL = new PagamentoParcialDal();
+                pagamentoParcialDAL.Excluir(pagamentoParcial);
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+        }
         public PagamentoParcialBll()
         {
             _dal = new PagamentoParcialDal();
         }
+
 
         public void RegistrarPagamentoParcial(PagamentoParcialModel pagamentoParcial)
         {

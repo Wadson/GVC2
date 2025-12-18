@@ -1,1484 +1,1289 @@
+using Dapper;
+using GVC.Helpers;
+using GVC.MODEL;
+using iText.Kernel.Colors;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using Krypton.Toolkit;
+using Microsoft.Data.Sqlite;
+using OfficeOpenXml;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Globalization;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using GVC;
+using System.Data;
 using System.Drawing;
-using ComponentFactory.Krypton.Toolkit;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using Color = System.Drawing.Color;
 
-namespace GVC
-{
+namespace GVC{
     public static class Utilitario
     {
+        private static readonly CultureInfo CulturaBR = new CultureInfo("pt-BR");
         
-        private static readonly SqlConnection conn = Conexao.Conex();
-        public static string RemoverZerosAEsquerda(string valor)
-        {
-            if (string.IsNullOrEmpty(valor))
-                return valor;
+        // ==============================================================
+        // 1. FORMATAR MOEDA (TextBox e KryptonTextBox)
+        // ==============================================================
+        public static void FormatarMoeda(TextBox txt) => FormatarMoeda(txt, txt.Text);
+        public static void FormatarMoeda(KryptonTextBox txt) => FormatarMoeda(txt, txt.Text);
 
-            return valor.TrimStart('0');            
-
-        }
-        public static void AtualizarTotalRegistros(Label lblTotalRegistros, DataGridView dataGridView1)
-        {
-            int totalRegistros = dataGridView1.Rows.Count;
-            lblTotalRegistros.Text = $"Total de Registros: {totalRegistros}";
-        }
-        public static void PreencherCamposEndereco(string enderecoCompleto, KryptonTextBox txtEndereco, KryptonTextBox txtNumero, KryptonTextBox txtBairro)
-        {
-            try
-            {
-                // Divide o endereço por vírgula (,) e hífen (-), removendo espaços extras
-                string[] partesEndereco = Regex.Split(enderecoCompleto, @"\s*[,|-]\s*");
-
-                // Garantir que há pelo menos 3 partes (Rua, Número, Bairro)
-                if (partesEndereco.Length >= 3)
-                {
-                    txtEndereco.Text = partesEndereco[0].Trim();
-
-                    string numero = partesEndereco[1].Trim();
-                    if (numero.StartsWith("nº "))
-                    {
-                        numero = numero.Substring(3).Trim(); // Remover "nº " com segurança
-                    }
-
-                    txtNumero.Text = numero;
-                    txtBairro.Text = partesEndereco[2].Trim();
-                }
-                else
-                {
-                    MessageBox.Show("Formato de endereço inválido. Certifique-se de que o endereço contém ao menos rua, número e bairro.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao processar o endereço: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-
-        // Mudar a Cor dos Texbox inicio
-        public static void AdicionarEfeitoFocoEmTodos(Control container)
-        {
-            foreach (Control control in container.Controls)
-            {
-                if (control is KryptonTextBox kryptonTextBox)
-                {
-                    AdicionarEfeitoFoco(kryptonTextBox);
-                }
-
-                // Verifica se o controle contém outros controles (como em um Panel ou GroupBox)
-                if (control.HasChildren)
-                {
-                    AdicionarEfeitoFocoEmTodos(control);
-                }
-            }
-        }
-
-        private static void AdicionarEfeitoFoco(KryptonTextBox kryptonTextBox)
-        {
-            kryptonTextBox.Enter += (s, e) => kryptonTextBox.StateActive.Back.Color1 = System.Drawing.Color.PaleTurquoise;
-            kryptonTextBox.Leave += (s, e) => kryptonTextBox.StateActive.Back.Color1 = kryptonTextBox.StateCommon.Back.Color1;
-        }
-
-
-        //FIM ACIMA
-        public static string BuscarResultadoPorQuery(string query, int codigo)
-        {
-            string resultado = "Resultado não encontrado";
-
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Codigo", codigo);
-
-                try
-                {
-                    connection.Open();
-                    Console.WriteLine("Conexão aberta com sucesso.");
-                    Console.WriteLine($"Executando a query: {query}");
-
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        resultado = reader[0].ToString(); // Acessando o primeiro resultado da consulta
-                        Console.WriteLine($"Resultado encontrado: {resultado}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Nenhum registro encontrado.");
-                    }
-                    reader.Close();
-                }
-                catch (Exception ex)
-                {
-                    // Trate exceções conforme necessário
-                    Console.WriteLine(ex.Message);
-                }
-            }
-
-            return resultado;
-        }
-
-
-
-
-
-
-        // Método que gera o próximo código
-        public static int GerarProximoCodigo(string query)
-        {
-            int proximoCodigo = 1; // Valor inicial padrão
-
-            using (SqlConnection conn = Conexao.Conex()) // Inicializando a conexão aqui
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        var result = cmd.ExecuteScalar();
-                        if (result != DBNull.Value)
-                        {
-                            proximoCodigo = Convert.ToInt32(result) + 1;
-                        }
-                    }
-                }
-                catch (SqlException sqlEx)
-                {
-                    // Tratar exceção de SQL
-                    Console.WriteLine($"Erro de SQL: {sqlEx.Message}");
-                }
-                catch (InvalidOperationException invOpEx)
-                {
-                    // Tratar exceção de operação inválida
-                    Console.WriteLine($"Erro de Operação Inválida: {invOpEx.Message}");
-                }
-                catch (Exception ex)
-                {
-                    // Tratar outras exceções
-                    Console.WriteLine($"Erro: {ex.Message}");
-                }
-                finally
-                {
-                    if (conn.State == System.Data.ConnectionState.Open)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-
-            return proximoCodigo;
-        }
-        //Novo Gerador de Código
-
-        public static int GerarNovoCodigoID(string nomeCampo, string nomeDaTabela)
-        {
-            return GetNextId(nomeCampo, nomeDaTabela);
-        }
-
-        private static int GetNextId(string nomeCampo, string nomeDaTabela)
-        {
-            int nextId = 1;
-
-            using (var connection = Conexao.Conex())
-            {
-                string query = $"SELECT MAX({nomeCampo}) FROM {nomeDaTabela}";
-
-                SqlCommand command = new SqlCommand(query, connection);
-
-                connection.Open();
-                object result = command.ExecuteScalar();
-                if (result != DBNull.Value)
-                {
-                    nextId = Convert.ToInt32(result) + 1;
-                }
-            }
-
-            return nextId;
-        }
-   
-        public static decimal RemoverFormatoMoeda(System.Windows.Forms.TextBox textBox)
-        {
-            // Obtém o texto do TextBox
-            string valorMonetario = textBox.Text;
-
-            // Remove símbolos de moeda e espaços, mantendo os pontos e vírgulas
-            string valorSemFormato = valorMonetario.Replace("R$", "")  // Remover símbolo de moeda brasileiro
-                                                   .Replace("$", "")   // Remover símbolo de dólar, se necessário
-                                                   .Replace("€", "")   // Remover símbolo de euro, se necessário
-                                                   .Replace("£", "")   // Remover símbolo de libra, se necessário
-                                                   .Trim();            // Remover espaços adicionais
-
-            // Converte a string para decimal considerando a cultura local
-            if (decimal.TryParse(valorSemFormato, NumberStyles.Any, new CultureInfo("pt-BR"), out decimal valorDecimal))
-            {
-                return valorDecimal;
-            }
-            return 0;
-        }
-
-
-
-        // Método para validar CPF
-        public static bool ValidarCPF(string cpf)
-        {
-            if (cpf.Length != 11 || cpf.All(c => c == cpf[0])) return false;
-
-            int[] multiplicadores1 = { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int[] multiplicadores2 = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-
-            string tempCpf = cpf.Substring(0, 9);
-            int soma = 0;
-
-            for (int i = 0; i < 9; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicadores1[i];
-
-            int resto = soma % 11;
-            resto = resto < 2 ? 0 : 11 - resto;
-
-            string digito = resto.ToString();
-            tempCpf += digito;
-            soma = 0;
-
-            for (int i = 0; i < 10; i++)
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicadores2[i];
-
-            resto = soma % 11;
-            resto = resto < 2 ? 0 : 11 - resto;
-
-            digito += resto.ToString();
-
-            return cpf.EndsWith(digito);
-        }
-
-        // Método para preencher ComboBox
-        public static void PreencherComboBox(ComboBox comboBox, string query, string nome, string Id)
-        {            
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-
-                    comboBox.DisplayMember = nome;  // Substitua "Nome" pela coluna que deseja exibir
-                    comboBox.ValueMember = Id;      // Substitua "ID" pela coluna de valor
-                    comboBox.DataSource = dt;
-                    conn.Close();
-                }
-            }
-        }
-        public static void PreencherComboBoxKrypton(KryptonComboBox comboBox, string query, string nome, string Id)
-        {
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-
-                    comboBox.DisplayMember = nome;  // Substitua "Nome" pela coluna que deseja exibir
-                    comboBox.ValueMember = Id;      // Substitua "ID" pela coluna de valor
-                    comboBox.DataSource = dt;
-                    conn.Close();
-                }
-            }
-        }
-        public static int ObterCodigoComboBox(string query, string NomeParametro, string nomePesquisar)
-        {
-            int codigoCategoria = -1;
-            using (var connection = Conexao.Conex())
-            {
-                //string query = "SELECT CategoriaID FROM Categoria WHERE NomeCategoria = @NomeCategoria";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(NomeParametro, nomePesquisar);
-
-                try
-                {
-                    connection.Open();
-                    var result = command.ExecuteScalar();
-                    if (result != null)
-                    {
-                        codigoCategoria = (int)result;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao buscar categoria: " + ex.Message);
-                }
-            }
-            return codigoCategoria;
-        }
-        public static void PesquisarPorNome(string query, string nomeParametro, string nomePesquisar, DataGridView dataGridView)
-        {
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(nomeParametro, nomePesquisar);
-
-                try
-                {
-                    connection.Open();
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    if (dataTable.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        dataGridView.DataSource = null; // Limpa o DataGridView
-                    }
-                    else
-                    {
-                        dataGridView.DataSource = dataTable;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao buscar categoria: " + ex.Message);
-                }
-            }
-        }
-        public static void PesquisarGeralComParametro(string query, string nomeParametro, object valorParametro, DataGridView dataGridView)
-        {
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(nomeParametro, valorParametro);
-
-                try
-                {
-                    connection.Open();
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    if (dataTable.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        dataGridView.DataSource = null; // Limpa o DataGridView
-                    }
-                    else
-                    {
-                        dataGridView.DataSource = dataTable;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao buscar categoria: " + ex.Message);
-                }
-            }
-        }
-
-        public static void PesquisarPorCodigoRetornarNome(string query, string parametroCodigo, int codigoPesquisar, Label labelResultado)
-        {
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(parametroCodigo, codigoPesquisar);
-
-                try
-                {
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        labelResultado.Text = reader["Nome"].ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        labelResultado.Text = string.Empty; // Limpa o Label
-                    }
-                    reader.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao buscar nome: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
         public static void PesquisarPorCodigoRetornarNomeTexBox(string query, string nomeParametro, string parametro, KryptonTextBox txtResultado)
         {
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(nomeParametro, parametro);
-
+            using (var connection = GVC.Helpers.Conexao.Conex())
                 try
                 {
                     connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.Read())
+                    // Usando Dapper para consulta única
+                    var resultado = connection.QueryFirstOrDefault<dynamic>(query, new Dictionary<string, object>
+            {
+                { nomeParametro, parametro }
+            });
+
+                    if (resultado != null)
                     {
-                        txtResultado.Text = reader["Estado"].ToString();
+                        // A coluna "Estado" vem do resultado da query
+                        txtResultado.Text = resultado.Estado?.ToString() ?? string.Empty;
                     }
                     else
                     {
-                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        txtResultado.Text = string.Empty; // Limpa o texbox
+                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.",
+                            MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        txtResultado.Text = string.Empty;
                     }
-                    reader.Close();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao buscar nome: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Erro ao buscar nome: " + ex.Message, "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        public static void PesquisarPorNomeMensagemSuprimida(string query, string nomeParametro, string valorParametro, KryptonDataGridView dgv)
+
+
+        public static void ExportarParaPDF(KryptonDataGridView dgv, string arquivo = null)
         {
-            try
+            var salvar = new SaveFileDialog { Filter = "PDF|*.pdf", FileName = arquivo ?? "Relatorio.pdf" };
+            if (salvar.ShowDialog() != DialogResult.OK) return;
+
+            // Criar documento (A4 paisagem)
+            using (var writer = new PdfWriter(salvar.FileName))
             {
-                using (SqlConnection conn = Conexao.Conex())
+                using (var pdf = new PdfDocument(writer))
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    // A4 em paisagem: 842pt x 595pt
+                    var pageSize = iText.Kernel.Geom.PageSize.A4.Rotate();
+                    var document = new Document(pdf, pageSize);
+                    document.SetMargins(20, 20, 20, 20);
+
+                    // Criar tabela
+                    var tabela = new Table(dgv.Columns.Count, true);
+                    tabela.SetWidth(UnitValue.CreatePercentValue(100));
+
+                    // Cabeçalho da tabela
+                    foreach (DataGridViewColumn col in dgv.Columns)
                     {
-                        cmd.Parameters.AddWithValue(nomeParametro, valorParametro);
-
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        if (col.Visible)
                         {
-                            DataTable dt = new DataTable();
-                            dt.Load(reader);
+                            var cell = new Cell()
+                                .Add(new Paragraph(col.HeaderText ?? ""))
+                                .SetBackgroundColor(new DeviceRgb(200, 200, 200))
+                                .SetFontColor(new DeviceRgb(0, 0, 0))
+                                .SetBold();
+                            tabela.AddHeaderCell(cell);
+                        }
+                    }
 
-                            if (dt.Rows.Count == 0)
+                    // Dados da tabela
+                    foreach (DataGridViewRow row in dgv.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            if (cell.OwningColumn.Visible)
                             {
-                                // Limpar o DataGridView se não houver resultados
-                                dgv.DataSource = null;
-                                return;
+                                var valor = cell.Value?.ToString() ?? "";
+                                tabela.AddCell(new Cell().Add(new Paragraph(valor)));
                             }
-
-                            dgv.DataSource = dt;
                         }
                     }
+
+                    // Adicionar tabela ao documento
+                    document.Add(tabela);
+
+                    // Fechar documento (não precisa chamar Close explicitamente com using)
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar categoria: " + ex.Message);
-            }
+
+            MessageBox.Show("PDF gerado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
-        public static void PesquisarPorPeriodo(string query, string nomeParametroInicio, DateTime dataVencimentoInicio, string nomeParametroFim, DateTime dataVencimentoFim, DataGridView dataGridView)
+        public static void ExportarParaExcel(KryptonDataGridView dgv)
         {
-            using (var connection = Conexao.Conex())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue(nomeParametroInicio, dataVencimentoInicio);
-                command.Parameters.AddWithValue(nomeParametroFim, dataVencimentoFim);
+            var salvar = new SaveFileDialog { Filter = "Excel|*.xlsx" };
+            if (salvar.ShowDialog() != DialogResult.OK) return;
 
-                try
-                {
-                    connection.Open();
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
+            using var pacote = new ExcelPackage(new FileInfo(salvar.FileName));
+            var planilha = pacote.Workbook.Worksheets.Add("Relatório");
 
-                    if (dataTable.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Nenhum resultado encontrado.", "Informe.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        dataGridView.DataSource = null; // Limpa o DataGridView
-                    }
-                    else
-                    {
-                        dataGridView.DataSource = dataTable;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao buscar categoria: " + ex.Message);
-                }
-            }
+            for (int c = 0; c < dgv.Columns.Count; c++)
+                planilha.Cells[1, c + 1].Value = dgv.Columns[c].HeaderText;
+
+            for (int r = 0; r < dgv.Rows.Count; r++)
+                for (int c = 0; c < dgv.Columns.Count; c++)
+                    planilha.Cells[r + 2, c + 1].Value = dgv.Rows[r].Cells[c].FormattedValue;
+
+            pacote.Save();
+            MessageBox.Show("Excel exportado com sucesso!");
         }
-        public static int ContaRegistros(DataGridView dataGridView)
+
+
+        // ==============================================================
+        // BUSCA PRODUTO POR REFERÊNCIA E PREENCHE CAMPOS AUTOMATICAMENTE
+        // Usado em PDV, Pedidos, Orçamentos — em qualquer lugar!
+        // ==============================================================
+        public static void PesquisarProdutoPorReferencia(
+            string referencia,
+            KryptonTextBox txtReferencia,
+            KryptonTextBox txtNomeProduto,
+            KryptonTextBox txtProdutoID,
+            KryptonTextBox txtPrecoVenda = null)
         {
-            if (dataGridView.DataSource != null)
+            // Limpa se estiver vazio
+            if (string.IsNullOrWhiteSpace(referencia))
             {
-                DataTable dataTable = dataGridView.DataSource as DataTable;
-                return dataTable.Rows.Count;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-
-        private static bool isFormatting = false;
-
-        public static void FormatTextBoxToCurrency(TextBox textBox)
-        {
-            if (!isFormatting)
-            {
-                isFormatting = true;
-                if (decimal.TryParse(textBox.Text, out decimal value))
-                {
-                    textBox.Text = String.Format(CultureInfo.CurrentCulture, "{0:N2}", value);
-                }
-                else
-                {
-                    textBox.Text = "0.00";
-                }
-                textBox.SelectionStart = textBox.Text.Length;
-                isFormatting = false;
-            }
-        }
-        public static void FormatTextBoxToCurrencyKrypton(KryptonTextBox textBox)
-        {
-            if (!isFormatting)
-            {
-                isFormatting = true;
-                if (decimal.TryParse(textBox.Text, out decimal value))
-                {
-                    textBox.Text = String.Format(CultureInfo.CurrentCulture, "{0:N2}", value);
-                }
-                else
-                {
-                    textBox.Text = "0.00";
-                }
-                textBox.SelectionStart = textBox.Text.Length;
-                isFormatting = false;
-            }
-        }
-
-        private static void FormatTextBoxToCurrencyHandler(object sender, EventArgs e)
-        {
-            FormatTextBoxToCurrency(sender as TextBox);
-        }
-
-
-
-
-
-        // Método para tornar todos os textos dos TextBox em maiúsculas
-        public static void TornarTextosMaiusculas(Control container)
-        {
-            foreach (Control control in container.Controls)
-            {
-                if (control is TextBox textBox)
-                {
-                    textBox.Text = textBox.Text.ToUpper();
-                }
-
-                // Se o controle possuir filhos, aplica recursivamente
-                if (control.HasChildren)
-                {
-                    TornarTextosMaiusculas(control);
-                }
-            }
-            /*
-private void FrmMeuFormulario_Load(object sender, EventArgs e)
-    {
-        Utilitario.TornarTextosMaiusculas(this); // Converte textos já presentes para maiúsculas
-
-        // Atribui o evento TextChanged para todos os TextBox
-        foreach (Control control in this.Controls)
-        {
-            if (control is TextBox textBox)
-            {
-                textBox.TextChanged += textBox_TextChanged;
-            }
-        }
-    }
-
-    private void textBox_TextChanged(object sender, EventArgs e)
-    {
-        if (sender is TextBox textBox)
-        {
-            int posicaoCursor = textBox.SelectionStart;
-            textBox.Text = textBox.Text.ToUpper();
-            textBox.SelectionStart = posicaoCursor;
-        }
-    }
-            */
-        }
-        // Método para 7 dados e preencher DataGridView
-        public static void LocalizarGeral(DataGridView dataGridView, string query)
-        {                      
-            using (conn)
-            {
-                using (SqlCommand comando = new SqlCommand(query, conn))
-                {
-                    try
-                    {
-                        conn.Open();
-
-                        // Verifica se a conexão está aberta
-                        if (conn.State != ConnectionState.Open)
-                        {
-                            throw new Exception("Não foi possível abrir a conexão com o banco de dados.");
-                        }
-
-                        // Configuração do DataAdapter
-                        SqlDataAdapter da = new SqlDataAdapter
-                        {
-                            SelectCommand = comando
-                        };
-
-                        // Preenchimento do DataTable
-                        DataTable dtGeral = new DataTable();
-                        da.Fill(dtGeral);
-
-                        // Verifica se o DataTable tem dados
-                        if (dtGeral.Rows.Count == 0)
-                        {
-                            throw new Exception("Nenhum dado foi encontrado.");
-                        }
-
-                        // Atribuição dos dados ao DataGridView
-                        dataGridView.DataSource = dtGeral;
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        MessageBox.Show($"Erro de SQL: {sqlEx.Message}", "Erro de SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (InvalidOperationException invOpEx)
-                    {
-                        MessageBox.Show($"Erro de Operação Inválida: {invOpEx.Message}", "Erro de Operação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        // Verifica se a conexão está aberta antes de tentar fechá-la
-                        if (conn.State == ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                    }
-                }
-            }
-        }
-
-        // Método para limpar campos
-        public static void LimpaCampo(Control container)
-        {
-            foreach (Control c in container.Controls)
-            {
-                if (c is TextBox textBox)
-                {
-                    textBox.Clear();
-                }
-                else if (c is MaskedTextBox maskedTextBox)
-                {
-                    maskedTextBox.Clear();
-                }
-                else if (c is DateTimePicker dateTimePicker)
-                {
-                    dateTimePicker.Value = DateTime.Now;
-                }
-                else if (c is ComboBox comboBox)
-                {
-                    comboBox.SelectedIndex = -1;
-                }
-                else if (c is Panel panel)
-                {
-                    LimpaCampo(panel); // Recursivamente limpar os controles dentro do painel
-                }
-                else if (c is GroupBox groupBox)
-                {
-                    LimpaCampo(groupBox); // Recursivamente limpar os controles dentro do groupBox
-                }
-                else if (c is DataGridView dataGridView)
-                {
-                    dataGridView.Rows.Clear(); // Limpar todas as linhas do DataGridView
-                }
-            }
-        }
-        public static void LimpaCampoKrypton(Control container)
-        {
-            foreach (Control c in container.Controls)
-            {
-                if (c is KryptonTextBox textBox)
-                {
-                    textBox.Clear();
-                }
-                else if (c is KryptonMaskedTextBox maskedTextBox)
-                {
-                    maskedTextBox.Clear();
-                }
-                else if (c is KryptonDateTimePicker dateTimePicker)
-                {
-                    dateTimePicker.Value = DateTime.Now;
-                }
-                else if (c is KryptonComboBox comboBox)
-                {
-                    comboBox.SelectedIndex = -1;
-                }
-                else if (c is KryptonPanel panel)
-                {
-                    LimpaCampo(panel); // Recursivamente limpar os controles dentro do painel
-                }
-                else if (c is KryptonGroupBox groupBox)
-                {
-                    LimpaCampo(groupBox); // Recursivamente limpar os controles dentro do groupBox
-                }               
-            }
-        }
-
-        // Método para somar valores no DataGridView
-        public static decimal SomarValoresDataGridView(KryptonDataGridView dataGridView, string columnName)
-        {
-            decimal soma = 0;
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                if (row.Cells[columnName].Value != null)
-                {
-                    soma += Convert.ToDecimal(row.Cells[columnName].Value);
-                }
-            }
-            return soma;
-        }
-        //Versão melhorada do Método SOMARVALORESDATAGRIDVIEW
-
-        public static decimal SomarValoresDataGrid(DataGridView dataGridView, string columnName)
-        {
-            decimal soma = 0;
-
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                // Verifica se a célula na coluna especificada contém um valor válido
-                if (row.Cells[columnName].Value != null)
-                {
-                    decimal valor;
-                    // Tenta converter o valor para decimal, se não conseguir, ignora essa célula
-                    if (decimal.TryParse(row.Cells[columnName].Value.ToString(), out valor))
-                    {
-                        soma += valor;
-                    }
-                }
-            }
-
-            return soma;
-        }
-
-        // Método para somar valores do banco de dados
-        public static decimal SomarValoresBancoDados(string query)
-        {
-            decimal soma = 0;            
-            using (conn)
-            {
-                using (SqlCommand comando = new SqlCommand(query, conn))
-                {
-                    try
-                    {
-                        conn.Open();
-                        soma = Convert.ToDecimal(comando.ExecuteScalar());
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        MessageBox.Show($"Erro de SQL: {sqlEx.Message}", "Erro de SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (InvalidOperationException invOpEx)
-                    {
-                        MessageBox.Show($"Erro de Operação Inválida: {invOpEx.Message}", "Erro de Operação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        if (conn.State == ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                    }
-                }
-            }
-            return soma;
-        }
-        public static bool VerificarDuplicidade(string query, Dictionary<string, object> parametros)
-        {
-            using (conn)
-            {
-                using (SqlCommand comando = new SqlCommand(query, conn))
-                {
-                    foreach (var parametro in parametros)
-                    {
-                        comando.Parameters.AddWithValue(parametro.Key, parametro.Value);
-                    }
-
-                    try
-                    {
-                        conn.Open();
-                        var result = comando.ExecuteScalar();
-                        return result != null && result != DBNull.Value;
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        // Trate a exceção de SQL conforme necessário
-                        Console.WriteLine($"Erro de SQL: {sqlEx.Message}");
-                        return false;
-                    }
-                    catch (InvalidOperationException invOpEx)
-                    {
-                        // Trate a exceção de operação inválida conforme necessário
-                        Console.WriteLine($"Erro de Operação Inválida: {invOpEx.Message}");
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Trate outras exceções conforme necessário
-                        Console.WriteLine($"Erro: {ex.Message}");
-                        return false;
-                    }
-                    finally
-                    {
-                        if (conn.State == System.Data.ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                    }
-                }
-            }
-
-            /* COMO IMPLEMENTAR O MÉTODO EVIDA *** VerificarDuplicidade *****
-             * 
-             *  string query = "SELECT COUNT(*) FROM Usuarios WHERE Email = @Email";
-                Dictionary<string, object> parametros = new Dictionary<string, object>
-                {
-                    { "@Email", "teste@exemplo.com" }
-                };
-
-                bool duplicado = VerificadorDuplicidade.VerificarDuplicidade(query, parametros);
-                if (duplicado)
-                {
-                    MessageBox.Show("Registro já existe!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    // Continuar com o cadastro
-                }
-
-             * */
-        }
-
-        public static string AcrescentarZerosEsquerda(int valor, int comprimentoTotal)
-        {
-            return valor.ToString().PadLeft(comprimentoTotal, '0');
-        }
-        /*
-          EXEMPLO DE IMPLEMENTAÇÃO DO MÉTODO AcrescentarZerosEsquerda
-
-            public class Programa
-            {
-                public static void Main()
-                {
-                    int numeroOriginal = 1;
-                    int comprimentoTotal = 4;
-
-                    // Chama o método global para acrescentar zeros à esquerda
-                    string numeroComZeros = Utilitario.AcrescentarZerosEsquerda(numeroOriginal, comprimentoTotal);
-
-                    Console.WriteLine($"Número com zeros à esquerda: {numeroComZeros}"); // Saída: 0001
-
-                    numeroOriginal = 45;
-                    numeroComZeros = Utilitario.AcrescentarZerosEsquerda(numeroOriginal, comprimentoTotal);
-
-                    Console.WriteLine($"Número com zeros à esquerda: {numeroComZeros}"); // Saída: 0045
-                }
-            }
-
-         * */
-        public static void AcrescentarZerosEsquerda(TextBox txtResultado, int comprimentoTotal)
-        {
-            if (txtResultado == null)
-            {
-                throw new ArgumentNullException(nameof(txtResultado), "O parâmetro txtResultado não pode ser nulo.");
-            }
-
-            string texto = txtResultado.Text;
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                MessageBox.Show("DEVE SER DIGITADO ALGUM VALOR NO CAMPO CÓDIGO.", "INFORMAÇÃO!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtResultado.Text = new string('0', comprimentoTotal);
+                txtNomeProduto.Clear();
+                txtProdutoID.Clear();
+                txtPrecoVenda?.Clear();
                 return;
             }
 
-            if (texto.Length < comprimentoTotal)
+            try
             {
-                txtResultado.Text = texto.PadLeft(comprimentoTotal, '0');
-            }
-        }
-        // Método para remover parênteses e traços de números
-        public static string RemoverParentesesETraços(string numero)
-        {
-            if (string.IsNullOrWhiteSpace(numero))
-            {
-                return numero;
-            }
+                using var conn = GVC.Helpers.Conexao.Conex();
 
-            return numero.Replace("(", "").Replace(")", "").Replace("-", "").Trim();
-        }
+                string sql = @"
+            SELECT ProdutoID, NomeProduto, PrecoVenda 
+            FROM Produtos 
+            WHERE Referencia = @Referencia 
+            LIMIT 1";
 
-        public static bool EvitarDuplicado(string tabela, string campo, string valor)
-        {
-            string query = $"SELECT COUNT(*) FROM {tabela} WHERE {campo} = @valor";
+                var produto = conn.QueryFirstOrDefault<dynamic>(sql, new { Referencia = referencia.Trim() });
 
-            using (conn)
-            {
-                using (SqlCommand comando = new SqlCommand(query, conn))
+                if (produto != null)
                 {
-                    comando.Parameters.AddWithValue("@valor", valor);
-
-                    try
-                    {
-                        conn.Open();
-                        var result = comando.ExecuteScalar();
-                        return result != null && Convert.ToInt32(result) > 0;
-                    }
-                    catch (SqlException sqlEx)
-                    {
-                        // Trate a exceção de SQL conforme necessário
-                        Console.WriteLine($"Erro de SQL: {sqlEx.Message}");
-                        return false;
-                    }
-                    catch (InvalidOperationException invOpEx)
-                    {
-                        // Trate a exceção de operação inválida conforme necessário
-                        Console.WriteLine($"Erro de Operação Inválida: {invOpEx.Message}");
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Trate outras exceções conforme necessário
-                        Console.WriteLine($"Erro: {ex.Message}");
-                        return false;
-                    }
-                    finally
-                    {
-                        if (conn.State == System.Data.ConnectionState.Open)
-                        {
-                            conn.Close();
-                        }
-                    }
-                }
-            }
-        }
-        // Método para concatenar textos dos TextBoxes e adicionar ao DataGridView
-        public static void AddConcatenatedTextToDataGridView(TextBox textBox1, TextBox textBox2, TextBox textBox3, DataGridView dataGridView)
-        {
-            // Concatenar textos dos TextBoxes
-            string concatenatedString = textBox1.Text + " " + textBox2.Text + " " + textBox3.Text;
-
-            // Adicionar a string concatenada ao DataGridView em uma única coluna
-            dataGridView.Rows.Add(concatenatedString);
-        }
-
-        // Método para restaurar textos aos TextBoxes a partir do DataGridView
-        public static void RestoreTextBoxesFromDataGridView(TextBox textBox1, TextBox textBox2, TextBox textBox3, DataGridView dataGridView, int rowIndex)
-        {
-            if (rowIndex >= 0 && rowIndex < dataGridView.Rows.Count)
-            {
-                // Obter o valor da célula clicada
-                string concatenatedString = dataGridView.Rows[rowIndex].Cells[0].Value.ToString();
-
-                // Dividir a string concatenada de volta aos valores originais
-                string[] splitStrings = concatenatedString.Split(' ');
-
-                // Restaurar os valores aos TextBoxes, considerando que existem três partes
-                if (splitStrings.Length == 3)
-                {
-                    textBox1.Text = splitStrings[0];
-                    textBox2.Text = splitStrings[1];
-                    textBox3.Text = splitStrings[2];
+                    txtProdutoID.Text = produto.ProdutoID.ToString();
+                    txtNomeProduto.Text = produto.NomeProduto?.ToString() ?? "";
+                    //txtPrecoVend.Text = produto.PrecoVenda != null
+                        //? Convert.ToDecimal(produto.PrecoVenda).ToString("F2")
+                        //: "";
                 }
                 else
                 {
-                    MessageBox.Show("O formato do texto concatenado está incorreto.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtProdutoID.Clear();
+                    txtNomeProduto.Clear();
+                    txtPrecoVenda?.Clear();
+                    txtNomeProduto.Text = "PRODUTO NÃO ENCONTRADO";
+                    txtNomeProduto.ForeColor = System.Drawing.Color.Red;
                 }
             }
-            //Exemplo de uso
-            /*
-             *  private void btnSave_Click(object sender, EventArgs e)
-                {
-                    AddConcatenatedTextToDataGridView(textBox1, textBox2, textBox3, dataGridView1);
-                }
-
-                private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-                {
-                    RestoreTextBoxesFromDataGridView(textBox1, textBox2, textBox3, dataGridView1, e.RowIndex);
-                }
-
-             * */
-        }
-        public static bool ValidarCampos(TextBox txtbox)
-        {
-            if (string.IsNullOrEmpty(txtbox.Text))
+            catch (Exception ex)
             {
-                MessageBox.Show("O campo Produto é obrigatório.");
+                MessageBox.Show("Erro ao buscar produto: " + ex.Message, "Erro",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                txtProdutoID.Clear();
+                txtNomeProduto.Clear();
+                txtPrecoVenda?.Clear();
+                txtNomeProduto.Text = "ERRO NA BUSCA";
+                txtNomeProduto.ForeColor = System.Drawing.Color.DarkRed;
+            }
+        }
+        // ==============================================================
+        // PESQUISA GENÉRICA COM PARÂMETRO (sem mensagem automática)
+        // Ideal para preencher DataGridView sem exibir "nenhum registro"
+        // ==============================================================
+        public static void PesquisarComParametro(string sql, string nomeParametro, object valorParametro, KryptonDataGridView dgv)
+        {
+            try
+            {
+                using var conn = GVC.Helpers.Conexao.Conex();
+
+                // Usa Dapper (muito mais rápido e limpo que SqlDataReader manual)
+                var resultado = conn.Query(sql, new { }, commandType: CommandType.Text)
+                                   .Select((dynamic row) =>
+                                   {
+                                       var dict = (IDictionary<string, object>)row;
+                                       var dataRow = new Dictionary<string, object>(dict, StringComparer.OrdinalIgnoreCase);
+                                       return dataRow;
+                                   });
+
+                var dt = new DataTable();
+
+                if (resultado.Any())
+                {
+                    // Cria as colunas automaticamente
+                    var primeiraLinha = resultado.First();
+                    foreach (var coluna in primeiraLinha.Keys)
+                    {
+                        dt.Columns.Add(coluna);
+                    }
+
+                    // Preenche as linhas
+                    foreach (var linha in resultado)
+                    {
+                        var row = dt.NewRow();
+                        foreach (var item in linha)
+                        {
+                            row[item.Key] = item.Value ?? DBNull.Value;
+                        }
+                        dt.Rows.Add(row);
+                    }
+                }
+
+                // Atribui ao DataGridView (limpa automaticamente se vazio)
+                dgv.DataSource = dt.Rows.Count > 0 ? dt : null;
+            }
+            catch (Exception ex)
+            {
+                // Log silencioso opcional (não exibe MessageBox)
+                // MessageBox.Show("Erro interno na pesquisa: " + ex.Message);
+                dgv.DataSource = null;
+            }
+        }
+        // ==============================================================
+        // PESQUISA GENÉRICA COM UM OU MAIS PARÂMETROS (Dapper + Sqlite)
+        // Ideal para grids, relatórios, consultas com WHERE, etc.
+        // ==============================================================
+        public static void PesquisarGeralComParametro(string sql, string nomeParametro, object valorParametro, KryptonDataGridView grid)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add(nomeParametro, valorParametro);
+
+            PesquisarGeralComParametros(sql, parametros, grid);
+        }
+
+        // ==============================================================
+        // PESQUISA POR PERÍODO (DATA INÍCIO + DATA FIM)
+        // Com opção de suprimir mensagem (muito usado em relatórios)
+        // ==============================================================
+        public static void PesquisarPorPeriodo(
+            string sql,
+            string paramInicio,
+            DateTime dataInicio,
+            string paramFim,
+            DateTime dataFim,
+            KryptonDataGridView grid,
+            bool mostrarMensagemSeVazio = true)
+        {
+            try
+            {
+                using var conn = GVC.Helpers.Conexao.Conex();
+
+                var parametros = new DynamicParameters();
+                parametros.Add(paramInicio, dataInicio.Date);           // .Date remove hora
+                parametros.Add(paramFim, dataFim.Date.AddDays(1).AddSeconds(-1)); // até 23:59:59
+
+                var resultado = conn.Query(sql, parametros);
+
+                var dt = new DataTable();
+
+                if (resultado.Any())
+                {
+                    // Cria colunas automaticamente
+                    foreach (var prop in resultado.First().GetType().GetProperties())
+                    {
+                        dt.Columns.Add(prop.Name, prop.PropertyType == typeof(DateTime?) ? typeof(DateTime) : prop.PropertyType);
+                    }
+
+                    // Preenche linhas
+                    foreach (var item in resultado)
+                    {
+                        var row = dt.NewRow();
+                        foreach (var prop in item.GetType().GetProperties())
+                        {
+                            var valor = prop.GetValue(item) ?? DBNull.Value;
+                            row[prop.Name] = valor;
+                        }
+                        dt.Rows.Add(row);
+                    }
+
+                    grid.DataSource = dt;
+                }
+                else
+                {
+                    grid.DataSource = null;
+                    if (mostrarMensagemSeVazio)
+                    {
+                        MessageBox.Show("Nenhum registro encontrado no período informado.",
+                                       "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao consultar por período: " + ex.Message,
+                               "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                grid.DataSource = null;
+            }
+        }      
+
+        public static int ContaRegistros(KryptonDataGridView grid)
+        {
+            if (grid == null || grid.DataSource == null)
+                return 0;
+
+            // 1. DataTable (mais comum)
+            if (grid.DataSource is DataTable dt)
+                return dt.Rows.Count;
+
+            // 2. BindingSource (muito usado em alguns forms)
+            if (grid.DataSource is BindingSource bs)
+                return bs.Count;
+
+            // 3. List<T>, IEnumerable, Array, etc.
+            if (grid.DataSource is System.Collections.IEnumerable enumerable &&
+                grid.DataSource is not string)
+            {
+                try
+                {
+                    return enumerable.Cast<object>().Count();
+                }
+                catch
+                {
+                    // fallback silencioso
+                }
+            }
+
+            // 4. Último recurso: conta as linhas visíveis no grid
+            return grid.Rows.Count;
+        }
+
+        // ==============================================================
+        // VERSÃO QUE IGNORA A LINHA "NOVA" (quando AllowUserToAddRows = true)
+        // ==============================================================
+        public static int ContaRegistrosSemLinhaNova(KryptonDataGridView grid)
+        {
+            int total = ContaRegistros(grid);
+
+            if (grid != null && grid.AllowUserToAddRows && total > 0)
+                total--; // remove a linha em branco do final
+
+            return total;
+        }
+        // Sobrecarga para múltiplos parâmetros (mais usada no sistema)
+        public static void PesquisarGeralComParametros(string sql, DynamicParameters parametros, KryptonDataGridView grid)
+        {
+            try
+            {
+                using var conn = GVC.Helpers.Conexao.Conex();
+
+                // Executa a consulta com Dapper
+                var resultado = conn.Query(sql, parametros);
+
+                // Converte para DataTable (necessário para DataGridView)
+                var dt = new DataTable();
+
+                if (resultado.Any())
+                {
+                    // Cria colunas automaticamente
+                    foreach (var prop in resultado.First().GetType().GetProperties())
+                    {
+                        dt.Columns.Add(prop.Name);
+                    }
+
+                    // Preenche linhas
+                    foreach (var item in resultado)
+                    {
+                        var row = dt.NewRow();
+                        foreach (var prop in item.GetType().GetProperties())
+                        {
+                            var value = prop.GetValue(item) ?? DBNull.Value;
+                            row[prop.Name] = value;
+                        }
+                        dt.Rows.Add(row);
+                    }
+                }
+
+                // Atribui ao grid
+                grid.DataSource = dt.Rows.Count > 0 ? dt : null;
+            }
+            catch (Exception ex)
+            {
+                // Opcional: log silencioso ou MessageBox apenas em debug
+                MessageBox.Show("Erro na consulta: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                grid.DataSource = null;
+            }
+        }
+
+        // Versão mais simples com Dictionary (compatibilidade com códigos antigos)
+        public static void PesquisarGeralComParametros(string sql, Dictionary<string, object> parametros, KryptonDataGridView grid)
+        {
+            var dapperParams = new DynamicParameters();
+            if (parametros != null)
+            {
+                foreach (var p in parametros)
+                {
+                    dapperParams.Add(p.Key, p.Value ?? DBNull.Value);
+                }
+            }
+
+            PesquisarGeralComParametros(sql, dapperParams, grid);
+        }
+        // ==============================================================
+        // ADICIONA EFEITO DE FOCO EM TODOS OS KryptonTextBox DO FORMULÁRIO
+        // (muito usado no Load de todos os cadastros)
+        // ==============================================================
+        // ==================== 1. Efeito de foco (cor da borda) ====================
+        public static void AdicionarEfeitoFocoEmTodos(Control container)
+        {
+            foreach (Control ctrl in TodosOsControles(container))
+            {
+                if (ctrl is KryptonTextBox kTxt)
+                {
+                    // Cor quando ganha foco
+                    kTxt.Enter += (s, e) => kTxt.StateCommon.Border.Color1 = System.Drawing.Color.DeepSkyBlue;
+                    // Cor quando perde foco (volta ao padrão do tema)
+                    //kTxt.Leave += (s, e) => kTxt.StateCommon.Border.Color1 = System.Drawing.Color.Gray;
+
+                    // ESSA É A PARTE QUE CONSERTA A TABULAÇÃO E ENTER
+                    kTxt.KeyDown += (s, e) =>
+                    {
+                        if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+                        {
+                            container.SelectNextControl(ctrl, true, true, true, true);
+                            e.Handled = true;
+                            e.SuppressKeyPress = true; // evita o "ding"
+                        }
+                    };
+                }
+                else if (ctrl is TextBox txt)
+                {
+                    txt.Enter += (s, e) => txt.BackColor = System.Drawing.Color.PaleTurquoise;
+                    txt.Leave += (s, e) => txt.BackColor = SystemColors.Window;
+
+                    txt.KeyDown += (s, e) =>
+                    {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            container.SelectNextControl(ctrl, true, true, true, true);
+                            e.Handled = true;
+                            e.SuppressKeyPress = true;
+                        }
+                    };
+                }
+            }
+        }
+
+        // ==================== 2. Método que pega TODOS os controles (recursivo) ====================
+        private static IEnumerable<Control> TodosOsControles(Control control)
+        {
+            var pilha = new Stack<Control>();
+            pilha.Push(control);
+
+            while (pilha.Count > 0)
+            {
+                var atual = pilha.Pop();
+                yield return atual;
+
+                foreach (Control filho in atual.Controls)
+                    pilha.Push(filho);
+            }
+        }
+
+        // ==================== 3. (Opcional) Enter funciona como Tab no form inteiro ====================
+        public static void ConfigurarEnterComoTab(Form form)
+        {
+            if (form == null) return;
+
+            form.KeyPreview = true;
+
+            // remove inscrição anterior (se houver) para evitar handlers duplicados
+            form.KeyDown -= Utilitario_Form_KeyDown_EnterToTab;
+            form.KeyDown += Utilitario_Form_KeyDown_EnterToTab;
+
+            void Utilitario_Form_KeyDown_EnterToTab(object sender, KeyEventArgs e)
+            {
+                try
+                {
+                    if (e.KeyCode != Keys.Enter) return;
+
+                    Control active = form.ActiveControl;
+                    if (active == null) return;
+
+                    // Debug temporário: grava o tipo do controle ativo ao pressionar Enter
+                    try
+                    {
+                        File.AppendAllText("debug_enter_to_tab.txt",
+                            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - Enter pressed - ActiveControl: {active.GetType().FullName} (Name={active.Name}){Environment.NewLine}");
+                    }
+                    catch { /* não atrapalha se falhar */ }
+
+                    // Se o controle for um TextBoxBase (TextBox, RichTextBox, MaskedTextBox, etc)
+                    if (active is TextBoxBase tb)
+                    {
+                        // Se for multiline que aceita Enter, deixa o Enter passar
+                        if (tb.Multiline)
+                            return;
+                    }
+
+                    // KryptonTextBox (verificação direta)
+                    if (active is KryptonTextBox ktxt)
+                    {
+                        // KryptonTextBox normalmente não é multiline — avança
+                    }
+
+                    // Ignorar onde Enter tem função especial
+                    if (active is ButtonBase || active is LinkLabel || active is DataGridView || active is ToolStrip)
+                        return;
+
+                    // Controles que queremos avançar com Enter
+                    bool deveAvancar =
+                        active is TextBox ||
+                        active is TextBoxBase ||
+                        active is KryptonTextBox ||
+                        active is ComboBox ||
+                        active is MaskedTextBox ||
+                        active is NumericUpDown ||
+                        active is DateTimePicker;
+
+                    if (!deveAvancar) return;
+
+                    // Avança para o próximo controle
+                    form.SelectNextControl(active, forward: true, tabStopOnly: true, nested: true, wrap: true);
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
+                catch
+                {
+                    // se der qualquer erro aqui, não deixe quebrar o app
+                }
+            }
+
+        }
+
+        // ==============================================================
+        // MÉTODO AUXILIAR: aplica o efeito bonito no KryptonTextBox
+        // ==============================================================
+        public static void AplicarEfeitoFoco(KryptonTextBox textBox)
+        {
+            // Cor quando ganha foco
+            textBox.StateActive.Back.Color1 = System.Drawing.Color.PaleTurquoise;
+            
+
+            // Evento Enter
+            textBox.Enter += (s, e) =>
+            {
+                textBox.StateActive.Back.Color1 = System.Drawing.Color.PaleTurquoise;                
+            };
+
+            // Evento Leave (volta ao normal)
+            textBox.Leave += (s, e) =>
+            {
+                textBox.StateActive.Back.Color1 = textBox.StateCommon.Back.Color1;                
+            };
+        }
+        private static void FormatarMoeda(Control txt, string valor)
+        {
+            if (string.IsNullOrWhiteSpace(valor)) { txt.Text = "0,00"; return; }
+
+            if (decimal.TryParse(Regex.Replace(valor, @"[^\d,]", ""), NumberStyles.Any, CulturaBR, out decimal numero))
+                txt.Text = numero.ToString("N2", CulturaBR);
+            else
+                txt.Text = "0,00";
+
+            if (txt is TextBox tb) tb.SelectionStart = tb.Text.Length;
+            if (txt is KryptonTextBox ktb) ktb.SelectionStart = ktb.Text.Length;
+        }
+
+        /// <summary>
+        /// Converte string com máscara monetária para decimal
+        /// "R$ 1.234,56" → 1234.56m
+        /// "999,90" → 999.90m
+        /// "1.000.000,00" → 1000000.00m
+        /// </summary>
+        public static decimal ToDecimal(this string valor)
+        {
+            if (string.IsNullOrWhiteSpace(valor))
+                return 0m;
+
+            // Remove tudo que não for número, vírgula ou ponto
+            var limpo = Regex.Replace(valor, @"[^\d,.]", "");
+
+            // Substitui ponto por nada (milhar) e vírgula por ponto (decimal)
+            limpo = limpo.Replace(".", "").Replace(",", ".");
+
+            return decimal.TryParse(limpo, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal resultado)
+                ? resultado
+                : 0m;
+        }
+
+        /// <summary>
+        /// Versão estática do ToDecimal (caso não queira usar extensão)
+        /// </summary>
+        public static decimal RemoverMascaraMoeda(string valor) => valor.ToDecimal();
+               
+        public static int ProximoId(string query)
+        {
+            using var conn = Conexao.Conex();
+            var max = conn.ExecuteScalar<int?>(query);
+            return (max ?? 0) + 1;
+        }
+        public static string FormatarTelefonesString(string telefone)
+        {
+            telefone = ApenasNumeros(telefone);
+
+            // Telefone com 10 dígitos (ex: fixo: 11 2345-6789)
+            if (telefone.Length == 10)
+            {
+                return $"({telefone.Substring(0, 2)}) {telefone.Substring(2, 4)}-{telefone.Substring(6, 4)}";
+            }
+            // Telefone com 11 dígitos (ex: celular: 11 91234-5678)
+            if (telefone.Length == 11)
+            {
+                return $"({telefone.Substring(0, 2)}) {telefone.Substring(2, 5)}-{telefone.Substring(7, 4)}";
+            }
+            // Se não tiver 10 ou 11 dígitos, retorna como está
+            return telefone;
+        }
+
+        public static void FormatarTelefone(KryptonTextBox txtTelefone)
+        {
+            txtTelefone.Leave += (sender, e) =>
+            {
+                string textoOriginal = txtTelefone.Text.Trim();
+                string apenasNumeros = Regex.Replace(textoOriginal, @"\D", ""); // remove tudo que não for número
+
+                // Se vazio → aceita
+                if (string.IsNullOrWhiteSpace(apenasNumeros))
+                {
+                    txtTelefone.StateCommon.Border.Color1 = System.Drawing.Color.Gray;
+                    txtTelefone.Text = "";
+                    return;
+                }
+                // Celular com DDD deve ter exatamente 11 dígitos
+                if (apenasNumeros.Length != 11)
+                {
+                    txtTelefone.StateCommon.Border.Color1 = System.Drawing.Color.Crimson;
+                    MessageBox.Show("Telefone deve conter 11 dígitos (DDD + número).", "Telefone Inválido",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTelefone.Focus();
+                    return;
+                }
+                // Verifica se o DDD é válido (não começa com 0 e está entre 11 e 99)
+                string ddd = apenasNumeros.Substring(0, 2);
+                if (ddd == "00" || !int.TryParse(ddd, out int n) || n < 11 || n > 99)
+                {
+                    txtTelefone.StateCommon.Border.Color1 = System.Drawing.Color.Crimson;
+                    MessageBox.Show("DDD inválido. Use um DDD válido (ex: 11, 21, 31...)", "Telefone Inválido",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTelefone.Focus();
+                    return;
+                }
+                // Se já estiver perfeitamente formatado → mantém como o usuário digitou
+                if (Regex.IsMatch(textoOriginal, @"^\(\d{2}\) \d{5}-\d{4}$"))
+                {
+                    txtTelefone.Text = textoOriginal;
+                }
+                else
+                {
+                    // Formata automaticamente: (11) 98765-4321
+                    txtTelefone.Text = $"({apenasNumeros.Substring(0, 2)}) " +
+                                       $"{apenasNumeros.Substring(2, 5)}-" +
+                                       $"{apenasNumeros.Substring(7, 4)}";
+                }
+                // Telefone válido → borda verde
+                txtTelefone.StateCommon.Border.Color1 = System.Drawing.Color.MediumSeaGreen;
+            };
+            // Cor ao entrar no campo
+            txtTelefone.Enter += (s, e) => txtTelefone.StateCommon.Border.Color1 = System.Drawing.Color.DeepSkyBlue;
+        }
+
+        public static void LimparCampos(Control container)
+        {
+            foreach (Control c in container.Controls)
+            {
+                switch (c)
+                {
+                    case TextBoxBase tb: tb.Clear(); break;
+                    case Krypton.Toolkit.KryptonTextBox ktb: ktb.Clear(); break;
+                    case ComboBox cb: cb.SelectedIndex = -1; break;
+                    case Krypton.Toolkit.KryptonComboBox kcb: kcb.SelectedIndex = -1; break;
+                    case DateTimePicker dtp: dtp.Value = DateTime.Now; break;
+                    case Krypton.Toolkit.KryptonDateTimePicker kdp: kdp.Value = DateTime.Now; break;
+                    case CheckBox chk: chk.Checked = false; break;
+                    case RadioButton rb: rb.Checked = false; break;
+
+                    // 🔹 Novo: limpar PictureBox
+                    case PictureBox pb:
+                        if (pb.Image != null)
+                        {
+                            pb.Image.Dispose();
+                            pb.Image = null;
+                        }
+                        break;                  
+                }
+
+                if (c.HasChildren) LimparCampos(c);
+            }
+        }
+
+        // ==============================================================
+        // 7. TOTAL DE REGISTROS NO GRID
+        // ==============================================================
+        public static void AtualizarTotalKrypton(ToolStripStatusLabel lbl, DataGridView dgv)
+            => lbl.Text = $"Total: {dgv.Rows.Cast<DataGridViewRow>().Count(r => !r.IsNewRow)} registro(s)";
+        public static void AtualizarTotal(Label lbl, DataGridView dgv)
+           => lbl.Text = $"Total: {dgv.Rows.Cast<DataGridViewRow>().Count(r => !r.IsNewRow)} registro(s)";
+
+
+        public static void AtualizaTotalKrypton(KryptonLabel lbl, DataGridView dgv)
+                => lbl.Text = $"Total: {dgv.Rows.Cast<DataGridViewRow>().Count(r => !r.IsNewRow)} registro(s)";
+
+
+        // ==============================================================
+        // 8. SOMAR COLUNA DO DATAGRIDVIEW
+        // ==============================================================
+        public static decimal SomarColuna(DataGridView dgv, string coluna)
+        {
+            return dgv.Rows.Cast<DataGridViewRow>()
+                .Where(r => !r.IsNewRow)
+                .Sum(r => decimal.TryParse(r.Cells[coluna].Value?.ToString(), out decimal v) ? v : 0);
+        }
+        // ==============================================================
+        // 9. PESQUISAR COM DAPPER (RÁPIDO E SEGURO)
+        // ==============================================================
+        public static void Pesquisar(string query, object parametros, DataGridView dgv)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            var dt = new DataTable();
+            dt.Load(conn.ExecuteReader(query, parametros));
+            dgv.DataSource = dt.Rows.Count > 0 ? dt : null;
+        }
+        // ==============================================================
+        // 10. PREENCHER COMBOBOX (COM DAPPER)
+        // ==============================================================
+        public static void PreencherCombo(ComboBox cb, string query, string display, string value, object param = null)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            var lista = conn.Query(query, param).Select(x => new { Display = x.GetType().GetProperty(display).GetValue(x), Value = x.GetType().GetProperty(value).GetValue(x) });
+            cb.DisplayMember = "Display"; cb.ValueMember = "Value"; cb.DataSource = lista.ToList();
+        }
+
+        // ==============================================================
+        // 11. VERIFICAR DUPLICIDADE
+        // ==============================================================
+        public static bool Existe(string query, object parametros = null)
+        {
+            using var conn = GVC.Helpers.Conexao.Conex();
+            return conn.QuerySingle<int>(query, parametros) > 0;
+        }
+
+        // ==============================================================
+        // 12. EFECTO FOCO NOS KRYPTON TEXTBOX
+        // ==============================================================
+        public static void AplicarEfeitoFoco(Control container)
+        {
+            foreach (Control c in container.Controls)
+            {
+                if (c is KryptonTextBox ktb)
+                {
+                    ktb.Enter += (s, e) => ktb.StateActive.Back.Color1 = System.Drawing.Color.PaleTurquoise;
+                    ktb.Leave += (s, e) => ktb.StateActive.Back.Color1 = ktb.StateCommon.Back.Color1;
+                }
+                if (c.HasChildren) AplicarEfeitoFoco(c);
+            }
+        }
+    
+        public static ProdutosModel? BuscarProdutoPorRef(string referencia)
+        {
+            if (string.IsNullOrWhiteSpace(referencia)) return null;
+
+            const string sql = "SELECT * FROM Produtos WHERE Referencia = @Ref LIMIT 1";
+            using var conn = GVC.Helpers.Conexao.Conex();
+            return conn.QueryFirstOrDefault<ProdutosModel>(sql, new { Ref = referencia });
+        }
+       
+        public static string ApenasNumeros(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return "";
+            return Regex.Replace(texto, @"\D", "");
+        }
+        // WRAPPER para TELEFONE -------------------------------------------
+        public static void MascaraTelefone(object sender, KeyPressEventArgs e)
+        {
+            if (sender is KryptonTextBox txt)
+                AplicarMascaraTelefone(e, txt);
+        }
+        public static void AplicarMascaraTelefone(KeyPressEventArgs e, KryptonTextBox textBox)
+        {
+            // Permite backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            // Só permite números
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Remove tudo que não é número
+            string numeros = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+            // Limite: 11 números (DDD + 9 dígitos)
+            if (numeros.Length >= 11)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Adiciona o novo número
+            numeros += e.KeyChar;
+
+            // Monta máscara
+            string formatado = "";
+
+            if (numeros.Length <= 2)
+            {
+                // (DD
+                formatado = $"({numeros}";
+            }
+            else if (numeros.Length <= 6)
+            {
+                // (DD) XXXX
+                formatado = $"({numeros.Substring(0, 2)}) {numeros.Substring(2)}";
+            }
+            else if (numeros.Length <= 10)
+            {
+                // 10 dígitos: (DD) XXXX-XXXX
+                formatado = $"({numeros.Substring(0, 2)}) {numeros.Substring(2, 4)}-{numeros.Substring(6)}";
+            }
+            else
+            {
+                // 11 dígitos: (DD) 9XXXX-XXXX
+                formatado = $"({numeros.Substring(0, 2)}) {numeros.Substring(2, 5)}-{numeros.Substring(7)}";
+            }
+
+            // Atualiza textbox
+            textBox.Text = formatado;
+
+            // Cursor no fim
+            textBox.SelectionStart = textBox.Text.Length;
+
+            // Impede caractere "solto"
+            e.Handled = true;
+        }
+
+
+        public static string FormatarCPF(string cpf)
+        {
+            cpf = ApenasNumeros(cpf);
+            if (cpf.Length != 11) return cpf;
+            return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
+        }
+
+        public static bool ValidarCPF(string cpf)
+        {
+            cpf = ApenasNumeros(cpf);
+            if (cpf.Length != 11) return false;
+            if (new string(cpf[0], 11) == cpf) return false;
+            int soma = 0;
+            for (int i = 0; i < 9; i++) soma += (cpf[i] - '0') * (10 - i);
+            int resto = (soma * 10) % 11;
+            if (resto == 10 || resto == 11) resto = 0;
+            if (resto != (cpf[9] - '0')) return false;
+            soma = 0;
+            for (int i = 0; i < 10; i++) soma += (cpf[i] - '0') * (11 - i);
+            resto = (soma * 10) % 11;
+            if (resto == 10 || resto == 11) resto = 0;
+            return resto == (cpf[10] - '0');
+        }
+
+        public static string FormatarCNPJ(string cnpj)
+        {
+            cnpj = ApenasNumeros(cnpj);
+            if (cnpj.Length != 14) return cnpj;
+            return $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}";
+        }
+
+        public static bool ValidarCNPJ(string cnpj)
+        {
+            cnpj = ApenasNumeros(cnpj);
+            if (cnpj.Length != 14) return false;
+            if (new string(cnpj[0], 14) == cnpj) return false;
+            int[] multiplicadores1 = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicadores2 = { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int soma = 0;
+            for (int i = 0; i < 12; i++) soma += (cnpj[i] - '0') * multiplicadores1[i];
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+            if ((cnpj[12] - '0') != digito1) return false;
+            soma = 0;
+            for (int i = 0; i < 13; i++) soma += (cnpj[i] - '0') * multiplicadores2[i];
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+            return (cnpj[13] - '0') == digito2;
+        }
+
+        // Novos métodos: validador que aplica formatação e cor. Retorna true se válido.
+        public static bool ValidarEFormatarCPFnoTextbox(KryptonTextBox txt)
+        {
+            var original = txt.Text.Trim();
+            var apenasNumeros = ApenasNumeros(original);
+            if (string.IsNullOrEmpty(apenasNumeros))
+            {
+                txt.StateCommon.Border.Color1 = Color.Gray;
+                txt.Text = "";
+                return true; // vazio é considerado "sem erro" — quem chama decide
+            }
+
+            if (apenasNumeros.Length != 11 || !ValidarCPF(apenasNumeros))
+            {
+                txt.StateCommon.Border.Color1 = Color.Crimson;
                 return false;
             }
 
-            // Outras validações...
-
+            txt.Text = FormatarCPF(apenasNumeros);
+            txt.StateCommon.Border.Color1 = Color.MediumSeaGreen;
             return true;
         }
 
-        public static void ProcessarVenda(TextBox txtbox)
+        public static bool ValidarEFormatarCNPJnoTextbox(KryptonTextBox txt)
         {
-            if (!ValidarCampos(txtbox)) return;
-
-            var worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
+            var original = txt.Text.Trim();
+            var apenasNumeros = ApenasNumeros(original);
+            if (string.IsNullOrEmpty(apenasNumeros))
             {
-                // Operações de banco de dados aqui
-            };
-
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                MessageBox.Show("Venda processada com sucesso.");
-            };
-
-            worker.RunWorkerAsync();
-        }
-        //public static void FormataTelefone(object sender, KeyPressEventArgs e)
-        //{
-        //    TextBox textBoxTelefone = sender as TextBox;
-
-        //    if (textBoxTelefone != null)
-        //    {
-        //        // Permite apenas dígitos e teclas de controle (como backspace)
-        //        if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-        //        {
-        //            e.Handled = true;
-        //            return;
-        //        }
-
-        //        if (char.IsDigit(e.KeyChar))
-        //        {
-        //            // Prevê o novo valor que seria adicionado ao TextBox
-        //            string novoTexto = textBoxTelefone.Text + e.KeyChar;
-
-        //            // Remove todos os caracteres não numéricos para simplificar a formatação
-        //            string numero = novoTexto.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "");
-
-        //            // Formatação do número de telefone conforme o comprimento do texto
-        //            if (numero.Length <= 2)
-        //            {
-        //                textBoxTelefone.Text = "(" + numero;
-        //            }
-        //            else if (numero.Length <= 6)
-        //            {
-        //                textBoxTelefone.Text = "(" + numero.Substring(0, 2) + ") " + numero.Substring(2);
-        //            }
-        //            else if (numero.Length <= 10)
-        //            {
-        //                textBoxTelefone.Text = "(" + numero.Substring(0, 2) + ") " + numero.Substring(2, 4) + "-" + numero.Substring(6);
-        //            }
-
-        //            // Define o cursor no final do texto
-        //            textBoxTelefone.SelectionStart = textBoxTelefone.Text.Length;
-        //            e.Handled = true;
-        //        }
-        //    }
-        //}
-
-        //// Exemplo de uso do método FormataTelefone
-        //// Na classe construtor de inicialização adicione este código:
-        public static void FormataTelefone(object sender, KeyPressEventArgs e)
-        {
-            KryptonTextBox textBoxTelefone = sender as KryptonTextBox;
-
-            if (textBoxTelefone != null)
-            {
-                // Permite apenas dígitos e teclas de controle (como backspace)
-                if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-                {
-                    e.Handled = true;
-                    return;
-                }
-
-                // Permite apenas dígitos
-                if (char.IsDigit(e.KeyChar))
-                {
-                    // Prever o novo texto que será inserido
-                    string novoTexto = textBoxTelefone.Text + e.KeyChar;
-
-                    // Remove caracteres não numéricos para simplificar a formatação
-                    string numero = novoTexto.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "");
-
-                    // Formatação conforme o comprimento do texto
-                    if (numero.Length <= 2)
-                    {
-                        textBoxTelefone.Text = "(" + numero;
-                    }
-                    else if (numero.Length <= 7)
-                    {
-                        textBoxTelefone.Text = "(" + numero.Substring(0, 2) + ") " + numero.Substring(2);
-                    }
-                    else if (numero.Length <= 11)
-                    {
-                        textBoxTelefone.Text = "(" + numero.Substring(0, 2) + ") " + numero.Substring(2, 1) + " " + numero.Substring(3, 4) + "-" + numero.Substring(7);
-                    }
-
-                    // Define a posição do cursor no final do texto
-                    textBoxTelefone.SelectionStart = textBoxTelefone.Text.Length;
-                    e.Handled = true;
-                }
+                txt.StateCommon.Border.Color1 = System.Drawing.Color.Gray;
+                txt.Text = "";
+                return true;
             }
+
+            if (apenasNumeros.Length != 14 || !ValidarCNPJ(apenasNumeros))
+            {
+                txt.StateCommon.Border.Color1 = Color.Crimson;
+                return false;
+            }
+
+            txt.Text = FormatarCNPJ(apenasNumeros);
+            txt.StateCommon.Border.Color1 = Color.MediumSeaGreen;
+            return true;
         }
 
-        // Exemplo de uso do método FormataTelefone
-        // Na classe construtor de inicialização adicione este código:
-        //textBoxTelefone.KeyPress += new KeyPressEventHandler(FormataTelefone);
-
-
-
-    public static string LimparNumeroTelefone(string numero) => Regex.Replace(numero, @"[\(\)\- ]", ""); //Exemplo de Uso LimparNumero// string numeroFormatado = txtTelefone.Text; // string numeroLimpo = UtilitarioTelefone.LimparNumero(numeroFormatado);
-    public static string LimparNumeroGeral(string numero) 
-    {   
-        // Remove todos os caracteres que não são dígitos 
-        return Regex.Replace(numero, @"\D", ""); 
-        //Exemplo de Uso LimparNumero
-        // string numeroFormatado = txtTelefone.Text; 
-        // string numeroLimpo = UtilitarioTelefone.LimparNumero(numeroFormatado);
-    }
-
-        // método para PERSONALIZAR NUMEROS DE TELEFONE LIMPO PARA O FORMATO (99) 9 9999-4444
-        // PARA EXIBIR EM TEXBOX
-        public static string FormatPhoneNumber(string number)
+        // Métodos de máscara (KeyPress) — já existentes, mantenha-os.
+        public static void AplicarMascaraCPF(KeyPressEventArgs e, KryptonTextBox textBox)
         {
-            if (number.Length == 11)
-            {
-                return string.Format("({0}) {1}-{2}",
-                    number.Substring(0, 2),
-                    number.Substring(2, 5),
-                    number.Substring(7));
-            }
-            else if (number.Length == 10)
-            {
-                return string.Format("({0}) {1}-{2}",
-                    number.Substring(0, 2),
-                    number.Substring(2, 4),
-                    number.Substring(6));
-            }
-            else
-            {
-                return number;
-            }
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back) { e.Handled = true; return; }
+            if (e.KeyChar == (char)Keys.Back) return;
+
+            string texto = textBox.Text.Replace(".", "").Replace("-", "");
+            if (texto.Length == 11) { e.Handled = true; return; }
+
+            if (texto.Length == 3 || texto.Length == 6) textBox.Text += ".";
+            else if (texto.Length == 9) textBox.Text += "-";
+
+            textBox.SelectionStart = textBox.Text.Length;
         }
 
-    public static void FormatarCpf(object sender, KeyPressEventArgs e)
-    {
-        TextBox textBoxCpf = sender as TextBox;
-
-        if (textBoxCpf != null)
+        public static void AplicarMascaraCNPJ(KeyPressEventArgs e, KryptonTextBox textBox)
         {
-            // Permite apenas dígitos e controle (backspace)
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back) { e.Handled = true; return; }
+            if (e.KeyChar == (char)Keys.Back) return;
+
+            string texto = textBox.Text.Replace(".", "").Replace("/", "").Replace("-", "");
+            if (texto.Length == 14) { e.Handled = true; return; }
+
+            if (texto.Length == 2 || texto.Length == 5) textBox.Text += ".";
+            else if (texto.Length == 8) textBox.Text += "/";
+            else if (texto.Length == 12) textBox.Text += "-";
+
+            textBox.SelectionStart = textBox.Text.Length;
+        }
+
+
+        // WRAPPER para CPF -------------------------------------------
+        public static void MascaraCPF(object sender, KeyPressEventArgs e)
+        {
+            if (sender is KryptonTextBox txt)
+                AplicarMascaraCPF(e, txt); // chama sua função original
+        }
+
+        // WRAPPER para CNPJ ------------------------------------------
+        public static void MascaraCNPJ(object sender, KeyPressEventArgs e)
+        {
+            if (sender is KryptonTextBox txt)
+                AplicarMascaraCNPJ(e, txt); // chama sua função original
+        }
+        public static bool ValidarEFormatarCEPnoTextbox(KryptonTextBox txt)
+        {
+            var original = txt.Text.Trim();
+            var apenasNumeros = ApenasNumeros(original);
+
+            // ⭐ Se estiver vazio → não dá erro
+            if (string.IsNullOrWhiteSpace(apenasNumeros))
+            {
+                txt.StateCommon.Border.Color1 = Color.Gray; // aparência neutra
+                txt.Text = "";
+                return true; // válido, pode salvar
+            }
+
+            // Se não tiver 8 dígitos → inválido
+            if (apenasNumeros.Length != 8)
+            {
+                txt.StateCommon.Border.Color1 = Color.Crimson;
+                return false;
+            }
+
+            // Formata → 99.999-999
+            txt.Text = $"{apenasNumeros.Substring(0, 2)}.{apenasNumeros.Substring(2, 3)}-{apenasNumeros.Substring(5, 3)}";
+            txt.StateCommon.Border.Color1 = Color.MediumSeaGreen;
+            return true;
+        }
+        public static void AplicarMascaraCEP(KeyPressEventArgs e, KryptonTextBox textBox)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
-            }
-
-            // Formata o texto após a entrada de um dígito
-            if (char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                string numero = textBoxCpf.Text.Replace(".", "").Replace("-", "");
-                numero += e.KeyChar;
-
-                if (numero.Length <= 3)
-                {
-                    textBoxCpf.Text = numero;
-                }
-                else if (numero.Length <= 6)
-                {
-                    textBoxCpf.Text = numero.Substring(0, 3) + "." + numero.Substring(3);
-                }
-                else if (numero.Length <= 9)
-                {
-                    textBoxCpf.Text = numero.Substring(0, 3) + "." + numero.Substring(3, 3) + "." + numero.Substring(6);
-                }
-                else if (numero.Length <= 11)
-                {
-                    textBoxCpf.Text = numero.Substring(0, 3) + "." + numero.Substring(3, 3) + "." + numero.Substring(6, 3) + "-" + numero.Substring(9);
-                }
-
-                textBoxCpf.SelectionStart = textBoxCpf.Text.Length;
-
-                // Uso do Método FormataCpf
-
-                /*
-                // Construtor do formulário
-              //public Form1()
-              //{       
-              //Inicializacomponent;
-              // Adiciona o evento KeyPress ao campo de texto para chamar o método de formatação
-              //textBoxCpf.KeyPress += new KeyPressEventHandler(FormatadorCpfGlobal.FormatarCpf);        
-              //}
-                */
-            }
-        }
-    }
-
-    // Método para converter Guid em hash
-    public static string ConvertGuidToHash(Guid guid)
-    {
-        using (SHA256 sha256 = SHA256.Create())
-        {
-            byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(guid.ToString()));
-            int hashInt = BitConverter.ToInt32(hashBytes, 0);
-            return hashInt.ToString();
-        }
-    }
-
-      // Método para converter hash de volta para Guid (precisa de um mapeamento)
-    public static Guid ConvertHashToGuid(string hash)
-    {
-        // Simulação de conversão - em um cenário real, você precisará manter um mapeamento dos hashes para os GUIDs
-        return Guid.NewGuid();
-    }
-        //Use o método global DE Conversão, Representação de Guid para Número Legivelno seu formulário:
-
-        /*
-         public Form1()
-         {       
-        // Simula a atribuição de um Guid
-        VendaID = Guid.NewGuid();
-        
-        // Exibe um hash do Guid no TextBox
-        textBoxVendaID.Text = UtilitarioGuid.ConvertGuidToHash(VendaID);
-         }
-
-        // Método para salvar no banco de dados (simulação)
-         private void SalvarVenda()
-        {
-            string hash = textBoxVendaID.Text;
-             Guid vendaIdParaSalvar = UtilitarioGuid.ConvertHashToGuid(hash);
-        // Código para salvar vendaIdParaSalvar no banco de dados
-        }
-        */
-      
-        public static void PersonalizarTextBox(Control parentControl)
-        {
-            foreach (Control control in parentControl.Controls)
-            {
-                if (control is TextBox && !(control is CustomTextBox))
-                {
-                    TextBox originalTextBox = control as TextBox;
-                    CustomTextBox customTextBox = new CustomTextBox
-                    {
-                        Size = originalTextBox.Size,
-                        Location = originalTextBox.Location,
-                        Text = originalTextBox.Text,
-                        Font = originalTextBox.Font,
-                        Anchor = originalTextBox.Anchor,
-                        Dock = originalTextBox.Dock,
-                        Multiline = originalTextBox.Multiline
-                    };
-
-                    parentControl.Controls.Add(customTextBox);
-                    parentControl.Controls.Remove(originalTextBox);
-                }
-                else if (control.HasChildren)
-                {
-                    PersonalizarTextBox(control);
-                }
-            }
-        }
-
-        // Método para pesquisar com parâmetros
-        public static void PesquisarComParametros(string query, Dictionary<string, object> parametros, DataGridView grid)
-        {
-            using (var connection = Conexao.Conex())
-            {
-                using (var command = new SqlCommand(query, connection))
-                {
-                    if (parametros != null)
-                    {
-                        foreach (var param in parametros)
-                        {
-                            command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
-                        }
-                    }
-
-                    var adapter = new SqlDataAdapter(command);
-                    var dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-                    grid.DataSource = dataTable;
-                }
-            }
-        }
-        // Método para pesquisar com parâmetros FIM
-
-        public static void PesquisarProdutoPorReferencia(string referencia, KryptonTextBox txtNomeProduto, KryptonTextBox txtPrecoProduto)
-        {
-            // Limpa os TextBox antes de realizar a pesquisa
-            txtNomeProduto.Text = string.Empty;
-            txtPrecoProduto.Text = string.Empty;
-
-            using (var conn = Conexao.Conex())
-            {
-                try
-                {
-                    DataTable dt = new DataTable();
-                    SqlCommand comando = new SqlCommand("SELECT NomeProduto, PrecoDeVenda FROM Produtos WHERE Referencia = @Referencia", conn);
-                    comando.Parameters.AddWithValue("@Referencia", referencia);
-
-                    conn.Open();
-
-                    SqlDataAdapter da = new SqlDataAdapter(comando);
-                    da.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        txtNomeProduto.Text = dt.Rows[0]["NomeProduto"].ToString();
-                        txtPrecoProduto.Text = dt.Rows[0]["PrecoDeVenda"].ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Referência não encontrada.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao executar a pesquisa: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    if (conn.State == ConnectionState.Open)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-        }
-
-
-        public static void PesquisarProdutoPorReferencia2(string referencia, KryptonTextBox texboxReferencia, KryptonTextBox texboxNome, KryptonTextBox texboxProdutoID)
-        {
-            // Evita a pesquisa vazia se o campo estiver em branco
-            if (string.IsNullOrWhiteSpace(referencia))
-            {
-                texboxNome.Clear();
-                texboxProdutoID.Clear();
                 return;
             }
 
-            // Query para buscar o ProdutoID e o NomeProduto pela referência
-            string query = "SELECT ProdutoID, NomeProduto FROM Produtos WHERE Referencia = @Referencia";
+            if (e.KeyChar == (char)Keys.Back) return;
+
+            string texto = ApenasNumeros(textBox.Text);
+
+            if (texto.Length == 8)  // impede mais que 8 números
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (texto.Length == 2)
+                textBox.Text += ".";
+            else if (texto.Length == 5)
+                textBox.Text += "-";
+
+            textBox.SelectionStart = textBox.Text.Length;
+        }
+        public static void MascaraCEP(object sender, KeyPressEventArgs e)
+        {
+            if (sender is KryptonTextBox txt)
+                AplicarMascaraCEP(e, txt);
+        }
+
+      
+        public static void MascaraIE(KeyPressEventArgs e, Krypton.Toolkit.KryptonTextBox txt)
+        {
+            // Permite somente números e Backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Limita a 14 dígitos
+            if (char.IsDigit(e.KeyChar) && txt.Text.Length >= 14)
+                e.Handled = true;
+        }
+
+        public static bool ValidarIE(string ie)
+        {
+            if (string.IsNullOrWhiteSpace(ie))
+                return false;
+
+            ie = ie.Trim();
+
+            // Remove qualquer caractere que não seja número
+            ie = new string(ie.Where(char.IsDigit).ToArray());
+
+            // A maioria das IEs tem entre 2 e 14 dígitos
+            return ie.Length >= 2 && ie.Length <= 14;
+        }
+
+        public class ViaCepResponse
+        {
+            public string cep { get; set; }
+            public string logradouro { get; set; }
+            public string complemento { get; set; }
+            public string bairro { get; set; }
+            public string localidade { get; set; }
+            public string uf { get; set; }
+            public string ibge { get; set; }
+            public string gia { get; set; }
+            public string ddd { get; set; }
+            public string siafi { get; set; }
+            public bool erro { get; set; }
+        }
+
+        public static async Task<ViaCepResponse?> BuscarCepAsync(string cep)
+        {
+            cep = ApenasNumeros(cep);
+            if (cep.Length != 8) return null;
+
+            using HttpClient client = new HttpClient();
+            string url = $"https://viacep.com.br/ws/{cep}/json/";
 
             try
             {
-                using (SqlConnection conexao = Conexao.Conex())
-                {
-                    conexao.Open();
-                    SqlCommand comando = new SqlCommand(query, conexao);
-                    comando.Parameters.AddWithValue("@Referencia", referencia);
+                var response = await client.GetAsync(url);
+                if (!response.IsSuccessStatusCode) return null;
 
-                    // Executa a consulta e obtém o resultado
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            // Preenche os campos de NomeProduto e ProdutoID
-                            texboxProdutoID.Text = reader["ProdutoID"].ToString();
-                            texboxNome.Text = reader["NomeProduto"].ToString();
-                        }
-                        else
-                        {
-                            // Caso não encontre, limpar os campos
-                            texboxNome.Clear();
-                            texboxProdutoID.Clear();
-                        }
-                    }
-                }
+                string json = await response.Content.ReadAsStringAsync();
+                var dados = System.Text.Json.JsonSerializer.Deserialize<ViaCepResponse>(json);
+
+                if (dados == null || dados.erro) return null;
+
+                return dados;
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Erro ao buscar o produto: " + ex.Message);
+                return null;
             }
         }
 
 
-    }
-}
+        //public static string FormatarCPF(string cpf)
+        //{
+        //    cpf = ApenasNumeros(cpf);
+        //    return Convert.ToUInt64(cpf).ToString(@"000\.000\.000\-00");
+        //}
 
-    /*
-//Crie a classe personalizada CustomTextBox:
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+        //public static string FormatarCNPJ(string cnpj)
+        //{
+        //    cnpj = ApenasNumeros(cnpj);
+        //    return Convert.ToUInt64(cnpj).ToString(@"00\.000\.000\/0000\-00");
+        //}
+        public static string FormatarCEP(string cep)
+        {
+            if (string.IsNullOrWhiteSpace(cep))
+                return "";
 
-public class CustomTextBox : TextBox
-{
-    private Color originalBackColor;
+            cep = new string(cep.Where(char.IsDigit).ToArray());
 
-    public CustomTextBox()
-    {
-        // Salvar a cor de fundo original
-        originalBackColor = this.BackColor;
+            if (cep.Length == 8)
+                return $"{cep.Substring(0, 5)}-{cep.Substring(5, 3)}";
 
-        // Adicionar eventos
-        this.Enter += new EventHandler(CustomTextBox_Enter);
-        this.Leave += new EventHandler(CustomTextBox_Leave);
-    }
+            return cep;
+        }
 
-    private void CustomTextBox_Enter(object sender, EventArgs e)
-    {
-        // Mudar cor de fundo para azul claro quando em foco
-        this.BackColor = Color.LightBlue;
-    }
+        public static string FormatarTelefoneTexto(string tel)
+        {
+            tel = ApenasNumeros(tel);
 
-    private void CustomTextBox_Leave(object sender, EventArgs e)
-    {
-        // Restaurar a cor de fundo original quando perde o foco
-        this.BackColor = originalBackColor;
-    }
-}
-*/
-//Método para aplicar a personalização a todos os TextBox em um formulário:
+            if (tel.Length == 10)
+                return Convert.ToUInt64(tel).ToString(@"(00)0000\-0000");
 
+            if (tel.Length == 11)
+                return Convert.ToUInt64(tel).ToString(@"(00)00000\-0000");
 
-/*
+            return tel;
+        }
 
-
-*/
-// 3 Chame o método no seu formulário principal:
-/*
-public Form1()
-{
-    InitializeComponent();
-    ApplyCustomTextBox(this);
-}
-*/
-
-
-
-//}
-/*
-            COMO IMPLEMENTAR EM QUALQUER FORMULÁRIO
-            using GVC.Utils;  // Certifique-se de importar o namespace correto
-
-            // ...
-
-            private void FrmGerarParcelas_Load(object sender, EventArgs e)
+        public static string FormatarCepTexto(string cep)
+        {
+            cep = ApenasNumeros(cep);
+            return Convert.ToUInt64(cep).ToString(@"00000\-000");
+        }
+        /// <summary>
+        /// Aplica comportamento de foco em KryptonTextBox:
+        /// Verde claro ao ganhar foco, branco ao perder.
+        /// </summary>
+        public static void AplicarCorFoco(KryptonTextBox txt)
+        {
+            txt.Enter += (s, e) =>
             {
-                string query = "SELECT MAX(ParcelaID) FROM Parcelas";
-                int codigoVenda = Utilitario.GerarProximoCodigo(query); // Chama o método global
+                txt.StateCommon.Back.Color1 = Color.LightGreen;
+            };
 
-                // Atribui o código gerado ao TextBox
-                txtVendaID.Text = codigoVenda.ToString();    
+            txt.Leave += (s, e) =>
+            {
+                txt.StateCommon.Back.Color1 = Color.White;
+            };
+        }
+        public static string ZerosEsquerda(int numero, int tamanho) => numero.ToString().PadLeft(tamanho, '0');
+        //public static string ZerosEsquerda(string texto, int tamanho) => texto.PadLeft(tamanho, '0');
+
+
+
+
+
+        public static void CarregarFormasPagamento(KryptonComboBox cmb)
+        {
+            try
+            {
+                cmb.Items.Clear();
+
+                // Item padrão tipado (NUNCA string solta)
+                cmb.Items.Add(new FormaPagamentoItem(0, "Selecione uma forma de pagamento"));
+                cmb.SelectedIndex = 0;
+
+                string query = @"
+            SELECT FormaPgtoID, FormaPgto 
+            FROM FormaPgto 
+            ORDER BY 
+                CASE 
+                    WHEN FormaPgto LIKE 'Dinheiro%' THEN 1
+                    WHEN FormaPgto LIKE 'PIX%' THEN 2
+                    WHEN FormaPgto LIKE 'Cartão Débito%' THEN 3
+                    WHEN FormaPgto LIKE 'Cartão Crédito%' THEN 4
+                    ELSE 5
+                END,
+                FormaPgto";
+
+                using (var connection = Helpers.Conexao.Conex())
+                using (var command = new SqliteCommand(query, connection))
+                {
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            cmb.Items.Add(new FormaPagamentoItem(
+                                Convert.ToInt32(reader["FormaPgtoID"]),
+                                reader["FormaPgto"].ToString()
+                            ));
+                        }
+                    }
+                }
+
+                // Exibe Descricao corretamente
+                cmb.DisplayMember = nameof(FormaPagamentoItem.Descricao);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erro ao carregar formas de pagamento:\n{ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
 
-*/
+    }
+
+    /// <summary>
+    /// Classe auxiliar para representar item de forma de pagamento.
+    /// </summary>
+    public class FormaPagamentoItem
+    {
+        public int Id { get; }
+        public string Descricao { get; }
+
+        public FormaPagamentoItem(int id, string descricao)
+        {
+            Id = id;
+            Descricao = descricao;
+        }
+
+        public override string ToString() => Descricao;
+    }
+}

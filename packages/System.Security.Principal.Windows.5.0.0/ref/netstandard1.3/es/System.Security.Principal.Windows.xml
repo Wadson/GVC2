@@ -149,7 +149,8 @@
       </PermissionSet>
     </member>
     <member name="T:System.Security.Principal.NTAccount">
-      <summary>Representa un usuario o cuenta de grupo.</summary>
+      <summary>Representa un
+	  o cuenta de grupo.</summary>
     </member>
     <member name="M:System.Security.Principal.NTAccount.#ctor(System.String)">
       <summary>Inicializa una nueva instancia de la clase <see cref="T:System.Security.Principal.NTAccount" /> utilizando el nombre especificado.</summary>

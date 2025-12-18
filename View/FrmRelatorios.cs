@@ -1,599 +1,250 @@
-﻿using GVC.Relatorios;
+﻿
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Data.SqlClient;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
 using System.IO;
-using OfficeOpenXml; 
-using ComponentFactory.Krypton.Toolkit;
+using System.Linq;
+using System.Windows.Forms;
+using Krypton.Toolkit;
+using OfficeOpenXml;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using Dapper;
 
 namespace GVC.View
 {
-    public partial class FrmRelatorios : GVC.FrmModeloForm
+    public partial class FrmRelatorios : KryptonForm
     {
         public FrmRelatorios()
         {
             InitializeComponent();
-
-            // Definindo o contexto de licença do EPPlus
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Para uso não comercial
-                                                                        // ExcelPackage.LicenseContext = LicenseContext.Commercial; // Para uso comercial
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Ajuste se for comercial
         }
-        public string clienteSelecionado { get; set; }//não serve para nada, só para preencher o parametro do construtor
+
+        public string clienteSelecionado { get; set; }
+
         private void CalcularTotalDataGrid()
         {
             try
             {
-                // Calcular o total dos valores Não pagos na coluna "SaldoRestante"
-                decimal totalEmAberto = Utilitario.SomarValoresDataGrid(dgvContasReceber, "SaldoRestante");
+                decimal totalEmAberto = Utilitario.SomarColuna(dgvContasReceber, "SaldoRestante");
+                decimal totalRecebido = Utilitario.SomarColuna(dgvContasReceber, "ValorRecebido");
 
-                // Atualizar a label com o total calculado
-                lblTotal.Text = $"R$ {totalEmAberto:F2}";
-
-
-                // Calcular o total dos valores na coluna "ValorParcela"
-                decimal totalPago = Utilitario.SomarValoresDataGrid(dgvContasReceber, "ValorRecebido");
-
-                // Atualizar a label com o total calculado
-                lblTotalRecebido.Text = $"R$ {totalPago:F2}";
+                lblTotal.Text = $"R$ {totalEmAberto:N2}";
+                lblTotalRecebido.Text = $"R$ {totalRecebido:N2}";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao calcular o total: " + ex.Message);
+                MessageBox.Show("Erro ao calcular total: " + ex.Message);
             }
         }
-        // Chamando a função após carregar os dados no DataGridView
 
-        private void PersonalizarDataGridView(DataTable dataTable)
+        private void PersonalizarDataGridView()
         {
-            // Define o DataTable como a fonte de dados do DataGridView
-            dgvContasReceber.DataSource = dataTable;
+            if (dgvContasReceber.Columns.Count == 0) return;
 
-            // Renomeia as colunas
-            dgvContasReceber.Columns["NomeCliente"].HeaderText = "Cliente";
-            dgvContasReceber.Columns["NumeroParcela"].HeaderText = "Parcela";
-            dgvContasReceber.Columns["ValorParcela"].HeaderText = "Valor Parcela";
-            dgvContasReceber.Columns["DataVencimento"].HeaderText = "Data Vencimento";
-            dgvContasReceber.Columns["SaldoRestante"].HeaderText = "Saldo Restante";
-            dgvContasReceber.Columns["ValorRecebido"].HeaderText = "Valor Recebido";            
-            dgvContasReceber.Columns["Pago"].HeaderText = "Pago";
-            dgvContasReceber.Columns["VendaID"].HeaderText = "Venda ID";
+            var colunas = new (string nome, string titulo, bool visivel, string formato, DataGridViewContentAlignment alinhamento)[]
+            {
+                ("Nome", "Cliente", true, null, DataGridViewContentAlignment.MiddleLeft),
+                ("NumeroParcela", "Parcela", true, null, DataGridViewContentAlignment.MiddleCenter),
+                ("ValorParcela", "Valor Parcela", true, "N2", DataGridViewContentAlignment.MiddleRight),
+                ("DataVencimento", "Data Vencimento", true, "d", DataGridViewContentAlignment.MiddleCenter),
+                ("SaldoRestante", "Saldo Restante", true, "N2", DataGridViewContentAlignment.MiddleRight),
+                ("ValorRecebido", "Valor Recebido", true, "N2", DataGridViewContentAlignment.MiddleRight),
+                ("Pago", "Pago", true, null, DataGridViewContentAlignment.MiddleCenter),
+                ("ParcelaID", null, false, null, DataGridViewContentAlignment.NotSet),
+                ("VendaID", null, false, null, DataGridViewContentAlignment.NotSet),
+                ("ClienteID", null, false, null, DataGridViewContentAlignment.NotSet)
+            };
 
-            // Oculta as colunas de CódigoID (se necessário)
-            dgvContasReceber.Columns["VendaID"].Visible = false;
-            dgvContasReceber.Columns["ParcelaID"].Visible = false;
-            dgvContasReceber.Columns["ClienteID"].Visible = false;
-            // Formata as colunas de valores no formato de moeda ("N2")            
-            dgvContasReceber.Columns["ValorParcela"].DefaultCellStyle.Format = "N2";
-            dgvContasReceber.Columns["SaldoRestante"].DefaultCellStyle.Format = "N2";
-            dgvContasReceber.Columns["ValorRecebido"].DefaultCellStyle.Format = "N2";
+            foreach (var c in colunas)
+            {
+                if (dgvContasReceber.Columns.Contains(c.nome))
+                {
+                    var col = dgvContasReceber.Columns[c.nome];
+                    if (c.titulo != null) col.HeaderText = c.titulo;
+                    col.Visible = c.visivel;
+                    if (c.formato != null) col.DefaultCellStyle.Format = c.formato;
+                    if (c.alinhamento != DataGridViewContentAlignment.NotSet)
+                        col.DefaultCellStyle.Alignment = c.alinhamento;
 
-            // Redimensiona automaticamente as colunas para ajustar ao conteúdo
+                    col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+            }
+
+            // Cores
+            if (dgvContasReceber.Columns.Contains("ValorParcela"))
+                dgvContasReceber.Columns["ValorParcela"].DefaultCellStyle.BackColor = Color.LightGreen;
+            if (dgvContasReceber.Columns.Contains("SaldoRestante"))
+                dgvContasReceber.Columns["SaldoRestante"].DefaultCellStyle.BackColor = Color.LightGreen;
+            if (dgvContasReceber.Columns.Contains("ValorRecebido"))
+                dgvContasReceber.Columns["ValorRecebido"].DefaultCellStyle.BackColor = Color.LightBlue;
+
             dgvContasReceber.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-            // Alinhamento das colunas de valores
-            dgvContasReceber.Columns["ValorParcela"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgvContasReceber.Columns["SaldoRestante"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgvContasReceber.Columns["ValorRecebido"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgvContasReceber.Columns["NumeroParcela"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            // Configura o DataGridView para exibir a coluna "Pago" como um checkbox
-            dgvContasReceber.Columns["Pago"].ValueType = typeof(bool);
-
-            // Habilita a seleção de linha inteira (FullRowSelect)
             dgvContasReceber.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            // Centralização dos cabeçalhos de todas as colunas
-            foreach (DataGridViewColumn column in dgvContasReceber.Columns)
-            {
-                column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
-
-            // Colore as colunas de valores
-            dgvContasReceber.Columns["ValorParcela"].DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
-            dgvContasReceber.Columns["SaldoRestante"].DefaultCellStyle.BackColor = System.Drawing.Color.LightGreen;
-            dgvContasReceber.Columns["ValorRecebido"].DefaultCellStyle.BackColor = System.Drawing.Color.LightBlue;
         }
 
-
-        //1. Pesquisar por StatusGeral (Pago = @Pago)
-        public DataTable PesquisarPorStatusGeral(bool pago)
+        // 1. Por Status (Pago / Não Pago)
+        private void PesquisarPorStatusGeral(bool pago)
         {
-            string query = @"
-                 SELECT
-                    Parcela.ParcelaID,   
-                    Parcela.ValorParcela, 
-                    Parcela.NumeroParcela,   
-                    Parcela.SaldoRestante,     
-                    Parcela.DataVencimento, 
-                    Parcela.VendaID,           
-                    Parcela.Pago,              
-                    Parcela.ValorRecebido,         
-                    Cliente.ClienteID,              
-                    Cliente.NomeCliente            
-                FROM Parcela                          
-                INNER JOIN Venda ON Parcela.VendaID = Venda.VendaID
-                INNER JOIN Cliente ON Venda.ClienteID = Cliente.ClienteID
-                WHERE Parcela.Pago = @Pago";
+            string sql = @"
+                SELECT p.*, c.Nome, c.ClienteID
+                FROM Parcela p
+                INNER JOIN Venda v ON p.VendaID = v.VendaID
+                INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+                WHERE p.Pago = @Pago
+                ORDER BY p.DataVencimento";
 
-            using (var connection = Conexao.Conex())
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Pago", pago);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        // Personaliza o DataGridView com o DataTable resultante
-                        PersonalizarDataGridView(dataTable);
-                        return dataTable;
-
-                        CalcularTotalDataGrid();
-                    }
-                }
-            }
-        }
-        // 2. Pesquisar por NomeCliente e StatusGeral (NomeCliente = @NomeCliente AND Pago = @Pago)
-
-        public DataTable PesquisarPorNomeClienteEStatus(string nomeCliente, bool pago)
-        {
-            string query = @"
-                 SELECT
-                    Parcela.ParcelaID,   
-                    Parcela.ValorParcela, 
-                    Parcela.NumeroParcela,   
-                    Parcela.SaldoRestante,     
-                    Parcela.DataVencimento, 
-                    Parcela.VendaID,           
-                    Parcela.Pago,              
-                    Parcela.ValorRecebido,         
-                    Cliente.ClienteID,              
-                    Cliente.NomeCliente            
-                FROM Parcela                          
-                INNER JOIN Venda ON Parcela.VendaID = Venda.VendaID
-                INNER JOIN Cliente ON Venda.ClienteID = Cliente.ClienteID
-                                WHERE Cliente.NomeCliente = @NomeCliente AND Parcela.Pago = @Pago";
-
-            using (var connection = Conexao.Conex())
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@NomeCliente", nomeCliente);
-                    command.Parameters.AddWithValue("@Pago", pago);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        // Personaliza o DataGridView com o DataTable resultante
-                        PersonalizarDataGridView(dataTable);
-                        CalcularTotalDataGrid();
-                        return dataTable;                       
-                    }
-                }
-            }
+            Utilitario.PesquisarGeralComParametro(sql, "@Pago", pago ? 1 : 0, dgvContasReceber);
+            PersonalizarDataGridView();
+            CalcularTotalDataGrid();
         }
 
-        public DataTable PesquisarPorPeriodoEStatus(DateTime dataInicial, DateTime dataFinal, bool pago)
+        // 2. Por Nome + Status
+        private void PesquisarPorNomeClienteEStatus(string nomeCliente, bool pago)
         {
-            string query = @"
-                SELECT
-                    Parcela.ParcelaID,   
-                    Parcela.ValorParcela, 
-                    Parcela.NumeroParcela,   
-                    Parcela.SaldoRestante,     
-                    Parcela.DataVencimento, 
-                    Parcela.VendaID,           
-                    Parcela.Pago,              
-                    Parcela.ValorRecebido,         
-                    Cliente.ClienteID,              
-                    Cliente.NomeCliente            
-                FROM Parcela                          
-                INNER JOIN Venda ON Parcela.VendaID = Venda.VendaID
-                INNER JOIN Cliente ON Venda.ClienteID = Cliente.ClienteID
-                                WHERE Parcela.DataVencimento BETWEEN @DataInicial AND @DataFinal AND Parcela.Pago = @Pago";
+            string sql = @"
+                SELECT p.*, c.Nome, c.ClienteID
+                FROM Parcela p
+                INNER JOIN Venda v ON p.VendaID = v.VendaID
+                INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+                WHERE c.Nome LIKE @Nome AND p.Pago = @Pago
+                ORDER BY p.DataVencimento";
 
-            using (var connection = Conexao.Conex())
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@DataInicial", dataInicial);
-                    command.Parameters.AddWithValue("@DataFinal", dataFinal);
-                    command.Parameters.AddWithValue("@Pago", pago);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        // Personaliza o DataGridView com o DataTable resultante
-                        PersonalizarDataGridView(dataTable);
-                        CalcularTotalDataGrid();
-                        return dataTable;                       
-                    }
-                }
-            }
+            Utilitario.PesquisarGeralComParametro(sql, "@Nome", $"%{nomeCliente}%", dgvContasReceber);
+            Utilitario.PesquisarGeralComParametro(sql.Replace("LIKE @Nome", "LIKE @Nome").Replace("@Nome", "@Nome"), "@Pago", pago ? 1 : 0, dgvContasReceber);
+            PersonalizarDataGridView();
+            CalcularTotalDataGrid();
         }
 
-        // 4. Pesquisar por Contas Vencidas (DataVencimento <= @DataVencimento)
-        public DataTable PesquisarContasVencidas(DateTime dataVencimento)
+        // 3. Por Período + Status
+        private void PesquisarPorPeriodoEStatus(DateTime inicio, DateTime fim, bool pago)
         {
-            string query = @"
-                SELECT                    
-                    Parcela.ParcelaID,   
-                    Parcela.ValorParcela, 
-                    Parcela.NumeroParcela,   
-                    Parcela.SaldoRestante,     
-                    Parcela.DataVencimento, 
-                    Parcela.VendaID,           
-                    Parcela.Pago,              
-                    Parcela.ValorRecebido,         
-                    Cliente.ClienteID,              
-                    Cliente.NomeCliente            
-                FROM Parcela                          
-                INNER JOIN Venda ON Parcela.VendaID = Venda.VendaID
-                INNER JOIN Cliente ON Venda.ClienteID = Cliente.ClienteID
-                                    WHERE Parcela.DataVencimento <= @DataVencimento";
+            string sql = @"
+                SELECT p.*, c.Nome, c.ClienteID
+                FROM Parcela p
+                INNER JOIN Venda v ON p.VendaID = v.VendaID
+                INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+                WHERE p.DataVencimento >= @Inicio 
+                  AND p.DataVencimento <= @Fim 
+                  AND p.Pago = @Pago
+                ORDER BY p.DataVencimento";
 
-            using (var connection = Conexao.Conex())
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@DataVencimento", dataVencimento);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        // Personaliza o DataGridView com o DataTable resultante
-                        PersonalizarDataGridView(dataTable);
-                        CalcularTotalDataGrid();
-                        return dataTable;                       
-                    }
-                }
-            }
+            var parametros = new DynamicParameters();
+            parametros.Add("@Inicio", inicio.Date);
+            parametros.Add("@Fim", fim.Date.AddDays(1).AddSeconds(-1));
+            parametros.Add("@Pago", pago ? 1 : 0);
+
+            Utilitario.PesquisarGeralComParametros(sql, parametros, dgvContasReceber);
+            PersonalizarDataGridView();
+            CalcularTotalDataGrid();
         }
 
-        // 5. Pesquisar por Contas Não Vencidas (DataVencimento >= @DataVencimento)
-
-        public DataTable PesquisarContasNaoVencidas(DateTime dataVencimento)
+        // 4. Contas Vencidas (até hoje)
+        private void PesquisarContasVencidas()
         {
-            string query = @"
-                SELECT
-                    Parcela.ParcelaID,   
-                    Parcela.ValorParcela, 
-                    Parcela.NumeroParcela,   
-                    Parcela.SaldoRestante,     
-                    Parcela.DataVencimento, 
-                    Parcela.VendaID,           
-                    Parcela.Pago,              
-                    Parcela.ValorRecebido,         
-                    Cliente.ClienteID,              
-                    Cliente.NomeCliente            
-                FROM Parcela                          
-                INNER JOIN Venda ON Parcela.VendaID = Venda.VendaID
-                INNER JOIN Cliente ON Venda.ClienteID = Cliente.ClienteID
-                                            WHERE Parcela.DataVencimento >= @DataVencimento";
+            string sql = @"
+                SELECT p.*, c.Nome, c.ClienteID
+                FROM Parcela p
+                INNER JOIN Venda v ON p.VendaID = v.VendaID
+                INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+                WHERE p.DataVencimento <= @Hoje AND p.Pago = 0
+                ORDER BY p.DataVencimento";
 
-            using (var connection = Conexao.Conex())
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@DataVencimento", dataVencimento);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-                        // Personaliza o DataGridView com o DataTable resultante
-                        PersonalizarDataGridView(dataTable);
-                        CalcularTotalDataGrid();
-                        return dataTable;                       
-                    }
-                }
-            }
+            Utilitario.PesquisarGeralComParametro(sql, "@Hoje", DateTime.Today, dgvContasReceber);
+            PersonalizarDataGridView();
+            CalcularTotalDataGrid();
         }
 
-        private void ExportarExcel()
+        // 5. Contas a Vencer (a partir de hoje)
+        private void PesquisarContasNaoVencidas()
         {
-            SaveFileDialog salvar = new SaveFileDialog();
-            salvar.Filter = "Arquivo Excel (*.xlsx)|*.xlsx";
-            salvar.Title = "Salvar como Excel";
+            string sql = @"
+                SELECT p.*, c.Nome, c.ClienteID
+                FROM Parcela p
+                INNER JOIN Venda v ON p.VendaID = v.VendaID
+                INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+                WHERE p.DataVencimento > @Hoje AND p.Pago = 0
+                ORDER BY p.DataVencimento";
 
-            if (salvar.ShowDialog() == DialogResult.OK)
-            {
-                FileInfo fileInfo = new FileInfo(salvar.FileName);
-
-                // Cria o pacote Excel
-                using (var pacote = new ExcelPackage(fileInfo))
-                {
-                    // Cria uma nova planilha
-                    var planilha = pacote.Workbook.Worksheets.Add("Dados");
-
-                    // Preenche o cabeçalho (primeira linha)
-                    for (int col = 0; col < dgvContasReceber.Columns.Count; col++)
-                    {
-                        planilha.Cells[1, col + 1].Value = dgvContasReceber.Columns[col].HeaderText;
-                    }
-
-                    // Preenche os dados
-                    for (int row = 0; row < dgvContasReceber.Rows.Count; row++)
-                    {
-                        for (int col = 0; col < dgvContasReceber.Columns.Count; col++)
-                        {
-                            // Verifica se a célula não é nula
-                            if (dgvContasReceber.Rows[row].Cells[col].Value != null)
-                            {
-                                planilha.Cells[row + 2, col + 1].Value = dgvContasReceber.Rows[row].Cells[col].Value.ToString();
-                            }
-                        }
-                    }
-
-                    // Salva o arquivo Excel
-                    pacote.Save();
-                }
-
-                MessageBox.Show("Arquivo Excel salvo com sucesso!");
-            }
+            Utilitario.PesquisarGeralComParametro(sql, "@Hoje", DateTime.Today, dgvContasReceber);
+            PersonalizarDataGridView();
+            CalcularTotalDataGrid();
         }
-        private void cmbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+
+        // Carregar itens da venda selecionada
+        private void CarregarItensVenda(int vendaID)
         {
-            // Oculta todos os GroupBox inicialmente
-            gbStatus.Visible = false;
-            gbPeriodo.Visible = false;
-            gbNomeCliente.Visible = false;
+            string sql = @"
+                SELECT pr.Referencia, pr.NomeProduto, iv.Quantidade, iv.PrecoUnitario,
+                       (iv.Quantidade * iv.PrecoUnitario) AS Subtotal
+                FROM ItemVenda iv
+                INNER JOIN Produtos pr ON iv.ProdutoID = pr.ProdutoID
+                WHERE iv.VendaID = @VendaID";
 
-            // Obtém o método selecionado no ComboBox
-            string metodoSelecionado = cmbFiltro.SelectedItem?.ToString();
+            Utilitario.PesquisarGeralComParametro(sql, "@VendaID", vendaID, dgvItensVenda);
 
-            // Habilita os GroupBox necessários conforme o método selecionado
-            switch (metodoSelecionado)
+            // Personalização rápida do grid de itens
+            if (dgvItensVenda.Columns.Count > 0)
             {
-                case "PesquisarPorStatusGeral":
-                    gbStatus.Visible = true; // Apenas o GroupBox de Status é necessário
-                    btnFiltro.Visible = true;                    
-                    break;
-
-                case "PesquisarPorNomeClienteEStatus":
-                    gbStatus.Visible = true; // Status e Nome do Cliente são necessários
-                    gbNomeCliente.Visible = true;
-                    btnFiltro.Visible = true;
-                    break;
-
-                case "PesquisarPorPeriodoEStatus":
-                    gbStatus.Visible = true; // Status e Período são necessários
-                    gbPeriodo.Visible = true;
-                    btnFiltro.Visible = true;
-                    break;
-
-                case "PesquisarContasVencidas":
-                case "PesquisarContasNaoVencidas":
-                    // Nenhum GroupBox é necessário, pois o filtro é baseado apenas na data atual
-                    break;
-
-                default:                    
-                    break;
+                dgvItensVenda.Columns["PrecoUnitario"].DefaultCellStyle.Format = "C2";
+                dgvItensVenda.Columns["Subtotal"].DefaultCellStyle.Format = "C2";
+                dgvItensVenda.AutoResizeColumns();
             }
         }
 
         private void btnFiltro_Click(object sender, EventArgs e)
         {
-            // Limpa o DataGridView antes de aplicar um novo filtro
             dgvContasReceber.DataSource = null;
             dgvItensVenda.DataSource = null;
 
-            // Obtém o método selecionado no ComboBox
-            string metodoSelecionado = cmbFiltro.SelectedItem?.ToString();
+            string opcao = cmbFiltro.Text;
 
-            // Variável para armazenar o resultado da pesquisa
-            DataTable resultado = null;
-
-            // Executa o método de pesquisa correspondente ao item selecionado no ComboBox
-            switch (metodoSelecionado)
+            switch (opcao)
             {
                 case "PesquisarPorStatusGeral":
-                    if (gbStatus.Visible) // Verifica se o GroupBox está visível
-                    {
-                        bool status = rbPago.Checked; // true para "Pago", false para "Não Pago"
-                        resultado = PesquisarPorStatusGeral(status);
-                    }
+                    PesquisarPorStatusGeral(rbPago.Checked);
                     break;
-
                 case "PesquisarPorNomeClienteEStatus":
-                    if (gbStatus.Visible && gbNomeCliente.Visible) // Verifica se os GroupBox estão visíveis
+                    if (string.IsNullOrWhiteSpace(txtNomeCliente.Text))
                     {
-                        string nomeCliente = txtNomeCliente.Text;
-                        bool statusCliente = rbPago.Checked; // true para "Pago", false para "Não Pago"
-                        resultado = PesquisarPorNomeClienteEStatus(nomeCliente, statusCliente);
+                        MessageBox.Show("Digite o nome do cliente.");
+                        return;
                     }
+                    PesquisarPorNomeClienteEStatus(txtNomeCliente.Text, rbPago.Checked);
                     break;
-
                 case "PesquisarPorPeriodoEStatus":
-                    if (gbStatus.Visible && gbPeriodo.Visible) // Verifica se os GroupBox estão visíveis
-                    {
-                        DateTime dataInicio = dtpDataVencimentoInicio.Value;
-                        DateTime dataFim = dtpDataVencimentoFim.Value;
-                        bool statusPeriodo = rbPago.Checked; // true para "Pago", false para "Não Pago"
-                        resultado = PesquisarPorPeriodoEStatus(dataInicio, dataFim, statusPeriodo);
-                    }
+                    PesquisarPorPeriodoEStatus(dtpDataVencimentoInicio.Value, dtpDataVencimentoFim.Value, rbPago.Checked);
                     break;
-
                 case "PesquisarContasVencidas":
-                    resultado = PesquisarContasVencidas(DateTime.Now);
+                    PesquisarContasVencidas();
                     break;
-
                 case "PesquisarContasNaoVencidas":
-                    resultado = PesquisarContasNaoVencidas(DateTime.Now);
-                    break;
-
-                default:
-                    MessageBox.Show("Selecione um método válido.");
+                    PesquisarContasNaoVencidas();
                     break;
             }
-
-            // Exibe o resultado no DataGridView
-            if (resultado != null)
-            {
-                dgvContasReceber.DataSource = resultado;
-                dgvItensVenda.DataSource = null; // Limpa o DataGridView de Itens de Venda
-            }
-            else
-            {
-                MessageBox.Show("Nenhum resultado encontrado ou parâmetros inválidos.");
-            }
         }
 
-        private void FrmRelatorios_Load(object sender, EventArgs e)
+        private void dgvContasReceber_SelectionChanged(object sender, EventArgs e)
         {
-            // Define o primeiro item como selecionado por padrão (opcional)
-            if (cmbFiltro.Items.Count > 0)
-            {
-                cmbFiltro.SelectedIndex = 0;
-            }
-        }
-
-
-        private void AbrirFrmLocalizarCliente()
-        {
-                 // Cria uma instância do frmLocalizarCliente e define o Owner como o FrmPedidoVendaNovo
-            FrmLocalizarCliente frmLocalizarCliente = new FrmLocalizarCliente(this, clienteSelecionado)
-            {
-                Owner = this
-            };
-            frmLocalizarCliente.ShowDialog();
-            frmLocalizarCliente.Text = "Localizar Clientes";
-        }
-        private void btnPesquisar_Click(object sender, EventArgs e)
-        {            
-        }
-        public void ExportarParaPDF(KryptonDataGridView dgv, string caminhoArquivo)
-        {
-            try
-            {
-                // Criando o documento PDF
-                Document documento = new Document(PageSize.A4, 10, 10, 10, 10);
-                PdfWriter.GetInstance(documento, new FileStream(caminhoArquivo, FileMode.Create));
-                documento.Open();
-
-                // Criando a tabela com base no número de colunas do DataGridView
-                PdfPTable tabela = new PdfPTable(dgv.ColumnCount);
-                tabela.WidthPercentage = 100;
-
-                // Adicionando cabeçalhos
-                foreach (DataGridViewColumn coluna in dgv.Columns)
-                {
-                    PdfPCell cell = new PdfPCell(new Phrase(coluna.HeaderText));
-                    cell.BackgroundColor = new BaseColor(240, 240, 240); // Cinza claro
-                    tabela.AddCell(cell);
-                }
-
-                // Adicionando as linhas da tabela
-                foreach (DataGridViewRow linha in dgv.Rows)
-                {
-                    if (!linha.IsNewRow) // Ignorar linha vazia
-                    {
-                        foreach (DataGridViewCell celula in linha.Cells)
-                        {
-                            tabela.AddCell(celula.Value?.ToString() ?? ""); // Adiciona os valores, evitando valores nulos
-                        }
-                    }
-                }
-
-                // Adicionando a tabela ao documento e fechando o PDF
-                documento.Add(tabela);
-                documento.Close();
-
-                MessageBox.Show("PDF gerado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao gerar PDF: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void btnImprimir_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog salvar = new SaveFileDialog();
-            salvar.Filter = "Arquivo PDF|*.pdf";
-            salvar.Title = "Salvar como PDF";
-
-            if (salvar.ShowDialog() == DialogResult.OK)
-            {
-                ExportarParaPDF(dgvContasReceber, salvar.FileName);                
-            }
-        }
-
-        private void btnExportarExcel_Click(object sender, EventArgs e)
-        {
-            ExportarExcel();
-        }
-
-        private void dgvPesquisar_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvContasReceber.SelectedRows.Count > 0)
+            if (dgvContasReceber.SelectedRows.Count > 0 &&
+                dgvContasReceber.SelectedRows[0].Cells["VendaID"].Value != null)
             {
                 int vendaID = Convert.ToInt32(dgvContasReceber.SelectedRows[0].Cells["VendaID"].Value);
                 CarregarItensVenda(vendaID);
             }
         }
-        private void PersonalizarDataGridView()
+
+        private void btnImprimir_Click(object sender, EventArgs e) => Utilitario.ExportarParaPDF(dgvContasReceber, "Relatorio_Contas.pdf");
+        private void btnExportarExcel_Click(object sender, EventArgs e) => Utilitario.ExportarParaExcel(dgvContasReceber);
+
+        private void btnSair_Click(object sender, EventArgs e) => this.Close();
+        private void btnLocalizarCliente_Click(object sender, EventArgs e) => new FrmLocalizarCliente(this, clienteSelecionado) { Owner = this }.ShowDialog();
+
+        private void FrmRelatorios_Load(object sender, EventArgs e)
         {
-            //// Auto redimensionamento das colunas
-            //dgvItensVenda.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            // Redimensiona automaticamente as colunas para ajustar ao conteúdo
-            dgvItensVenda.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-            // Centralização dos campos "Referencia" e "Quantidade"
-            dgvItensVenda.Columns["Referencia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvItensVenda.Columns["Quantidade"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            // Formatação em moeda para "PrecoUnitario" e "Subtotal"
-            dgvItensVenda.Columns["PrecoUnitario"].DefaultCellStyle.Format = "C2"; // Formato moeda
-            dgvItensVenda.Columns["Subtotal"].DefaultCellStyle.Format = "C2"; // Formato moeda
-
-            // Centralização dos cabeçalhos de todas as colunas
-            foreach (DataGridViewColumn column in dgvItensVenda.Columns)
-            {
-                column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
+            if (cmbFiltro.Items.Count > 0) cmbFiltro.SelectedIndex = 0;
         }
-
-        // Chame o método PersonalizarDataGridView após definir a fonte de dados do dgvItensVenda
-        private void CarregarItensVenda(int vendaID)
-        {
-            string query = @"SELECT Produtos.Referencia, Produtos.NomeProduto, ItemVenda.Quantidade, 
-                        ItemVenda.PrecoUnitario, 
-                        (ItemVenda.Quantidade * ItemVenda.PrecoUnitario) AS Subtotal
-                 FROM ItemVenda 
-                 INNER JOIN Produtos ON ItemVenda.ProdutoID = Produtos.ProdutoID 
-                 WHERE VendaID = @VendaID";
-
-
-            using (var connection = Conexao.Conex())
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@VendaID", vendaID);
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-                dgvItensVenda.DataSource = dataTable;
-
-                // Personalize o DataGridView após definir a fonte de dados
-                PersonalizarDataGridView();
-            }
-        }
-
-
-        private void btnLocalizarCliente_Click(object sender, EventArgs e)
-        {
-            AbrirFrmLocalizarCliente();
-        }
-
-        private void btnSair_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
     }
 }
