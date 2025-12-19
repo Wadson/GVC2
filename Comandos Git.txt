@@ -1,0 +1,72 @@
+
+🖥️ No Desktop (PC) 
+Para enviar alterações:   
+
+git add .
+git commit -m "Alterações no Desktop"
+git push
+
+
+💻 No Notebook
+
+git pull
+git add .
+git commit -m "Alterações no Notebook"
+git push
+
+
+
+
+
+
+
+
+
+
+🖥️ No Desktop (PC)
+
+1. Fazer alterações no projeto: 
+# editar arquivos normalmente
+git add .
+git commit -m "Alterações feitas no Desktop"
+
+2. Enviar para o GitHub:
+git push origin master
+
+
+💻 No Notebook
+1. Baixar as atualizações feitas no Desktop:
+git fetch origin
+git pull origin master
+
+Agora o notebook tem os mesmos arquivos que o Desktop enviou para o GitHub.
+
+2. Fazer novas alterações no projeto:
+# editar arquivos normalmente
+git add .
+git commit -m "Alterações feitas no Notebook"
+3.Enviar para o GitHub:
+git push origin master
+
+🔄 De volta ao Desktop
+1. Baixar as atualizações feitas no Notebook:
+git fetch origin
+git pull origin master
+
+Agora o Desktop está sincronizado com o que foi enviado pelo Notebook.
+
+📌 Resumindo o ciclo
+Desktop → GitHub → Notebook → GitHub → Desktop
+
+Cada vez que um computador faz alterações, ele deve:
+
+git add . + git commit -m "mensagem"
+
+git push origin master
+
+O outro computador deve:
+
+git pull origin master
+
+
+
