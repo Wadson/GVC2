@@ -163,11 +163,11 @@
             // dgvitens
             // 
             dgvitens.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dgvitens.Location = new Point(0, 185);
+            dgvitens.Location = new Point(7, 185);
             dgvitens.Name = "dgvitens";
             dgvitens.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007Blue;
             dgvitens.RowHeadersWidth = 23;
-            dgvitens.Size = new Size(571, 207);
+            dgvitens.Size = new Size(560, 207);
             dgvitens.TabIndex = 635;
             dgvitens.TabStop = false;
             dgvitens.CellContentClick += dgvItensVenda_CellContentClick;
@@ -270,7 +270,7 @@
             // btnAdicionarItem
             // 
             btnAdicionarItem.CornerRoundingRadius = 6F;
-            btnAdicionarItem.Location = new Point(386, 152);
+            btnAdicionarItem.Location = new Point(397, 152);
             btnAdicionarItem.Name = "btnAdicionarItem";
             btnAdicionarItem.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnAdicionarItem.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -428,6 +428,7 @@
             btnCancelar.TabIndex = 1019;
             btnCancelar.TabStop = false;
             btnCancelar.Values.Text = "Cancelar";
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnImprimir
             // 
@@ -747,7 +748,7 @@
             txtCpf.Location = new Point(401, 55);
             txtCpf.Name = "txtCpf";
             txtCpf.ReadOnly = true;
-            txtCpf.Size = new Size(161, 24);
+            txtCpf.Size = new Size(166, 24);
             txtCpf.StateCommon.Back.Color1 = Color.White;
             txtCpf.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             txtCpf.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
@@ -891,7 +892,7 @@
             tabControlPagamento.Location = new Point(0, 0);
             tabControlPagamento.Name = "tabControlPagamento";
             tabControlPagamento.SelectedIndex = 0;
-            tabControlPagamento.Size = new Size(300, 288);
+            tabControlPagamento.Size = new Size(300, 426);
             tabControlPagamento.TabIndex = 1040;
             tabControlPagamento.TabStop = false;
             // 
@@ -913,7 +914,7 @@
             tabPagamento.Location = new Point(4, 24);
             tabPagamento.Name = "tabPagamento";
             tabPagamento.Padding = new Padding(3);
-            tabPagamento.Size = new Size(292, 260);
+            tabPagamento.Size = new Size(292, 398);
             tabPagamento.TabIndex = 0;
             tabPagamento.Text = "Pagamento";
             tabPagamento.UseVisualStyleBackColor = true;
@@ -950,7 +951,7 @@
             tabParcelas.Location = new Point(4, 24);
             tabParcelas.Name = "tabParcelas";
             tabParcelas.Padding = new Padding(3);
-            tabParcelas.Size = new Size(292, 501);
+            tabParcelas.Size = new Size(292, 398);
             tabParcelas.TabIndex = 1;
             tabParcelas.Text = "Parcelas";
             // 

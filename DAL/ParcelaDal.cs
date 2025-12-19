@@ -1,10 +1,12 @@
 ﻿using Dapper;
 using GVC.MODEL;
+using iText.Kernel.Pdf.Canvas.Wmf;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -173,6 +175,7 @@ namespace GVC.DALL
 
         public DataTable ListarParcelas()
         {
+            AtualizarParcelasAtrasadas();
             const string sql = "SELECT * FROM Parcela ORDER BY DataVencimento";
 
             using var conn = Helpers.Conexao.Conex();
@@ -244,6 +247,29 @@ namespace GVC.DALL
         /// <summary>
         /// Estorna um pagamento e registra o motivo na Observacao da parcela
         /// </summary>
+
+        //CRIADO EM 18/12/2025
+
+        //✅ 3️⃣ SOLUÇÃO CORRETA(SEM INVENTAR)
+        //🔹 Passo A — Criar método na VendaDal
+
+        //👉 Método simples, usando apenas o que existe
        
+        public void AtualizarParcelasAtrasadas()
+        {
+            const string sql = @"
+    UPDATE Parcela
+    SET Status = 'Atrasada'
+    WHERE Status IN ('Pendente', 'Parcialmente Paga')
+      AND DataVencimento < date('now')";
+
+            using var conn = Helpers.Conexao.Conex();
+            conn.Execute(sql);
+        }
+
+
+
+
+
     }
 }

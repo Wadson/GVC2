@@ -18,12 +18,38 @@ namespace GVC.View
 {
     public partial class FrmVendas : KryptonForm
     {
+        // Definição do EnumStatusVenda em 18/12/2025
+        public enum EnumStatusVenda
+        {
+            Aberta,
+            EmAnalise,
+            AguardandoPagamento,
+            Concluida,
+            Cancelada,
+            Devolvida,
+            Expirada,
+            ParcialmentePago,
+            Suspensa
+        }
+        // Definição do EnumStatusParcela em 18/12/2025
+        public enum EnumStatusParcela
+        {
+            Pendente,
+            Paga,
+            Atrasada,
+            ParcialmentePaga,
+            Cancelada,
+            Devolvida
+        }
+
+
+        // Imcluído acima em 18/12/2025
         #region ===== CAMPOS / ESTADO ======================================
         private bool bloqueiaPesquisa = false;
         private bool _clienteFoiSelecionado = false;
         private readonly string QueryVenda = "SELECT MAX(VendaID) FROM Venda";
         public int ClienteID { get; set; }
-        public int ProdutoID { get; set; }        
+        public int ProdutoID { get; set; }
         private decimal _subtotal = 0m;
         private decimal _desconto = 0m;
         private decimal _valorTotal = 0m;
@@ -59,7 +85,7 @@ namespace GVC.View
         {
             InitializeComponent();
             InicializarFormulario(); // <<< OBRIGATÓRIO
-              
+
             dgvitens.CellEndEdit += dgvitens_CellEndEdit;
             this.Text = "Frente de Caixa";
             this.StateCommon.Header.Content.ShortText.Color1 = Color.Red;
@@ -70,7 +96,7 @@ namespace GVC.View
 
         #region ===== INICIALIZAÇÃO =========================================
 
-       
+
         private void InicializarFormulario()
         {
             this.Text = "Frente de Caixa";
@@ -86,11 +112,11 @@ namespace GVC.View
             txtPrecoUnitario.Text = "0,00";
             txtDesconto.Text = "0,00";
             txtTotalGeral.Text = "0,00";
-            
+
             AtualizarTotais();
         }
         private void FrmVendas_Load(object sender, EventArgs e)
-        {            
+        {
             Utilitario.CarregarFormasPagamento(cmbFormaPagamento);
             int vendaID = Utilitario.ProximoId(QueryVenda);
             lblVendaID.Text = Utilitario.ZerosEsquerda(vendaID, 4).ToString();
@@ -164,7 +190,7 @@ namespace GVC.View
 
             dgvitens.EnableHeadersVisualStyles = false;
             dgvitens.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvitens.ColumnHeadersHeight = 35;
+            dgvitens.ColumnHeadersHeight = 28;
             dgvitens.RowHeadersVisible = false;
             dgvitens.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
         }
@@ -362,7 +388,7 @@ namespace GVC.View
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
-            }           
+            }
         }
 
         #endregion
@@ -386,7 +412,7 @@ namespace GVC.View
             txtValorRecebido.Text = "0,00";
             txtTroco.Text = "0,00";
         }
-              
+
 
         #endregion
         #region Eventos
@@ -451,7 +477,7 @@ namespace GVC.View
                             txtNomeCliente.Text = pesquisaCliente.ClienteSelecionado;
                             ClienteID = pesquisaCliente.ClienteID;
                             txtNomeCliente.SelectionStart = txtNomeCliente.Text.Length;
-                            txtCpf.Text = pesquisaCliente.Cpf;
+                            txtCpf.Text = Utilitario.FormatarCPF2(pesquisaCliente.Cpf);
                         }
                     }
                 }
@@ -531,8 +557,8 @@ namespace GVC.View
             {
                 e.SuppressKeyPress = true;
                 SendKeys.Send("{TAB}");
-                }
             }
+        }
 
         private void txtPrecoUnitario_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -663,17 +689,18 @@ namespace GVC.View
         {
             var parcelas = new List<ParcelaModel>();
 
-            int qtd = (int)numParcelas.Value; // ← MUDE AQUI: use .Value, não .Text
-
+            int qtd = (int)numParcelas.Value;
             if (qtd <= 0)
                 return parcelas;
 
-            decimal valorTotalReais = Convert.ToDecimal(txtTotalGeral.Text);
-            decimal valorParcelaReais = valorTotalReais / qtd;
+            decimal valorTotal = Convert.ToDecimal(txtTotalGeral.Text);
+            decimal valorParcelaBase = valorTotal / qtd;
             decimal somaParcelas = 0m;
 
-            DateTime dataInicial = dtPrimeira.Value.Date; // use a data do DateTimePicker
+            DateTime dataInicial = dtPrimeira.Value.Date;
             int intervaloDias = (int)numIntervalo.Value;
+
+            bool pagamentoAVista = FormaPagamentoEhAVista(cmbFormaPagamento.Text);
 
             for (int i = 1; i <= qtd; i++)
             {
@@ -681,12 +708,10 @@ namespace GVC.View
 
                 decimal valorParcela;
                 if (i == qtd)
-                {
-                    valorParcela = valorTotalReais - somaParcelas;
-                }
+                    valorParcela = valorTotal - somaParcelas;
                 else
                 {
-                    valorParcela = Math.Round(valorParcelaReais, 2);
+                    valorParcela = Math.Round(valorParcelaBase, 2);
                     somaParcelas += valorParcela;
                 }
 
@@ -695,8 +720,11 @@ namespace GVC.View
                     NumeroParcela = i,
                     DataVencimento = vencimento,
                     ValorParcela = valorParcela,
-                    ValorRecebido = 0m,
-                    Status = "Pendente",
+
+                    // 🔥 AQUI ESTÁ A CORREÇÃO
+                    ValorRecebido = pagamentoAVista ? valorParcela : 0m,
+                    Status = pagamentoAVista ? "Paga" : "Pendente",
+
                     Juros = 0m,
                     Multa = 0m,
                     Observacao = null
@@ -706,13 +734,46 @@ namespace GVC.View
             return parcelas;
         }
 
+
+        private bool FormaPagamentoEhAVista(string formaPgto)
+        {
+            if (string.IsNullOrWhiteSpace(formaPgto))
+                return false;
+
+            string forma = formaPgto.ToUpperInvariant();
+
+            return forma.Contains("DINHEIRO") ||
+                   forma.Contains("PIX") ||
+                   forma.Contains("DÉBITO") ||
+                   forma.Contains("DEBITO") ||
+                   forma.Contains("TRANSFERÊNCIA") ||
+                   forma.Contains("TRANSFERENCIA");
+        }
+        private string CalcularStatusVendaPorParcelas(List<ParcelaModel> parcelas)
+        {
+            if (parcelas == null || !parcelas.Any())
+                return null; // deixa quem chamou decidir
+
+            decimal total = parcelas.Sum(p => p.ValorParcela + p.Juros + p.Multa);
+            decimal recebido = parcelas.Sum(p => p.ValorRecebido);
+
+            if (recebido <= 0)
+                return EnumStatusVenda.Aberta.ToDb();
+
+            if (recebido >= total)
+                return EnumStatusVenda.Concluida.ToDb();
+
+            return EnumStatusVenda.ParcialmentePago.ToDb();
+        }
+
+
         //4. IMPLEMENTAÇÃO FINAL DO BOTÃO SALVAR VENDA
         private string CalcularStatusVendaPorFormaPgto(string formaPgto)
         {
             if (string.IsNullOrWhiteSpace(formaPgto))
                 return "Aguardando Pagamento";
 
-
+            // Status para venda campo "StatusVenda"*******
             // Aberta
             // Em Análise
             // Aguardando Pagamento
@@ -722,6 +783,16 @@ namespace GVC.View
             // Expirada
             // Parcialmente Pago
             // Suspensa
+
+            // Status para parcela, campo "Status"***********
+            // Aberta
+            // Atrasada
+            // Aguardando Pagamento
+            // Pago
+            // Cancelada
+            // Devolvida
+            // Parcialmente Pago
+
             string forma = formaPgto.ToUpperInvariant();
 
             if (forma.Contains("DINHEIRO") ||
@@ -741,6 +812,40 @@ namespace GVC.View
 
 
         #endregion
+
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            // Limpa todos os TextBox da tela
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is KryptonTextBox)
+                    ((KryptonTextBox)ctrl).Clear();
+
+                if (ctrl is Krypton.Toolkit.KryptonTextBox)
+                    ((Krypton.Toolkit.KryptonTextBox)ctrl).Clear();
+            }
+
+            // Limpa o DataGridView
+            dgvitens.Rows.Clear();
+            dgvParcelas.Rows.Clear();
+            // Se quiser também resetar seleções
+            dgvitens.ClearSelection();
+            dgvParcelas.ClearSelection();
+
+            // Define o resultado do diálogo como Cancelar
+            this.DialogResult = DialogResult.Cancel;
+            txtQuantidade.Text = "1";
+            txtPrecoUnitario.Text = "0,00";           
+            txtSubTotal.Text = "0,00";
+            txtValorRecebido.Text = "0,00";
+            txtTroco.Text = "0,00";
+            txtTotalGeral.Text = "0,00";  
+
+            AtualizarTotais();
+
+
+        }
     }
 }
 /*

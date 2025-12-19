@@ -11,11 +11,14 @@ namespace GVC.BLL
 {
     internal class ParcelaBLL
     {
-        private readonly ParcelaDal _dal;
-
+        private readonly ParcelaDal _parcelaDal;
+        private readonly VendaDal _vendaDal = new VendaDal();
+        private readonly VendaBLL _vendaBLL;
         public ParcelaBLL()
         {
-            _dal = new ParcelaDal();
+            _parcelaDal = new ParcelaDal();
+            _vendaDal = new VendaDal();
+            _vendaBLL = new VendaBLL();
         }
 
         // ==========================================================
@@ -23,7 +26,7 @@ namespace GVC.BLL
         // ==========================================================
         public void BaixarParcelaTotal(long parcelaId)
         {
-            var parcela = _dal.BuscarPorId(parcelaId)
+            var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
             // Calcular o saldo restante em decimal
@@ -38,19 +41,9 @@ namespace GVC.BLL
             saldoRestante = Math.Round(saldoRestante, 2, MidpointRounding.AwayFromZero);
 
             // Inserir pagamento do saldo restante
-            _dal.BaixarParcela(parcelaId, saldoRestante, DateTime.Now);
+            _parcelaDal.BaixarParcela(parcelaId, saldoRestante, DateTime.Now);
         }
-        /// <summary>
-        /// Baixa total de múltiplas parcelas (usado no botão de baixa em lote com checkbox)
-        /// </summary>
-        /// <param name="parcelasIds">Lista de IDs das parcelas selecionadas</param>
-        public void BaixarParcelasEmLote(List<long> parcelasIds)
-        {
-            if (parcelasIds == null || parcelasIds.Count == 0)
-                throw new Exception("Nenhuma parcela selecionada para baixa.");
 
-            _dal.BaixarParcelasEmLote(parcelasIds, DateTime.Now);
-        }
         // ==========================================================
         // 2. BAIXA PARCIAL DE UMA PARCELA (valor informado pelo usuário)
         // ==========================================================
@@ -59,24 +52,31 @@ namespace GVC.BLL
             if (valorPago <= 0m)
                 throw new Exception("O valor pago deve ser maior que zero.");
 
-            var parcela = _dal.BuscarPorId(parcelaId)
+            var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
-            // Agora tudo é diretamente em reais (decimal)
             decimal totalDevido = parcela.ValorParcela + parcela.Juros + parcela.Multa;
             decimal saldoAtual = totalDevido - parcela.ValorRecebido;
 
-            // Arredonda para 2 casas (boa prática)
             valorPago = Math.Round(valorPago, 2, MidpointRounding.AwayFromZero);
 
             if (valorPago > saldoAtual)
-                throw new Exception($"Valor pago ({valorPago:C2}) maior que o saldo devido ({saldoAtual:C2}).");
+                throw new Exception("Valor pago maior que o saldo devido.");
 
-            // Aplica a baixa (o DAL já soma diretamente em decimal)
-            _dal.BaixarParcela(parcelaId, valorPago, DateTime.Now);
+            // 1️⃣ Baixa da parcela
+            _parcelaDal.BaixarParcela(parcelaId, valorPago, DateTime.Now);
 
-            // O trigger do banco cuida do Status e DataPagamento automaticamente
+            // 2️⃣ Buscar TODAS as parcelas da venda
+            var parcelasVenda = _parcelaDal.GetParcelas((int)parcela.VendaID);
+
+            // 3️⃣ Recalcular status da venda
+            string novoStatusVenda =  _vendaBLL.CalcularStatusVendaPorParcelas(parcelasVenda);
+
+
+            // 4️⃣ Atualizar venda
+            _vendaDal.AtualizarStatusVenda(parcela.VendaID, novoStatusVenda);
         }
+
 
         // ==========================================================
         // 3. BAIXA EM LOTE (várias parcelas selecionadas no grid)
@@ -86,11 +86,30 @@ namespace GVC.BLL
             if (parcelasIds == null || parcelasIds.Count == 0)
                 throw new Exception("Nenhuma parcela selecionada.");
 
-            foreach (var parcelaId in parcelasIds)
-            {
-                BaixarParcelaTotal(parcelaId);
-            }
+            BaixarParcelasEmLote(parcelasIds.Select(id => (long)id).ToList());
         }
+
+        public void BaixarParcelasEmLote(List<long> parcelasIds)
+        {
+            if (parcelasIds == null || parcelasIds.Count == 0)
+                throw new Exception("Nenhuma parcela selecionada para baixa.");
+
+            // 1️⃣ Descobrir a venda (todas são da mesma venda no grid)
+            var primeiraParcela = _parcelaDal.BuscarPorId(parcelasIds[0])
+                ?? throw new Exception("Parcela não encontrada.");
+
+            long vendaId = primeiraParcela.VendaID;
+
+            // 2️⃣ Baixa em lote (DAL)
+            _parcelaDal.BaixarParcelasEmLote(parcelasIds, DateTime.Now);
+
+            // 3️⃣ Recalcular status da venda UMA ÚNICA VEZ
+            var parcelasVenda = _parcelaDal.GetParcelas((int)vendaId);
+            string novoStatus = _vendaBLL.CalcularStatusVenda(parcelasVenda);
+
+            _vendaDal.AtualizarStatusVenda(vendaId, novoStatus);
+        }
+
 
         // ==========================================================
         // ALTERAR STATUS MANUALMENTE
@@ -100,11 +119,11 @@ namespace GVC.BLL
             if (string.IsNullOrWhiteSpace(novoStatus))
                 throw new Exception("Status inválido.");
 
-            ParcelaModel parcela = _dal.BuscarPorId(parcelaId)
+            ParcelaModel parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
             parcela.Status = novoStatus;
-            _dal.UpdateParcela(parcela);
+            _parcelaDal.UpdateParcela(parcela);
         }
 
         // ==========================================================
@@ -115,7 +134,7 @@ namespace GVC.BLL
             if (parcela == null)
                 throw new Exception("Parcela inválida.");
 
-            _dal.Excluir(parcela);
+            _parcelaDal.Excluir(parcela);
         }
 
         /// <summary>
@@ -131,13 +150,13 @@ namespace GVC.BLL
             if (valorEstorno <= 0m)
                 throw new Exception("O valor do estorno deve ser maior que zero.");
 
-            var parcela = _dal.BuscarPorId(parcelaId)
+            var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
             if (valorEstorno > parcela.ValorRecebido)
                 throw new Exception($"Valor do estorno ({valorEstorno:C2}) maior que o valor recebido ({parcela.ValorRecebido:C2}).");
 
-            _dal.EstornarPagamento(parcelaId, valorEstorno, dataEstorno.Value, motivo);
+            _parcelaDal.EstornarPagamento(parcelaId, valorEstorno, dataEstorno.Value, motivo);
 
             // Trigger atualiza Status e DataPagamento automaticamente
         }
@@ -150,44 +169,6 @@ namespace GVC.BLL
                 EstornarPagamento(parcelaId, valorEstornoPorParcela, dataEstorno, motivo);
             }
         }
-        //public void EstornarPagamentosEmLote(List<int> parcelasIds, decimal valorEstornoPorParcela, string motivo)
-        //{
-        //    if (parcelasIds == null || parcelasIds.Count == 0)
-        //        throw new Exception("Nenhuma parcela selecionada para estorno.");
-
-        //    if (valorEstornoPorParcela <= 0m)
-        //        throw new Exception("O valor do estorno deve ser maior que zero.");
-
-        //    if (string.IsNullOrWhiteSpace(motivo))
-        //        motivo = "Estorno sem motivo informado";
-
-        //    var dataEstorno = DateTime.Now;
-
-        //    using var conn = Helpers.Conexao.Conex();
-        //    conn.Open();
-        //    using var transaction = conn.BeginTransaction();
-
-        //    try
-        //    {
-        //        foreach (var parcelaId in parcelasIds)
-        //        {
-        //            var parcela = _dal.BuscarPorId(parcelaId);
-        //            if (parcela == null)
-        //                throw new Exception($"Parcela ID {parcelaId} não encontrada.");
-
-        //            if (valorEstornoPorParcela > parcela.ValorRecebido)
-        //                throw new Exception($"Parcela {parcelaId}: estorno ({valorEstornoPorParcela:C2}) maior que recebido ({parcela.ValorRecebido:C2}).");
-
-        //            _dal.EstornarPagamento(parcelaId, valorEstornoPorParcela, motivo, dataEstorno);
-        //        }
-
-        //        transaction.Commit();
-        //    }
-        //    catch
-        //    {
-        //        transaction.Rollback();
-        //        throw;
-        //    }
-        //}
+       
     }
 }

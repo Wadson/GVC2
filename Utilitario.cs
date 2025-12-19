@@ -28,6 +28,10 @@ namespace GVC{
     {
         private static readonly CultureInfo CulturaBR = new CultureInfo("pt-BR");
         
+
+
+
+
         // ==============================================================
         // 1. FORMATAR MOEDA (TextBox e KryptonTextBox)
         // ==============================================================
@@ -992,6 +996,17 @@ namespace GVC{
 
             textBox.SelectionStart = textBox.Text.Length;
         }
+        //Segunda versão da máscara de CPF
+        public static string FormatarCPF2(string cpf)
+        {
+            string apenasNumeros = new string(cpf.Where(char.IsDigit).ToArray());
+
+            if (apenasNumeros.Length == 11)
+                return Convert.ToUInt64(apenasNumeros).ToString(@"000\.000\.000\-00");
+
+            return cpf; // retorna como está se não tiver 11 dígitos
+        }
+
 
         public static void AplicarMascaraCNPJ(KeyPressEventArgs e, KryptonTextBox textBox)
         {
@@ -1283,7 +1298,7 @@ namespace GVC{
             Id = id;
             Descricao = descricao;
         }
-
         public override string ToString() => Descricao;
+
     }
 }

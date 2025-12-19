@@ -1,18 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\GVC\\",
+  "WorkspaceRootPath": "C:\\GVC2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\view\\frmlocalizarcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmlocalizarcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmbaixarparcela.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmbaixarparcela.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\view\\frmvendas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmvendas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\view\\frmlocalizarcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmlocalizarcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|C:\\GVC2\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,19 +18,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 70,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 22,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:5:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:1792700580:0:{683b7fa4-6a84-40c1-a43b-1803dc159f14}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+              "Name": "ST:11:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
             },
             {
               "$type": "Bookmark",
@@ -62,11 +54,31 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:11:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+              "Name": "ST:1302319146:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:2003952158:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+              "Name": "ST:1275316672:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:339460458:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1344760694:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:931682041:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:367531499:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
             },
             {
               "$type": "Bookmark",
@@ -90,14 +102,6 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:9:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:14:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:15:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
             },
             {
@@ -106,40 +110,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FrmVendas.cs [Projeto]",
-              "DocumentMoniker": "C:\\GVC\\View\\FrmVendas.cs",
-              "RelativeDocumentMoniker": "View\\FrmVendas.cs",
-              "ToolTip": "C:\\GVC\\View\\FrmVendas.cs [Projeto]",
-              "RelativeToolTip": "View\\FrmVendas.cs [Projeto]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-18T21:59:02.585Z",
-              "EditorCaption": " [Projeto]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "FrmLocalizarCliente.cs",
-              "DocumentMoniker": "C:\\GVC\\View\\FrmLocalizarCliente.cs",
-              "RelativeDocumentMoniker": "View\\FrmLocalizarCliente.cs",
-              "ToolTip": "C:\\GVC\\View\\FrmLocalizarCliente.cs",
-              "RelativeToolTip": "View\\FrmLocalizarCliente.cs",
-              "ViewState": "AgIAALsBAAAAAAAAAAAIwMQBAAAYAAAAAAAAAA==",
+              "Title": "FrmBaixarParcela.cs",
+              "DocumentMoniker": "C:\\GVC2\\View\\FrmBaixarParcela.cs",
+              "RelativeDocumentMoniker": "View\\FrmBaixarParcela.cs",
+              "ToolTip": "C:\\GVC2\\View\\FrmBaixarParcela.cs",
+              "RelativeToolTip": "View\\FrmBaixarParcela.cs",
+              "ViewState": "AgIAAKMAAAAAAAAAAAAMwLIAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-18T20:38:22.878Z",
+              "WhenOpened": "2025-12-19T00:33:40.181Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FrmLocalizarCliente.cs [Projeto]",
-              "DocumentMoniker": "C:\\GVC\\View\\FrmLocalizarCliente.cs",
-              "RelativeDocumentMoniker": "View\\FrmLocalizarCliente.cs",
-              "ToolTip": "C:\\GVC\\View\\FrmLocalizarCliente.cs [Projeto]",
-              "RelativeToolTip": "View\\FrmLocalizarCliente.cs [Projeto]",
+              "DocumentIndex": 1,
+              "Title": "FrmContasAReceber.cs [Projeto]",
+              "DocumentMoniker": "C:\\GVC2\\View\\FrmContasAReceber.cs",
+              "RelativeDocumentMoniker": "View\\FrmContasAReceber.cs",
+              "ToolTip": "C:\\GVC2\\View\\FrmContasAReceber.cs [Projeto]",
+              "RelativeToolTip": "View\\FrmContasAReceber.cs [Projeto]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-18T20:38:19.585Z",
-              "EditorCaption": " [Projeto]"
+              "WhenOpened": "2025-12-19T00:33:31.193Z"
             }
           ]
         },
