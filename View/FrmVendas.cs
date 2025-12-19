@@ -350,12 +350,7 @@ namespace GVC.View
                 // SALVAR TUDO
                 // ===============================
                 var vendaDal = new VendaDal();
-
-                int vendaId = vendaDal.AddVendaCompleta(
-                    venda,
-                    _itensBinding.ToList(),
-                    parcelas
-                );
+                int vendaId = vendaDal.AddVendaCompleta(venda, _itensBinding.ToList(), parcelas);
 
                 // implementação adicional: validação de crediário
                 if (parcelas.Count == 0 && cmbFormaPagamento.Text.Contains("Crediário"))
@@ -368,26 +363,14 @@ namespace GVC.View
                     MessageBox.Show("Gere as parcelas antes de salvar uma venda no crediário.");
                     tabControlPagamento.SelectedTab = tabParcelas;
                     return;
-                }
-                // fim da implementação adicional
+                }                
 
-                MessageBox.Show(
-                    $"Venda salva com sucesso!\nVenda Nº {vendaId}",
-                    "Sucesso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-
+                MessageBox.Show($"Venda salva com sucesso!\nVenda Nº {vendaId}","Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimparFormulario();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Erro ao salvar venda",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                MessageBox.Show(ex.Message, "Erro ao salvar venda", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -404,14 +387,54 @@ namespace GVC.View
         }
         private void LimparFormulario()
         {
+            // ===== ESTADO =====
             ClienteID = 0;
+            ProdutoID = 0;
+            bloqueiaPesquisa = false;
+            _clienteFoiSelecionado = false;
+
+            // ===== CLIENTE =====
+            txtNomeCliente.Clear();
+            txtCpf.Clear();
+
+            // ===== ITENS =====
             _itensBinding.Clear();
+            dgvitens.Refresh();
+
+            // ===== PARCELAS =====
+            dgvParcelas.Rows.Clear();
+            parcelasDaVenda.Clear();
+            _parcelasGeradas.Clear();
+
+            // ===== TABS =====
+            tabParcelas.Enabled = false;
+            tabControlPagamento.SelectedTab = tabPagamento;
+
+            // ===== CAMPOS FINANCEIROS =====
             txtDesconto.Text = "0,00";
             txtSubTotal.Text = "0,00";
             txtTotalGeral.Text = "0,00";
             txtValorRecebido.Text = "0,00";
             txtTroco.Text = "0,00";
+            txtValorParcela.Clear();
+
+            // ===== FORMAS / PARCELAMENTO =====
+            cmbFormaPagamento.SelectedIndex = -1;
+            numParcelas.Value = 1;
+            numIntervalo.Value = 30;
+            dtPrimeira.Value = DateTime.Today;
+
+            // ===== PRODUTO =====
+            LimparCamposProduto();
+
+            // ===== NOVO ID DE VENDA =====
+            int vendaID = Utilitario.ProximoId(QueryVenda);
+            lblVendaID.Text = Utilitario.ZerosEsquerda(vendaID, 4);
+
+            // ===== FOCO =====
+            txtNomeCliente.Focus();
         }
+
 
 
         #endregion

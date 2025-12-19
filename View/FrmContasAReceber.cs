@@ -641,11 +641,17 @@ namespace GVC.View
                     try
                     {
                         var bll = new ParcelaBLL();
-                        bll.EstornarPagamentosEmLote(
-                            selecionadas.Select(p => (long)p.ParcelaID).ToList(),
-                            frm.ValorEstorno,
-                            frm.Motivo
-                        );
+
+                        foreach (var p in selecionadas)
+                        {
+                            bll.EstornarPagamento(
+                                (long)p.ParcelaID,
+                                frm.ValorEstorno,
+                                frm.Motivo
+                            );
+                        }
+
+
 
                         MessageBox.Show("Estorno realizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         CarregarParcelas(); // atualiza o grid

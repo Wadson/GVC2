@@ -28,7 +28,7 @@ namespace GVC.View
             // Opcional: calcular saldo total das parcelas selecionadas para sugerir valor máximo
         }
 
-        private void btnConfirmar_Click(object sender, EventArgs e)
+        private void btnConfirmarEstorno_Click(object sender, EventArgs e)
         {
             if (!decimal.TryParse(txtValorEstornado.Text, out decimal valor) || valor <= 0)
             {

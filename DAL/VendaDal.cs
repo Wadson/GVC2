@@ -31,6 +31,7 @@ namespace GVC.DALL
 
         public int AddVendaCompleta(VendaModel venda, List<ItemVendaModel> itens, List<ParcelaModel> parcelas = null)
         {
+            // 🔹 Calcula status da venda ANTES de gravar
             if (parcelas != null && parcelas.Any())
             {
                 var statusCalculado = CalcularStatusVendaPorParcelas(parcelas);
@@ -39,18 +40,23 @@ namespace GVC.DALL
                     venda.StatusVenda = statusCalculado;
             }
 
-            const string sqlVenda = @" INSERT INTO Venda (DataVenda, ClienteID, ValorTotal, FormaPgtoID, Desconto, Observacoes, StatusVenda) 
-            VALUES (@DataVenda, @ClienteID, @ValorTotal, @FormaPgtoID, @Desconto, @Observacoes, @StatusVenda);
-            SELECT LAST_INSERT_ROWID();";
+            const string sqlVenda = @" INSERT INTO Venda
+        (DataVenda, ClienteID, ValorTotal, FormaPgtoID, Desconto, Observacoes, StatusVenda)
+        VALUES
+        (@DataVenda, @ClienteID, @ValorTotal, @FormaPgtoID, @Desconto, @Observacoes, @StatusVenda);
+        SELECT LAST_INSERT_ROWID();";
 
-            const string sqlItem = @" INSERT INTO ItemVenda (VendaID, ProdutoID, Quantidade, PrecoUnitario, Subtotal, DescontoItem)
-            VALUES (@VendaID, @ProdutoID, @Quantidade, @PrecoUnitario, @Quantidade * @PrecoUnitario, @DescontoItem)";
+            const string sqlItem = @" INSERT INTO ItemVenda
+        (VendaID, ProdutoID, Quantidade, PrecoUnitario, Subtotal, DescontoItem)
+        VALUES
+        (@VendaID, @ProdutoID, @Quantidade, @PrecoUnitario, @Quantidade * @PrecoUnitario, @DescontoItem)";
 
-            const string sqlParcela = @"INSERT INTO Parcela ( VendaID, NumeroParcela, DataVencimento,
-                ValorParcela, ValorRecebido, Status, DataPagamento, Juros, Multa, Observacao )
-            VALUES ( @VendaID, @NumeroParcela, @DataVencimento, @ValorParcela, @ValorRecebido,
-                @Status, @DataPagamento, @Juros, @Multa, @Observacao )";
-
+            const string sqlParcela = @" INSERT INTO Parcela
+        (VendaID, NumeroParcela, DataVencimento, ValorParcela, ValorRecebido,
+         Status, DataPagamento, Juros, Multa, Observacao)
+        VALUES
+        (@VendaID, @NumeroParcela, @DataVencimento, @ValorParcela, @ValorRecebido,
+         @Status, @DataPagamento, @Juros, @Multa, @Observacao)";
 
             using var conn = GVC.Helpers.Conexao.Conex();
             conn.Open();
@@ -58,34 +64,40 @@ namespace GVC.DALL
 
             try
             {
+                // 1️⃣ Venda
                 int vendaId = conn.QuerySingle<int>(sqlVenda, new
                 {
                     venda.ClienteID,
                     venda.FormaPgtoID,
-                    venda.DataVenda,                    
+                    venda.DataVenda,
                     venda.ValorTotal,
                     venda.Desconto,
                     venda.Observacoes,
                     venda.StatusVenda
                 }, transaction);
 
-                // 2. Atualiza os itens com o VendaID correto
-                foreach (var item in itens)
-                    item.VendaID = vendaId;
-
-                // 3. Insere itens
-                if (itens.Any())
-                    conn.Execute(sqlItem, itens, transaction);
-
-                // 4. Insere parcelas (se houver)
-                foreach (var p in parcelas)
+                // 2️⃣ Itens
+                if (itens != null && itens.Any())
                 {
-                    p.VendaID = vendaId;
+                    foreach (var item in itens)
+                        item.VendaID = vendaId;
 
-                    if (p.Status == EnumStatusParcela.Paga.ToDb() && p.DataPagamento == null)
-                        p.DataPagamento = DateTime.Now;
+                    conn.Execute(sqlItem, itens, transaction);
                 }
 
+                // 3️⃣ Parcelas
+                if (parcelas != null && parcelas.Any())
+                {
+                    foreach (var p in parcelas)
+                    {
+                        p.VendaID = vendaId;
+
+                        if (p.Status == EnumStatusParcela.Paga.ToDb() && p.DataPagamento == null)
+                            p.DataPagamento = DateTime.Now;
+                    }
+
+                    conn.Execute(sqlParcela, parcelas, transaction);
+                }
 
                 transaction.Commit();
                 return vendaId;
@@ -96,6 +108,7 @@ namespace GVC.DALL
                 throw;
             }
         }
+
         public void UpdateVenda(VendaModel venda)
         {
             const string sql = @"UPDATE Venda 

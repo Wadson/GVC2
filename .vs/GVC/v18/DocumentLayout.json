@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\GVC2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmbaixarparcela.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmbaixarparcela.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|C:\\GVC2\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\bll\\parcelabll.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:bll\\parcelabll.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\dal\\parceladal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:dal\\parceladal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmestornarpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmestornarpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc2\\view\\frmestornarpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmestornarpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 70,
-          "SelectedChildIndex": 22,
+          "SelectedChildIndex": 23,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,15 +74,7 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:1275316672:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:339460458:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1344760694:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
             },
             {
               "$type": "Bookmark",
@@ -83,6 +91,10 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1008947941:0:{bf84ea66-d821-4dba-b1b1-2777d8574775}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
             },
             {
               "$type": "Bookmark",
@@ -110,27 +122,79 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FrmBaixarParcela.cs",
-              "DocumentMoniker": "C:\\GVC2\\View\\FrmBaixarParcela.cs",
-              "RelativeDocumentMoniker": "View\\FrmBaixarParcela.cs",
-              "ToolTip": "C:\\GVC2\\View\\FrmBaixarParcela.cs",
-              "RelativeToolTip": "View\\FrmBaixarParcela.cs",
-              "ViewState": "AgIAAKMAAAAAAAAAAAAMwLIAAAAkAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "ParcelaDal.cs",
+              "DocumentMoniker": "C:\\GVC2\\DAL\\ParcelaDal.cs",
+              "RelativeDocumentMoniker": "DAL\\ParcelaDal.cs",
+              "ToolTip": "C:\\GVC2\\DAL\\ParcelaDal.cs",
+              "RelativeToolTip": "DAL\\ParcelaDal.cs",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAtwPUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T00:33:40.181Z",
+              "WhenOpened": "2025-12-19T15:46:42.289Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ParcelaBll.cs",
+              "DocumentMoniker": "C:\\GVC2\\BLL\\ParcelaBll.cs",
+              "RelativeDocumentMoniker": "BLL\\ParcelaBll.cs",
+              "ToolTip": "C:\\GVC2\\BLL\\ParcelaBll.cs",
+              "RelativeToolTip": "BLL\\ParcelaBll.cs",
+              "ViewState": "AgIAAJ0AAAAAAAAAAADwv7UAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T15:34:42.583Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FrmContasAReceber.cs",
+              "DocumentMoniker": "C:\\GVC2\\View\\FrmContasAReceber.cs",
+              "RelativeDocumentMoniker": "View\\FrmContasAReceber.cs",
+              "ToolTip": "C:\\GVC2\\View\\FrmContasAReceber.cs",
+              "RelativeToolTip": "View\\FrmContasAReceber.cs",
+              "ViewState": "AgIAAHYCAAAAAAAAAAAAwIkCAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T15:32:22.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "FrmContasAReceber.cs [Projeto]",
               "DocumentMoniker": "C:\\GVC2\\View\\FrmContasAReceber.cs",
               "RelativeDocumentMoniker": "View\\FrmContasAReceber.cs",
               "ToolTip": "C:\\GVC2\\View\\FrmContasAReceber.cs [Projeto]",
               "RelativeToolTip": "View\\FrmContasAReceber.cs [Projeto]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T00:33:31.193Z"
+              "WhenOpened": "2025-12-19T15:32:20.904Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FrmEstornarPagamento.cs",
+              "DocumentMoniker": "C:\\GVC2\\View\\FrmEstornarPagamento.cs",
+              "RelativeDocumentMoniker": "View\\FrmEstornarPagamento.cs",
+              "ToolTip": "C:\\GVC2\\View\\FrmEstornarPagamento.cs",
+              "RelativeToolTip": "View\\FrmEstornarPagamento.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAASwCoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T15:31:00.56Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FrmEstornarPagamento.cs [Projeto]",
+              "DocumentMoniker": "C:\\GVC2\\View\\FrmEstornarPagamento.cs",
+              "RelativeDocumentMoniker": "View\\FrmEstornarPagamento.cs",
+              "ToolTip": "C:\\GVC2\\View\\FrmEstornarPagamento.cs [Projeto]",
+              "RelativeToolTip": "View\\FrmEstornarPagamento.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T15:30:19.68Z",
+              "EditorCaption": " [Projeto]"
             }
           ]
         },

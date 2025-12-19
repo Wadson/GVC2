@@ -37,7 +37,7 @@
             lblValorEstornado = new Label();
             lblCliente = new Label();
             btnCancelar = new Krypton.Toolkit.KryptonButton();
-            btnConfirmar = new Krypton.Toolkit.KryptonButton();
+            btnConfirmarEstorno = new Krypton.Toolkit.KryptonButton();
             SuspendLayout();
             // 
             // kryptonPalette1
@@ -215,61 +215,61 @@
             btnCancelar.Values.Text = "Cancelar";
             btnCancelar.Click += btnCancelar_Click;
             // 
-            // btnConfirmar
+            // btnConfirmarEstorno
             // 
-            btnConfirmar.CornerRoundingRadius = 6F;
-            btnConfirmar.Location = new Point(218, 181);
-            btnConfirmar.Name = "btnConfirmar";
-            btnConfirmar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmar.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmar.OverrideDefault.Back.ColorAngle = 45F;
-            btnConfirmar.OverrideDefault.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmar.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmar.OverrideDefault.Border.ColorAngle = 45F;
-            btnConfirmar.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmar.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmar.OverrideDefault.Border.Rounding = 20F;
-            btnConfirmar.OverrideDefault.Border.Width = 1;
-            btnConfirmar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnConfirmar.Size = new Size(120, 30);
-            btnConfirmar.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
-            btnConfirmar.StateCommon.Back.Color2 = Color.FromArgb(6, 180, 240);
-            btnConfirmar.StateCommon.Back.ColorAngle = 45F;
-            btnConfirmar.StateCommon.Border.Color1 = Color.FromArgb(0, 76, 172);
-            btnConfirmar.StateCommon.Border.Color2 = Color.FromArgb(0, 76, 172);
-            btnConfirmar.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmar.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmar.StateCommon.Border.Rounding = 6F;
-            btnConfirmar.StateCommon.Border.Width = 1;
-            btnConfirmar.StateCommon.Content.ShortText.Color1 = Color.White;
-            btnConfirmar.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnConfirmar.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
-            btnConfirmar.StatePressed.Back.Color1 = Color.FromArgb(119, 221, 119);
-            btnConfirmar.StatePressed.Back.Color2 = Color.FromArgb(119, 221, 119);
-            btnConfirmar.StatePressed.Back.ColorAngle = 135F;
-            btnConfirmar.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
-            btnConfirmar.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
-            btnConfirmar.StatePressed.Border.ColorAngle = 135F;
-            btnConfirmar.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmar.StatePressed.Border.Rounding = 20F;
-            btnConfirmar.StatePressed.Border.Width = 1;
-            btnConfirmar.StatePressed.Content.ShortText.Color1 = Color.Black;
-            btnConfirmar.StatePressed.Content.ShortText.Color2 = Color.Black;
-            btnConfirmar.StateTracking.Back.Color1 = Color.FromArgb(119, 221, 119);
-            btnConfirmar.StateTracking.Back.Color2 = Color.FromArgb(119, 221, 119);
-            btnConfirmar.StateTracking.Back.ColorAngle = 45F;
-            btnConfirmar.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmar.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmar.StateTracking.Border.ColorAngle = 45F;
-            btnConfirmar.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmar.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmar.StateTracking.Border.Rounding = 20F;
-            btnConfirmar.StateTracking.Border.Width = 1;
-            btnConfirmar.StateTracking.Content.ShortText.Color1 = Color.Black;
-            btnConfirmar.StateTracking.Content.ShortText.Color2 = Color.Black;
-            btnConfirmar.TabIndex = 1043;
-            btnConfirmar.Values.Text = "Confirmar";
-            btnConfirmar.Click += btnConfirmar_Click;
+            btnConfirmarEstorno.CornerRoundingRadius = 6F;
+            btnConfirmarEstorno.Location = new Point(218, 181);
+            btnConfirmarEstorno.Name = "btnConfirmarEstorno";
+            btnConfirmarEstorno.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmarEstorno.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmarEstorno.OverrideDefault.Back.ColorAngle = 45F;
+            btnConfirmarEstorno.OverrideDefault.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmarEstorno.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmarEstorno.OverrideDefault.Border.ColorAngle = 45F;
+            btnConfirmarEstorno.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmarEstorno.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmarEstorno.OverrideDefault.Border.Rounding = 20F;
+            btnConfirmarEstorno.OverrideDefault.Border.Width = 1;
+            btnConfirmarEstorno.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
+            btnConfirmarEstorno.Size = new Size(120, 30);
+            btnConfirmarEstorno.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnConfirmarEstorno.StateCommon.Back.Color2 = Color.FromArgb(6, 180, 240);
+            btnConfirmarEstorno.StateCommon.Back.ColorAngle = 45F;
+            btnConfirmarEstorno.StateCommon.Border.Color1 = Color.FromArgb(0, 76, 172);
+            btnConfirmarEstorno.StateCommon.Border.Color2 = Color.FromArgb(0, 76, 172);
+            btnConfirmarEstorno.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmarEstorno.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmarEstorno.StateCommon.Border.Rounding = 6F;
+            btnConfirmarEstorno.StateCommon.Border.Width = 1;
+            btnConfirmarEstorno.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnConfirmarEstorno.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnConfirmarEstorno.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
+            btnConfirmarEstorno.StatePressed.Back.Color1 = Color.FromArgb(119, 221, 119);
+            btnConfirmarEstorno.StatePressed.Back.Color2 = Color.FromArgb(119, 221, 119);
+            btnConfirmarEstorno.StatePressed.Back.ColorAngle = 135F;
+            btnConfirmarEstorno.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
+            btnConfirmarEstorno.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnConfirmarEstorno.StatePressed.Border.ColorAngle = 135F;
+            btnConfirmarEstorno.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmarEstorno.StatePressed.Border.Rounding = 20F;
+            btnConfirmarEstorno.StatePressed.Border.Width = 1;
+            btnConfirmarEstorno.StatePressed.Content.ShortText.Color1 = Color.Black;
+            btnConfirmarEstorno.StatePressed.Content.ShortText.Color2 = Color.Black;
+            btnConfirmarEstorno.StateTracking.Back.Color1 = Color.FromArgb(119, 221, 119);
+            btnConfirmarEstorno.StateTracking.Back.Color2 = Color.FromArgb(119, 221, 119);
+            btnConfirmarEstorno.StateTracking.Back.ColorAngle = 45F;
+            btnConfirmarEstorno.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmarEstorno.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmarEstorno.StateTracking.Border.ColorAngle = 45F;
+            btnConfirmarEstorno.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmarEstorno.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmarEstorno.StateTracking.Border.Rounding = 20F;
+            btnConfirmarEstorno.StateTracking.Border.Width = 1;
+            btnConfirmarEstorno.StateTracking.Content.ShortText.Color1 = Color.Black;
+            btnConfirmarEstorno.StateTracking.Content.ShortText.Color2 = Color.Black;
+            btnConfirmarEstorno.TabIndex = 1043;
+            btnConfirmarEstorno.Values.Text = "Confirmar";
+            btnConfirmarEstorno.Click += btnConfirmarEstorno_Click;
             // 
             // FrmEstornarPagamento
             // 
@@ -278,7 +278,7 @@
             BackColor = Color.FromArgb(252, 252, 250);
             ClientSize = new Size(464, 218);
             Controls.Add(btnCancelar);
-            Controls.Add(btnConfirmar);
+            Controls.Add(btnConfirmarEstorno);
             Controls.Add(txtMotivo);
             Controls.Add(txtNomeCliente);
             Controls.Add(txtValorEstornado);
@@ -307,6 +307,6 @@
         private Label lblValorEstornado;
         private Label lblCliente;
         private Krypton.Toolkit.KryptonButton btnCancelar;
-        public Krypton.Toolkit.KryptonButton btnConfirmar;
+        public Krypton.Toolkit.KryptonButton btnConfirmarEstorno;
     }
 }

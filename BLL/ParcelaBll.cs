@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GVC.View.FrmVendas;
 
 namespace GVC.BLL
 {
@@ -69,13 +70,26 @@ namespace GVC.BLL
             // 2️⃣ Buscar TODAS as parcelas da venda
             var parcelasVenda = _parcelaDal.GetParcelas((int)parcela.VendaID);
 
-            // 3️⃣ Recalcular status da venda
-            string novoStatusVenda =  _vendaBLL.CalcularStatusVendaPorParcelas(parcelasVenda);
+            // 3️⃣ Recalcular status da venda (STATUS DE NEGÓCIO)
+            string statusCalculado =
+                _vendaBLL.CalcularStatusVendaPorParcelas(parcelasVenda);
 
+            // 🔥 3.1️⃣ AJUSTE PARA STATUS ACEITO PELO BANCO
+            string statusParaBanco = statusCalculado switch
+            {
+                var s when s == EnumStatusVenda.ParcialmentePago.ToDb()
+                    => EnumStatusVenda.AguardandoPagamento.ToDb(),
 
-            // 4️⃣ Atualizar venda
-            _vendaDal.AtualizarStatusVenda(parcela.VendaID, novoStatusVenda);
+                var s when s == EnumStatusVenda.EmAnalise.ToDb()
+                    => EnumStatusVenda.AguardandoPagamento.ToDb(),
+
+                _ => statusCalculado
+            };
+
+            // 4️⃣ Atualizar venda (SOMENTE status válido)
+            _vendaDal.AtualizarStatusVenda(parcela.VendaID, statusParaBanco);
         }
+
 
 
         // ==========================================================
@@ -143,32 +157,75 @@ namespace GVC.BLL
         /// <param name="parcelaId">ID da parcela</param>
         /// <param name="valorEstorno">Valor a estornar (positivo)</param>
         /// <param name="motivo">Motivo do estorno (para auditoria)</param>
-        public void EstornarPagamento(long parcelaId, decimal valorEstorno, DateTime? dataEstorno = null, string motivo = null)
+        public void EstornarPagamento(long parcelaId, decimal valorEstorno, string motivo)
         {
-            dataEstorno ??= DateTime.Now;
-
-            if (valorEstorno <= 0m)
-                throw new Exception("O valor do estorno deve ser maior que zero.");
+            if (valorEstorno <= 0)
+                throw new Exception("Valor de estorno inválido.");
 
             var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
             if (valorEstorno > parcela.ValorRecebido)
-                throw new Exception($"Valor do estorno ({valorEstorno:C2}) maior que o valor recebido ({parcela.ValorRecebido:C2}).");
+                throw new Exception("Valor do estorno maior que o valor recebido.");
 
-            _parcelaDal.EstornarPagamento(parcelaId, valorEstorno, dataEstorno.Value, motivo);
+            _parcelaDal.EstornarPagamento(parcelaId, valorEstorno, DateTime.Now, motivo);
 
-            // Trigger atualiza Status e DataPagamento automaticamente
+            // 🔁 Recalcula venda
+            var parcelasVenda = _parcelaDal.GetParcelas((int)parcela.VendaID);
+            var statusVenda = _vendaBLL.CalcularStatusVendaPorParcelas(parcelasVenda);
+
+            if (statusVenda == EnumStatusVenda.ParcialmentePago.ToDb())
+                statusVenda = EnumStatusVenda.AguardandoPagamento.ToDb();
+
+            _vendaDal.AtualizarStatusVenda(parcela.VendaID, statusVenda);
         }
-        public void EstornarPagamentosEmLote(List<long> parcelasIds, decimal valorEstornoPorParcela, string motivo = null)
+
+        public void EstornarPagamentosEmLote(
+     List<long> parcelasIds,
+     decimal valorEstorno,
+     string motivo)
         {
-            var dataEstorno = DateTime.Now;
+            if (valorEstorno <= 0)
+                throw new Exception("Valor de estorno inválido.");
+
+            decimal valorRestante = valorEstorno;
 
             foreach (var parcelaId in parcelasIds)
             {
-                EstornarPagamento(parcelaId, valorEstornoPorParcela, dataEstorno, motivo);
+                if (valorRestante <= 0)
+                    break;
+
+                var parcela = _parcelaDal.BuscarPorId(parcelaId)
+                    ?? throw new Exception("Parcela não encontrada.");
+
+                decimal estornoNestaParcela =
+                    Math.Min(parcela.ValorRecebido, valorRestante);
+
+                if (estornoNestaParcela <= 0)
+                    continue;
+
+                _parcelaDal.EstornarPagamento(
+                    parcelaId,
+                    estornoNestaParcela,
+                    DateTime.Now,
+                    motivo
+                );
+
+                valorRestante -= estornoNestaParcela;
             }
+
+            // 🔁 Recalcula status da venda UMA VEZ
+            long vendaId = _parcelaDal.BuscarPorId(parcelasIds.First()).VendaID;
+            var parcelasVenda = _parcelaDal.GetParcelas((int)vendaId);
+
+            string statusVenda =
+                _vendaBLL.CalcularStatusVendaPorParcelas(parcelasVenda);
+
+            // 🔒 CHECK constraint do SQLite
+            if (statusVenda == EnumStatusVenda.ParcialmentePago.ToDb())
+                statusVenda = EnumStatusVenda.AguardandoPagamento.ToDb();
+
+            _vendaDal.AtualizarStatusVenda(vendaId, statusVenda);
         }
-       
     }
 }
