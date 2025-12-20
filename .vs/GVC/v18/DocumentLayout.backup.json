@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\GVC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\dal\\itemvendadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:dal\\itemvendadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\util\\frmopcoesextrato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:util\\frmopcoesextrato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\dal\\vendadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:dal\\vendadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\dal\\parceladal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:dal\\parceladal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\model\\itemvendamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:model\\itemvendamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\util\\frmopcoesextrato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:util\\frmopcoesextrato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,6 +17,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcontasareceber.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvc\\util\\pdfgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:util\\pdfgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 70,
-          "SelectedChildIndex": 23,
+          "SelectedChildIndex": 21,
           "Children": [
             {
               "$type": "Bookmark",
@@ -122,72 +118,58 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ParcelaDal.cs",
-              "DocumentMoniker": "C:\\GVC\\DAL\\ParcelaDal.cs",
-              "RelativeDocumentMoniker": "DAL\\ParcelaDal.cs",
-              "ToolTip": "C:\\GVC\\DAL\\ParcelaDal.cs",
-              "RelativeToolTip": "DAL\\ParcelaDal.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-20T00:15:12.112Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "VendaDal.cs",
-              "DocumentMoniker": "C:\\GVC\\DAL\\VendaDal.cs",
-              "RelativeDocumentMoniker": "DAL\\VendaDal.cs",
-              "ToolTip": "C:\\GVC\\DAL\\VendaDal.cs",
-              "RelativeToolTip": "DAL\\VendaDal.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-20T00:15:10.022Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ItemVendaDal.cs",
-              "DocumentMoniker": "C:\\GVC\\DAL\\ItemVendaDal.cs",
-              "RelativeDocumentMoniker": "DAL\\ItemVendaDal.cs",
-              "ToolTip": "C:\\GVC\\DAL\\ItemVendaDal.cs",
-              "RelativeToolTip": "DAL\\ItemVendaDal.cs",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAUwKIAAAAQAAAAAAAAAA==",
+              "Title": "FrmOpcoesExtrato.cs",
+              "DocumentMoniker": "C:\\GVC\\UTIL\\FrmOpcoesExtrato.cs",
+              "RelativeDocumentMoniker": "UTIL\\FrmOpcoesExtrato.cs",
+              "ToolTip": "C:\\GVC\\UTIL\\FrmOpcoesExtrato.cs",
+              "RelativeToolTip": "UTIL\\FrmOpcoesExtrato.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAYwEUAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T23:58:48.666Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ItemVendaModel.cs",
-              "DocumentMoniker": "C:\\GVC\\MODEL\\ItemVendaModel.cs",
-              "RelativeDocumentMoniker": "MODEL\\ItemVendaModel.cs",
-              "ToolTip": "C:\\GVC\\MODEL\\ItemVendaModel.cs",
-              "RelativeToolTip": "MODEL\\ItemVendaModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T23:53:00.819Z",
+              "WhenOpened": "2025-12-20T14:14:50.105Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "PDFGenerator.cs",
+              "DocumentMoniker": "C:\\GVC\\UTIL\\PDFGenerator.cs",
+              "RelativeDocumentMoniker": "UTIL\\PDFGenerator.cs",
+              "ToolTip": "C:\\GVC\\UTIL\\PDFGenerator.cs",
+              "RelativeToolTip": "UTIL\\PDFGenerator.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAEwDEAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T14:05:55.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FrmOpcoesExtrato.cs [Projeto]",
+              "DocumentMoniker": "C:\\GVC\\UTIL\\FrmOpcoesExtrato.cs",
+              "RelativeDocumentMoniker": "UTIL\\FrmOpcoesExtrato.cs",
+              "ToolTip": "C:\\GVC\\UTIL\\FrmOpcoesExtrato.cs [Projeto]",
+              "RelativeToolTip": "UTIL\\FrmOpcoesExtrato.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T13:31:35.084Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "FrmContasAReceber.cs",
               "DocumentMoniker": "C:\\GVC\\View\\FrmContasAReceber.cs",
               "RelativeDocumentMoniker": "View\\FrmContasAReceber.cs",
               "ToolTip": "C:\\GVC\\View\\FrmContasAReceber.cs",
               "RelativeToolTip": "View\\FrmContasAReceber.cs",
-              "ViewState": "AgIAAKABAAAAAAAAAAAEwK8BAABMAAAAAAAAAA==",
+              "ViewState": "AgIAAD4EAAAAAAAAAAAUwFYEAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-19T19:56:09.371Z",
+              "WhenOpened": "2025-12-20T11:23:47.907Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "FrmContasAReceber.cs [Projeto]",
               "DocumentMoniker": "C:\\GVC\\View\\FrmContasAReceber.cs",
               "RelativeDocumentMoniker": "View\\FrmContasAReceber.cs",

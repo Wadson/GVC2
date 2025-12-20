@@ -1,14 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "dTqkAeiM5z4=",
+  "dgSpecHash": "9M9VTVzHtro=",
   "success": true,
   "projectFilePath": "C:\\GVC\\GVC.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\wadso\\.nuget\\packages\\bouncycastle.cryptography\\2.4.0\\bouncycastle.cryptography.2.4.0.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\epplus\\8.3.1\\epplus.8.3.1.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\epplus.interfaces\\8.1.0\\epplus.interfaces.8.1.0.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\itext7\\8.0.0\\itext7.8.0.0.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\itext7.commons\\8.0.0\\itext7.commons.8.0.0.nupkg.sha512",
+    "C:\\Users\\wadso\\.nuget\\packages\\itextsharp\\5.5.13.4\\itextsharp.5.5.13.4.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\krypton.toolkit\\70.22.11.312\\krypton.toolkit.70.22.11.312.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\metromodernui\\1.4.0\\metromodernui.1.4.0.nupkg.sha512",
     "C:\\Users\\wadso\\.nuget\\packages\\microsoft.data.sqlite\\8.0.0\\microsoft.data.sqlite.8.0.0.nupkg.sha512",
@@ -111,6 +113,18 @@
     "C:\\Users\\wadso\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "O pacote 'iTextSharp 5.5.13.4' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net8.0-windows7.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "projectPath": "C:\\GVC\\GVC.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\GVC\\GVC.csproj",
+      "libraryId": "iTextSharp",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

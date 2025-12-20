@@ -56,11 +56,7 @@ namespace GVC.BLL
             vendaDAL.UpdateVenda(venda);
         }
 
-        public VendaModel ObterVendaPorId(long vendaId)
-        {
-            return vendaDAL.ObterVendaPorId(vendaId);
-        }
-
+       
         // ⚠️ SE PRECISAR MANTER int
         public VendaModel ObterVendaPorId(int vendaId)
         {

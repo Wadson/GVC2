@@ -32,6 +32,9 @@
     <Compile Update="TexBoxTelefoneFormatado.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="UTIL\FrmOpcoesExtrato.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\FrmBackup.cs">
       <SubType>Form</SubType>
     </Compile>

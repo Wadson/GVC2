@@ -28,10 +28,6 @@ namespace GVC{
     {
         private static readonly CultureInfo CulturaBR = new CultureInfo("pt-BR");
         
-
-
-
-
         // ==============================================================
         // 1. FORMATAR MOEDA (TextBox e KryptonTextBox)
         // ==============================================================
@@ -40,16 +36,13 @@ namespace GVC{
 
         public static void PesquisarPorCodigoRetornarNomeTexBox(string query, string nomeParametro, string parametro, KryptonTextBox txtResultado)
         {
-            using (var connection = GVC.Helpers.Conexao.Conex())
+                using (var connection = GVC.Helpers.Conexao.Conex())
                 try
                 {
                     connection.Open();
 
                     // Usando Dapper para consulta única
-                    var resultado = connection.QueryFirstOrDefault<dynamic>(query, new Dictionary<string, object>
-            {
-                { nomeParametro, parametro }
-            });
+                    var resultado = connection.QueryFirstOrDefault<dynamic>(query, new Dictionary<string, object> { { nomeParametro, parametro } });
 
                     if (resultado != null)
                     {
@@ -68,7 +61,31 @@ namespace GVC{
                     MessageBox.Show("Erro ao buscar nome: " + ex.Message, "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+        }
+        public static string PesquisarPorCodigoRetornarNome(string query, string nomeParametro, object parametro)
+        {
+            using (var connection = GVC.Helpers.Conexao.Conex())
+            {
+                try
+                {
+                    var resultado = connection.QueryFirstOrDefault<dynamic>(query,
+                        new Dictionary<string, object> { { nomeParametro, parametro } });
+
+                    if (resultado != null)
+                    {
+                        // Retorna o primeiro valor da linha (normalmente é o nome)
+                        var dict = (IDictionary<string, object>)resultado;
+                        return dict.Values.FirstOrDefault()?.ToString() ?? string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao buscar nome: " + ex.Message, "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+            return string.Empty;
+        }
 
 
         public static void ExportarParaPDF(KryptonDataGridView dgv, string arquivo = null)

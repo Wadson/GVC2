@@ -246,32 +246,60 @@ namespace GVC.DALL
                 Status = novoStatus
             });
         }
-
-        public VendaModel ObterVendaPorId(long vendaId)
+        public VendaModel ObterVendaPorId(int vendaId)
         {
             using (var conn = Helpers.Conexao.Conex())
             {
-                string sql = @"
-                SELECT
-                    v.VendaID,
-                    v.ClienteID,
-                    c.Nome,
-                    v.DataVenda,
-                    v.ValorTotal,
-                    v.Desconto,
-                    v.Observacoes,
-                    v.StatusVenda
-                FROM Venda v
-                INNER JOIN Cliente c ON c.ClienteID = v.ClienteID
-                WHERE v.VendaID = @VendaID
-            ";
+                string sql = @" SELECT 
+                                v.VendaID,
+                                v.ClienteID,
+                                v.FormaPgtoID,
+                                v.DataVenda,
+                                v.ValorTotal,
+                                v.Desconto,
+                                v.Observacoes,
+                                v.StatusVenda,
+                                c.Nome AS NomeCliente
+                            FROM Venda v
+                            LEFT JOIN Cliente c ON c.ClienteID = v.ClienteID
+                            WHERE v.VendaID = @VendaID";
 
-                return conn.QueryFirstOrDefault<VendaModel>(
-                    sql,
-                    new { VendaID = vendaId }
-                );
+                var venda = conn.QueryFirstOrDefault<VendaModel>(sql, new { VendaID = vendaId });
+
+                // DEBUG
+                if (venda != null)
+                {
+                    Console.WriteLine($"DEBUG DAL: VendaID={venda.VendaID}, ClienteID={venda.ClienteID}");
+                }
+
+                return venda;
             }
-        }      
+        }
+        //public VendaModel ObterVendaPorId(long vendaId)
+        //{
+        //    using (var conn = Helpers.Conexao.Conex())
+        //    {
+        //        string sql = @"
+        //        SELECT
+        //            v.VendaID,
+        //            v.ClienteID,
+        //            c.Nome,
+        //            v.DataVenda,
+        //            v.ValorTotal,
+        //            v.Desconto,
+        //            v.Observacoes,
+        //            v.StatusVenda
+        //        FROM Venda v
+        //        INNER JOIN Cliente c ON c.ClienteID = v.ClienteID
+        //        WHERE v.VendaID = @VendaID
+        //    ";
+
+        //        return conn.QueryFirstOrDefault<VendaModel>(
+        //            sql,
+        //            new { VendaID = vendaId }
+        //        );
+        //    }
+        //}      
 
     }
 }

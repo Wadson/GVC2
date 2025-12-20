@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,82 +114,87 @@ namespace GVC.DALL
         public DataTable ListarItensComProduto(int vendaId)
         {
             const string sql = @" SELECT 
-                    iv.ItemVendaID,
-                    iv.VendaID,
-                    iv.ProdutoID,
-                    p.NomeProduto,
-                    p.CodigoBarras,
-                    iv.Quantidade,
-                    iv.PrecoUnitario,
-                    iv.Subtotal,
-                    iv.DescontoItem,
-                    (iv.Quantidade * iv.PrecoUnitario - iv.DescontoItem) AS TotalItem
-                FROM ItemVenda iv
-                INNER JOIN Produto p ON iv.ProdutoID = p.ProdutoID
-                WHERE iv.VendaID = @VendaID
-                ORDER BY iv.ItemVendaID";
+                                iv.ItemVendaID,
+                                iv.VendaID,
+                                iv.ProdutoID,
+                                p.NomeProduto,
+                                p.CodigoBarras,
+                                iv.Quantidade,
+                                iv.PrecoUnitario,
+                                iv.Subtotal,
+                                iv.DescontoItem,
+                                (iv.Quantidade * iv.PrecoUnitario - iv.DescontoItem) AS TotalItem
+                            FROM ItemVenda iv
+                            INNER JOIN Produto p ON iv.ProdutoID = p.ProdutoID
+                            WHERE iv.VendaID = @VendaID
+                            ORDER BY iv.ItemVendaID";
 
             using var conn = GVC.Helpers.Conexao.Conex();
             var dt = new DataTable();
             dt.Load(conn.ExecuteReader(sql, new { VendaID = vendaId }));
             return dt;
         }
+
         public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
         {
-            // 🔎 DIAGNÓSTICO – REMOVER DEPOIS
-            var tipo = typeof(ItemVendaModel);
-            foreach (var p in tipo.GetProperties())
-            {
-                System.Diagnostics.Debug.WriteLine($"{p.Name} - {p.PropertyType}");
-            }
-
             using (var conn = Helpers.Conexao.Conex())
             {
-                string sql = @"
-SELECT
-    iv.ItemVendaID AS ItemVendaID,
-    iv.VendaID AS VendaID,
-    iv.ProdutoID AS ProdutoID,
-    iv.Quantidade AS Quantidade,
-    CAST(REPLACE(iv.PrecoUnitario, ',', '.') AS NUMERIC) AS PrecoUnitario,
-    CAST(REPLACE(iv.Subtotal, ',', '.') AS NUMERIC) AS Subtotal,
-    CAST(REPLACE(iv.DescontoItem, ',', '.') AS NUMERIC) AS DescontoItem,
-    p.NomeProduto AS NomeProduto
-FROM ItemVenda iv
-INNER JOIN Produtos p ON p.ProdutoID = iv.ProdutoID
-WHERE iv.VendaID = @VendaID
-ORDER BY iv.ItemVendaID";
+                string sql = @" SELECT
+                                    iv.ItemVendaID,
+                                    iv.VendaID,
+                                    iv.ProdutoID,
+                                    iv.Quantidade,
+                                    iv.PrecoUnitario,
+                                    iv.Subtotal,
+                                    iv.DescontoItem,
+                                    p.NomeProduto
+                                FROM ItemVenda iv
+                                INNER JOIN Produtos p ON p.ProdutoID = iv.ProdutoID
+                                WHERE iv.VendaID = @VendaID
+                                ORDER BY iv.ItemVendaID";
 
+                var resultados = conn.Query(sql, new { VendaID = vendaId }).ToList();
+                var itens = new List<ItemVendaModel>();
 
-                return conn.Query<GVC.MODEL.ItemVendaModel>( sql,  new { VendaID = vendaId }).ToList();
+                foreach (var row in resultados)
+                {
+                    var dict = (IDictionary<string, object>)row;
+                    var item = new ItemVendaModel
+                    {
+                        ItemVendaID = Convert.ToInt64(dict["ItemVendaID"]),
+                        VendaID = Convert.ToInt64(dict["VendaID"]),
+                        ProdutoID = Convert.ToInt64(dict["ProdutoID"]),
+                        Quantidade = Convert.ToInt32(dict["Quantidade"]),
+                        NomeProduto = dict["NomeProduto"]?.ToString()
+                    };
 
-                //return conn.Query<ItemVendaModel>(sql, new { VendaID = vendaId }).ToList();
+                    // Conversão segura para valores decimais
+                    if (dict["PrecoUnitario"] != null)
+                    {
+                        var precoStr = dict["PrecoUnitario"].ToString();
+                        if (decimal.TryParse(precoStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal preco))
+                            item.PrecoUnitario = preco;
+                    }
+
+                    if (dict["Subtotal"] != null)
+                    {
+                        var subtotalStr = dict["Subtotal"].ToString();
+                        if (decimal.TryParse(subtotalStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal subtotal))
+                            item.Subtotal = subtotal;
+                    }
+
+                    if (dict["DescontoItem"] != null)
+                    {
+                        var descontoStr = dict["DescontoItem"].ToString();
+                        if (decimal.TryParse(descontoStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal desconto))
+                            item.DescontoItem = desconto;
+                    }
+
+                    itens.Add(item);
+                }
+
+                return itens;
             }
-        }
-
-
-        //public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
-        //{
-        //    using (var conn = Helpers.Conexao.Conex())
-        //    {
-        //        string sql = @"
-        //SELECT
-        //    iv.ItemVendaID    AS ItemVendaID,
-        //    iv.VendaID        AS VendaID,
-        //    iv.ProdutoID      AS ProdutoID,
-        //    iv.Quantidade     AS Quantidade,
-        //    iv.PrecoUnitario  AS PrecoUnitario,
-        //    iv.Subtotal       AS Subtotal,
-        //    iv.DescontoItem   AS DescontoItem,
-        //    p.NomeProduto     AS NomeProduto
-        //FROM ItemVenda iv
-        //INNER JOIN Produtos p ON p.ProdutoID = iv.ProdutoID
-        //WHERE iv.VendaID = @VendaID
-        //ORDER BY iv.ItemVendaID";
-
-        //        return conn.Query<ItemVendaModel>(sql, new { VendaID = vendaId }).ToList();
-        //    }
-        //}
-
+        }     
     }
 }

@@ -229,3 +229,6 @@ C:\GVC\obj\Debug\net8.0-windows7.0\refint\GVC.dll
 C:\GVC\obj\Debug\net8.0-windows7.0\GVC.pdb
 C:\GVC\obj\Debug\net8.0-windows7.0\GVC.genruntimeconfig.cache
 C:\GVC\obj\Debug\net8.0-windows7.0\ref\GVC.dll
+C:\GVC\bin\Debug\net8.0-windows7.0\BouncyCastle.Cryptography.dll
+C:\GVC\bin\Debug\net8.0-windows7.0\itextsharp.dll
+C:\GVC\obj\Debug\net8.0-windows7.0\GVC.UTIL.FrmOpcoesExtrato.resources

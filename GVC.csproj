@@ -15,6 +15,7 @@
 	<ItemGroup>
 		<!-- ESSENCIAIS -->
 		<PackageReference Include="Dapper" Version="2.1.66" />
+		<PackageReference Include="iTextSharp" Version="5.5.13.4" />
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
 		<PackageReference Include="Krypton.Toolkit" Version="70.22.11.312" />
 		<PackageReference Include="EPPlus" Version="8.3.1" />
