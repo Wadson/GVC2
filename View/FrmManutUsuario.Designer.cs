@@ -408,7 +408,7 @@
             Controls.Add(btnAlterar);
             Controls.Add(txtPesquisa);
             Controls.Add(dgvUsuarios);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             Name = "FrmManutUsuario";
             Palette = kryptonPalette1;
             PaletteMode = Krypton.Toolkit.PaletteMode.Custom;

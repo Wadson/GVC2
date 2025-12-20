@@ -18,7 +18,7 @@ namespace GVC.View
         public FrmTelaPrincipal()
         {
             InitializeComponent();
-            StatusOperacao = ""; 
+            StatusOperacao = "";
         }
         private string StatusOperacao = "";
         private void AbrirFormEnPanel(object Form)
@@ -229,8 +229,12 @@ namespace GVC.View
 
         private void btnFornecedor_Click(object sender, EventArgs e)
         {
-            FrmManutFornecedor frm = new FrmManutFornecedor(StatusOperacao);            
+            FrmManutFornecedor frm = new FrmManutFornecedor(StatusOperacao);
             AbrirFormEnPanel(frm);
+        }
+
+        private void btnCalculo_Click(object sender, EventArgs e)
+        {           
         }
     }
 }

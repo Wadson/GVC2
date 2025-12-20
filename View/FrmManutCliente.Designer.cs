@@ -427,7 +427,7 @@
             Controls.Add(txtPesquisa);
             Controls.Add(lblTotalRegistros);
             Controls.Add(dgvCliente);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             KeyPreview = true;
             Margin = new Padding(5, 3, 5, 3);
             MaximizeBox = false;

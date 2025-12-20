@@ -62,9 +62,6 @@
     <Compile Update="View\FrmEstornarPagamento.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="View\FrmExclusaoOrfaos.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="View\FrmFerramentas.cs">
       <SubType>Form</SubType>
     </Compile>

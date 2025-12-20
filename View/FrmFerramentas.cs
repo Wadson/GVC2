@@ -18,9 +18,7 @@ namespace GVC.View
         }
 
         private void btnExcluirRegistrosOrfao_Click(object sender, EventArgs e)
-        {
-            FrmExclusaoOrfaos frmExclusaoOrfao = new FrmExclusaoOrfaos();
-            frmExclusaoOrfao.ShowDialog();
+        {            
         }
 
         private void txtBackup_Click(object sender, EventArgs e)

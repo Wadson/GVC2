@@ -26,5 +26,7 @@ namespace GVC.MODEL
             ItensVendidos = new List<ItemVendaModel>();
             Parcelas = new List<ParcelaModel>();
         }
+
+        public string NomeCliente { get; set; }
     }
 }

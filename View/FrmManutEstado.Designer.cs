@@ -411,7 +411,7 @@
             Controls.Add(txtPesquisar);
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(dgvPesquisar);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(5, 3, 5, 3);
             MaximizeBox = false;
             MinimizeBox = false;

@@ -504,7 +504,7 @@
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(btnEstoque);
             Controls.Add(dgvProdutos);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(5, 3, 5, 3);
             MaximizeBox = false;
             MinimizeBox = false;

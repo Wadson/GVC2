@@ -955,7 +955,8 @@
             </summary>
             <param name="value">The value to convert.</param>
         </member>
-        <member name="M:Azure.Core.Serialization.DynamicData.op_Implicit(Azure.Core.Serialization.DynamicData)~System.Int64">
+        <member name="M:Azure.Core.Serialization.DynamicData.op_Implicit(Azure.Core.Serialization.DynamicData)~System.
+				">
             <summary>
             Converts the value to a <see cref="T:System.Int64" />.
             </summary>

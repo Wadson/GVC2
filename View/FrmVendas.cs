@@ -139,67 +139,203 @@ namespace GVC.View
             dgvitens.AutoGenerateColumns = false;
             dgvitens.Columns.Clear();
 
+            // 🔹 Coluna Código
             dgvitens.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Código",
                 DataPropertyName = nameof(ItemVendaModel.ProdutoID),
-                Width = 100,
-                ReadOnly = true
+                Width = 70, // 🔹 Largura reduzida
+                ReadOnly = true,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                },
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
+
+            // 🔹 Coluna Descrição
             dgvitens.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Descrição",
                 DataPropertyName = nameof(ItemVendaModel.NomeProduto),
-                Width = 350,
-                ReadOnly = true
+                Width = 620, // 🔹 Ajuste fino
+                ReadOnly = true,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleLeft,
+                    Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                },
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
+            // 🔹 Coluna Qtde (CENTRALIZADA)
             dgvitens.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Qtde",
                 DataPropertyName = nameof(ItemVendaModel.Quantidade),
-                Width = 80
+                Width = 80,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter, // 🔹 CENTRALIZADO
+                    Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                    BackColor = Color.WhiteSmoke, // 🔹 Fundo diferenciado para campo editável
+                    SelectionBackColor = Color.LightBlue
+                },
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
+            // 🔹 Coluna Preço
             dgvitens.Columns.Add(new DataGridViewTextBoxColumn
             {
-                HeaderText = "Preço",
+                HeaderText = "Preço Unit.",
                 DataPropertyName = nameof(ItemVendaModel.PrecoUnitario),
                 Width = 100,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "N2",
+                    Alignment = DataGridViewContentAlignment.MiddleRight, // 🔹 Alinhado à direita
+                    Font = new Font("Segoe UI", 9F, FontStyle.Regular)
+                },
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
+            // 🔹 Coluna Subtotal
             dgvitens.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Subtotal",
                 DataPropertyName = nameof(ItemVendaModel.Subtotal),
-                Width = 120,
+                Width = 130,
                 ReadOnly = true,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "N2",
+                    Alignment = DataGridViewContentAlignment.MiddleRight, // 🔹 Alinhado à direita
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold), // 🔹 Negrito para valor importante
+                    ForeColor = Color.DarkGreen, // 🔹 Cor verde para valores monetários
+                    BackColor = Color.LightYellow // 🔹 Fundo diferenciado
+                },
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
+            // 🔹 Coluna Remover
             dgvitens.Columns.Add(new DataGridViewButtonColumn
             {
-                Text = "X",
+                Text = "✕", // 🔹 Símbolo mais limpo
                 UseColumnTextForButtonValue = true,
-                Width = 40
+                Width = 40,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    BackColor = Color.FromArgb(192, 0, 0), // 🔹 Vermelho escuro
+                    SelectionBackColor = Color.FromArgb(220, 0, 0)
+                },
+                HeaderText = "Remover",
+                HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
+            // 🔹 Configurações gerais do Grid
             dgvitens.AllowUserToAddRows = false;
             dgvitens.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            dgvitens.MultiSelect = false; // 🔹 Só permite selecionar uma linha por vez
             dgvitens.EnableHeadersVisualStyles = false;
             dgvitens.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvitens.ColumnHeadersHeight = 28;
+            dgvitens.ColumnHeadersHeight = 30; // 🔹 Altura padrão
             dgvitens.RowHeadersVisible = false;
             dgvitens.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvitens.AllowUserToResizeRows = false;
+            dgvitens.RowTemplate.Height = 28; // 🔹 Altura das linhas
+
+            // 🔹 Estilo dos cabeçalhos
+            dgvitens.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                BackColor = Color.SteelBlue,
+                ForeColor = Color.White,
+                Alignment = DataGridViewContentAlignment.MiddleCenter,
+                Padding = new Padding(0, 2, 0, 2) // 🔹 Espaçamento vertical interno
+            };
+
+            // 🔹 Estilo das linhas alternadas (zebra)
+            dgvitens.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+            {
+                BackColor = Color.FromArgb(245, 245, 245) // 🔹 Cinza muito claro
+            };
+
+            // 🔹 Estilo de seleção
+            dgvitens.DefaultCellStyle.SelectionBackColor = Color.LightBlue;
+            dgvitens.DefaultCellStyle.SelectionForeColor = Color.Black;
         }
+        //private void ConfigurarGridItensVenda()
+        //{
+        //    dgvitens.AutoGenerateColumns = false;
+        //    dgvitens.Columns.Clear();
+
+        //    dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+        //    {
+        //        HeaderText = "Código",
+        //        DataPropertyName = nameof(ItemVendaModel.ProdutoID),
+        //        Width = 100,
+        //        ReadOnly = true
+        //    });
+        //    dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+        //    {
+        //        HeaderText = "Descrição",
+        //        DataPropertyName = nameof(ItemVendaModel.NomeProduto),
+        //        Width = 350,
+        //        ReadOnly = true
+        //    });
+
+        //    dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+        //    {
+        //        HeaderText = "Qtde",
+        //        DataPropertyName = nameof(ItemVendaModel.Quantidade),
+        //        Width = 80
+        //    });
+
+        //    dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+        //    {
+        //        HeaderText = "Preço",
+        //        DataPropertyName = nameof(ItemVendaModel.PrecoUnitario),
+        //        Width = 100,
+        //        DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+        //    });
+
+        //    dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+        //    {
+        //        HeaderText = "Subtotal",
+        //        DataPropertyName = nameof(ItemVendaModel.Subtotal),
+        //        Width = 120,
+        //        ReadOnly = true,
+        //        DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
+        //    });
+
+        //    dgvitens.Columns.Add(new DataGridViewButtonColumn
+        //    {
+        //        Text = "X",
+        //        UseColumnTextForButtonValue = true,
+        //        Width = 40
+        //    });
+
+        //    dgvitens.AllowUserToAddRows = false;
+        //    dgvitens.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+        //    dgvitens.EnableHeadersVisualStyles = false;
+        //    dgvitens.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        //    dgvitens.ColumnHeadersHeight = 28;
+        //    dgvitens.RowHeadersVisible = false;
+        //    dgvitens.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+        //}
         #endregion
 
         #region ===== ITENS =======================================
 
         private void btnAdicionarItem_Click(object sender, EventArgs e)
         {
+
             if (ProdutoID <= 0)
             {
                 MessageBox.Show("Produto inválido.");
@@ -218,6 +354,8 @@ namespace GVC.View
             if (item != null)
             {
                 item.Quantidade += qtd;
+                // 🔴 CORREÇÃO: Recalcular o Subtotal
+                item.Subtotal = item.Quantidade * item.PrecoUnitario;
             }
             else
             {
@@ -230,7 +368,7 @@ namespace GVC.View
                     PrecoUnitario = preco,
                     Subtotal = qtd * preco,
                     DescontoItem = 0m,
-                    NomeProduto = txtNomeProduto.Text // Aqui preenchemos o nome do produto
+                    NomeProduto = txtNomeProduto.Text
                 });
             }
 
@@ -248,6 +386,56 @@ namespace GVC.View
 
             // Foca no campo Nome do Produto
             txtNomeProduto.Focus();
+
+
+            //if (ProdutoID <= 0)
+            //{
+            //    MessageBox.Show("Produto inválido.");
+            //    return;
+            //}
+
+            //if (!decimal.TryParse(txtPrecoUnitario.Text, out decimal preco))
+            //    return;
+
+            //int qtd = Convert.ToInt32(txtQuantidade.Text);
+
+            //// Busca o item na lista de itens
+            //var item = _itensBinding.FirstOrDefault(i => i.ProdutoID == ProdutoID);
+
+            //// Se o item já existir, atualiza a quantidade
+            //if (item != null)
+            //{
+            //    item.Quantidade += qtd;
+            //}
+            //else
+            //{
+            //    // Adiciona um novo item com o nome do produto
+            //    _itensBinding.Add(new ItemVendaModel
+            //    {
+            //        VendaID = venda.VendaID,
+            //        ProdutoID = ProdutoID,
+            //        Quantidade = qtd,
+            //        PrecoUnitario = preco,
+            //        Subtotal = qtd * preco,
+            //        DescontoItem = 0m,
+            //        NomeProduto = txtNomeProduto.Text // Aqui preenchemos o nome do produto
+            //    });
+            //}
+
+            //// Atualiza o binding da lista de itens
+            //_itensBindingSource.ResetBindings(false);
+
+            //// Força a atualização da grid
+            //dgvitens.Refresh();
+
+            //// Atualiza os totais da venda
+            //AtualizarTotais();
+
+            //// Limpa os campos do produto
+            //LimparCamposProduto();
+
+            //// Foca no campo Nome do Produto
+            //txtNomeProduto.Focus();
         }
 
         private void dgvItensVenda_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -363,9 +551,9 @@ namespace GVC.View
                     MessageBox.Show("Gere as parcelas antes de salvar uma venda no crediário.");
                     tabControlPagamento.SelectedTab = tabParcelas;
                     return;
-                }                
+                }
 
-                MessageBox.Show($"Venda salva com sucesso!\nVenda Nº {vendaId}","Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Venda salva com sucesso!\nVenda Nº {vendaId}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimparFormulario();
             }
             catch (Exception ex)
@@ -859,15 +1047,20 @@ namespace GVC.View
             // Define o resultado do diálogo como Cancelar
             this.DialogResult = DialogResult.Cancel;
             txtQuantidade.Text = "1";
-            txtPrecoUnitario.Text = "0,00";           
+            txtPrecoUnitario.Text = "0,00";
             txtSubTotal.Text = "0,00";
             txtValorRecebido.Text = "0,00";
             txtTroco.Text = "0,00";
-            txtTotalGeral.Text = "0,00";  
+            txtTotalGeral.Text = "0,00";
 
             AtualizarTotais();
 
 
+        }
+
+        private void txtFechar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

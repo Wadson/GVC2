@@ -44,7 +44,30 @@ namespace GVC.View
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
 
+        private void FrmEstornarPagamento_Load(object sender, EventArgs e)
+        {
+            txtValorEstornado.Focus();
+        }
+
+        private void FrmEstornarPagamento_Shown(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is KryptonTextBox kryptonTxt)
+                    Utilitario.AplicarCorFoco(kryptonTxt);
+            }
+        }
+
+        private void FrmEstornarPagamento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SendKeys.Send("{TAB}");
+            }
         }
     }
 }

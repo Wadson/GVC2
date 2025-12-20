@@ -91,7 +91,7 @@
             txtMotivo.StateCommon.Content.Color1 = Color.Gray;
             txtMotivo.StateCommon.Content.Font = new Font("Segoe UI", 10.25F);
             txtMotivo.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
-            txtMotivo.TabIndex = 253;
+            txtMotivo.TabIndex = 1;
             // 
             // txtNomeCliente
             // 
@@ -110,6 +110,7 @@
             txtNomeCliente.StateCommon.Content.Font = new Font("Segoe UI", 10.25F);
             txtNomeCliente.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
             txtNomeCliente.TabIndex = 251;
+            txtNomeCliente.TabStop = false;
             // 
             // txtValorEstornado
             // 
@@ -126,7 +127,7 @@
             txtValorEstornado.StateCommon.Content.Color1 = Color.Gray;
             txtValorEstornado.StateCommon.Content.Font = new Font("Segoe UI", 10.25F);
             txtValorEstornado.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
-            txtValorEstornado.TabIndex = 252;
+            txtValorEstornado.TabIndex = 0;
             // 
             // lblMotivo
             // 
@@ -212,6 +213,7 @@
             btnCancelar.StateTracking.Border.Width = 1;
             btnCancelar.StateTracking.Content.ShortText.Color1 = Color.White;
             btnCancelar.TabIndex = 1044;
+            btnCancelar.TabStop = false;
             btnCancelar.Values.Text = "Cancelar";
             btnCancelar.Click += btnCancelar_Click;
             // 
@@ -267,7 +269,7 @@
             btnConfirmarEstorno.StateTracking.Border.Width = 1;
             btnConfirmarEstorno.StateTracking.Content.ShortText.Color1 = Color.Black;
             btnConfirmarEstorno.StateTracking.Content.ShortText.Color2 = Color.Black;
-            btnConfirmarEstorno.TabIndex = 1043;
+            btnConfirmarEstorno.TabIndex = 2;
             btnConfirmarEstorno.Values.Text = "Confirmar";
             btnConfirmarEstorno.Click += btnConfirmarEstorno_Click;
             // 
@@ -293,6 +295,9 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Estornar Pagamento";
+            Load += FrmEstornarPagamento_Load;
+            Shown += FrmEstornarPagamento_Shown;
+            KeyDown += FrmEstornarPagamento_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }

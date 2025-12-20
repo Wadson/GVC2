@@ -246,5 +246,32 @@ namespace GVC.DALL
                 Status = novoStatus
             });
         }
+
+        public VendaModel ObterVendaPorId(long vendaId)
+        {
+            using (var conn = Helpers.Conexao.Conex())
+            {
+                string sql = @"
+                SELECT
+                    v.VendaID,
+                    v.ClienteID,
+                    c.Nome,
+                    v.DataVenda,
+                    v.ValorTotal,
+                    v.Desconto,
+                    v.Observacoes,
+                    v.StatusVenda
+                FROM Venda v
+                INNER JOIN Cliente c ON c.ClienteID = v.ClienteID
+                WHERE v.VendaID = @VendaID
+            ";
+
+                return conn.QueryFirstOrDefault<VendaModel>(
+                    sql,
+                    new { VendaID = vendaId }
+                );
+            }
+        }      
+
     }
 }

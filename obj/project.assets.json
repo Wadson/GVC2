@@ -5964,23 +5964,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\WR Soft\\.nuget\\packages\\": {},
-    "D:\\Program Files\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\wadso\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\GVC2\\GVC.csproj",
+      "projectUniqueName": "C:\\GVC\\GVC.csproj",
       "projectName": "GVC",
-      "projectPath": "C:\\GVC2\\GVC.csproj",
-      "packagesPath": "C:\\Users\\WR Soft\\.nuget\\packages\\",
-      "outputPath": "C:\\GVC2\\obj\\",
+      "projectPath": "C:\\GVC\\GVC.csproj",
+      "packagesPath": "C:\\Users\\wadso\\.nuget\\packages\\",
+      "outputPath": "C:\\GVC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\Program Files\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\WR Soft\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\wadso\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5989,6 +5989,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

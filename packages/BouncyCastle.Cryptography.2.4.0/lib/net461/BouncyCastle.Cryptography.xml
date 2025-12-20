@@ -8246,7 +8246,10 @@
             <param name="outStr">Output stream to write to.</param>
             <param name="tag">The packet tag for the object.</param>
         </member>
-        <member name="M:Org.BouncyCastle.Bcpg.BcpgOutputStream.#ctor(System.IO.Stream,Org.BouncyCastle.Bcpg.PacketTag,System.Int64,System.Boolean)">
+        <member name="M:Org.BouncyCastle.Bcpg.BcpgOutputStream.#ctor(System.IO.Stream,Org.BouncyCastle.Bcpg.PacketTag,System.
+				
+
+,System.Boolean)">
             <summary>Create a stream representing a general packet.</summary>
             <param name="outStr">Output stream to write to.</param>
             <param name="tag">Packet tag.</param>

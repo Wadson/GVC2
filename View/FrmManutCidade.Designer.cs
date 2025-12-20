@@ -410,7 +410,7 @@
             Controls.Add(btnAltera);
             Controls.Add(txtLocaliza);
             Controls.Add(dataGridPesquisar);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(5, 3, 5, 3);
             MaximizeBox = false;
             MinimizeBox = false;

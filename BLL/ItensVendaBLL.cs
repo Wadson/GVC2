@@ -13,6 +13,7 @@ namespace GVC.BLL
     internal class ItensVendaBLL
     {
         ItemVendaDal itensvendasdall = null;
+       
         // ************************LISTA USUARIO*********************************************
         public DataTable Listar()
         {
@@ -103,6 +104,11 @@ namespace GVC.BLL
             {
                 conn.Close();
             }
+        }       
+        public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
+        {
+            var dal = new ItemVendaDal();
+            return dal.ListarItensPorVenda(vendaId);
         }
 
     }

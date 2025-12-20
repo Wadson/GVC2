@@ -11,44 +11,12 @@ namespace GVC.BLL
 {
     internal class VendaBLL
     {
-        VendaDal vendaDALL = null;
-        // Salva venda completa (venda + itens + parcelas)
-        public int SalvarVendaCompleta(VendaModel venda, List<ItemVendaModel> itens, List<ParcelaModel>? parcelas = null)
+        private readonly VendaDal vendaDAL;
+        // ✅ CONSTRUTOR OBRIGATÓRIO
+        public VendaBLL()
         {
-            try
-            {
-                return vendaDALL.AddVendaCompleta(venda, itens, parcelas);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao salvar venda completa.", ex);
-            }
-        }
-
-        public void Excluir(VendaModel vendas)
-        {
-            try
-            {
-                vendaDALL = new VendaDal();
-                vendaDALL.DeleteVenda(vendas);
-            }
-            catch (Exception erro)
-            {
-                throw erro;
-            }
-        }
-        public void Alterar(VendaModel vendas)
-        {
-            try
-            {
-                vendaDALL = new VendaDal();
-                vendaDALL.UpdateVenda(vendas);
-            }
-            catch (Exception erro)
-            {
-                throw erro;
-            }
-        }
+            vendaDAL = new VendaDal();
+        }       
         //🔹 Passo B — Criar método de cálculo na VendaBLL
         public string CalcularStatusVendaPorParcelas(List<ParcelaModel> parcelas)
         {
@@ -70,7 +38,35 @@ namespace GVC.BLL
 
         //👉 É AQUI que tudo se fecha
 
-      
+        public int SalvarVendaCompleta(
+           VendaModel venda,
+           List<ItemVendaModel> itens,
+           List<ParcelaModel>? parcelas = null)
+        {
+            return vendaDAL.AddVendaCompleta(venda, itens, parcelas);
+        }
+
+        public void Excluir(VendaModel venda)
+        {
+            vendaDAL.DeleteVenda(venda);
+        }
+
+        public void Alterar(VendaModel venda)
+        {
+            vendaDAL.UpdateVenda(venda);
+        }
+
+        public VendaModel ObterVendaPorId(long vendaId)
+        {
+            return vendaDAL.ObterVendaPorId(vendaId);
+        }
+
+        // ⚠️ SE PRECISAR MANTER int
+        public VendaModel ObterVendaPorId(int vendaId)
+        {
+            return vendaDAL.ObterVendaPorId(vendaId);
+        }
+
         public string CalcularStatusVenda(List<ParcelaModel> parcelas)
         {
             if (parcelas == null || parcelas.Count == 0)
@@ -87,6 +83,5 @@ namespace GVC.BLL
 
             return EnumStatusVenda.ParcialmentePago.ToDb();
         }
-
     }
 }

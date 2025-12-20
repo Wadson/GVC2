@@ -12,9 +12,9 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\WR Soft\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\WR Soft\\.nuget\\packages",
-      "D:\\Program Files\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      "C:\\Users\\wadso\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\wadso\\.nuget\\packages",
+      "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
     ],
     "configProperties": {
       "CSWINRT_USE_WINDOWS_UI_XAML_PROJECTIONS": false,

@@ -133,5 +133,62 @@ namespace GVC.DALL
             dt.Load(conn.ExecuteReader(sql, new { VendaID = vendaId }));
             return dt;
         }
+        public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
+        {
+            // 🔎 DIAGNÓSTICO – REMOVER DEPOIS
+            var tipo = typeof(ItemVendaModel);
+            foreach (var p in tipo.GetProperties())
+            {
+                System.Diagnostics.Debug.WriteLine($"{p.Name} - {p.PropertyType}");
+            }
+
+            using (var conn = Helpers.Conexao.Conex())
+            {
+                string sql = @"
+SELECT
+    iv.ItemVendaID AS ItemVendaID,
+    iv.VendaID AS VendaID,
+    iv.ProdutoID AS ProdutoID,
+    iv.Quantidade AS Quantidade,
+    CAST(REPLACE(iv.PrecoUnitario, ',', '.') AS NUMERIC) AS PrecoUnitario,
+    CAST(REPLACE(iv.Subtotal, ',', '.') AS NUMERIC) AS Subtotal,
+    CAST(REPLACE(iv.DescontoItem, ',', '.') AS NUMERIC) AS DescontoItem,
+    p.NomeProduto AS NomeProduto
+FROM ItemVenda iv
+INNER JOIN Produtos p ON p.ProdutoID = iv.ProdutoID
+WHERE iv.VendaID = @VendaID
+ORDER BY iv.ItemVendaID";
+
+
+                return conn.Query<GVC.MODEL.ItemVendaModel>( sql,  new { VendaID = vendaId }).ToList();
+
+                //return conn.Query<ItemVendaModel>(sql, new { VendaID = vendaId }).ToList();
+            }
+        }
+
+
+        //public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
+        //{
+        //    using (var conn = Helpers.Conexao.Conex())
+        //    {
+        //        string sql = @"
+        //SELECT
+        //    iv.ItemVendaID    AS ItemVendaID,
+        //    iv.VendaID        AS VendaID,
+        //    iv.ProdutoID      AS ProdutoID,
+        //    iv.Quantidade     AS Quantidade,
+        //    iv.PrecoUnitario  AS PrecoUnitario,
+        //    iv.Subtotal       AS Subtotal,
+        //    iv.DescontoItem   AS DescontoItem,
+        //    p.NomeProduto     AS NomeProduto
+        //FROM ItemVenda iv
+        //INNER JOIN Produtos p ON p.ProdutoID = iv.ProdutoID
+        //WHERE iv.VendaID = @VendaID
+        //ORDER BY iv.ItemVendaID";
+
+        //        return conn.Query<ItemVendaModel>(sql, new { VendaID = vendaId }).ToList();
+        //    }
+        //}
+
     }
 }

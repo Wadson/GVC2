@@ -214,6 +214,36 @@ namespace GVC.DALL
         }
 
 
+        //public void EstornarPagamento(long parcelaId, decimal valorEstorno, DateTime dataEstorno, string motivo = null)
+        //{
+        //    if (valorEstorno <= 0m) throw new ArgumentException("Valor do estorno deve ser maior que zero.");
+        //    if (string.IsNullOrWhiteSpace(motivo)) motivo = "Estorno sem motivo informado";
+
+        //    string linhaHistorico = $"[{dataEstorno:dd/MM/yyyy HH:mm}] Estorno de {valorEstorno:C2} - Motivo: {motivo}";
+
+        //    const string sql = @"
+        //UPDATE Parcela
+        //SET ValorRecebido = ValorRecebido - @ValorEstorno,
+        //    Observacao = CASE
+        //        WHEN Observacao IS NULL OR Observacao = '' THEN @LinhaHistorico
+        //        ELSE Observacao || char(13) || char(10) || @LinhaHistorico
+        //    END
+        //WHERE ParcelaID = @ParcelaID;
+
+        //INSERT INTO PagamentosParciais (ParcelaID, DataPagamento, ValorPago, Observacao)
+        //VALUES (@ParcelaID, @DataEstorno, @ValorNegativo, @MotivoCompleto);";
+
+        //    using var conn = Helpers.Conexao.Conex();
+        //    conn.Execute(sql, new
+        //    {
+        //        ParcelaID = parcelaId,
+        //        ValorEstorno = valorEstorno,
+        //        LinhaHistorico = linhaHistorico,
+        //        DataEstorno = dataEstorno,
+        //        ValorNegativo = -valorEstorno,
+        //        MotivoCompleto = $"Estorno: {motivo}"
+        //    });
+        //}
         public void EstornarPagamento(long parcelaId, decimal valorEstorno, DateTime dataEstorno, string motivo = null)
         {
             if (valorEstorno <= 0m) throw new ArgumentException("Valor do estorno deve ser maior que zero.");
@@ -221,27 +251,23 @@ namespace GVC.DALL
 
             string linhaHistorico = $"[{dataEstorno:dd/MM/yyyy HH:mm}] Estorno de {valorEstorno:C2} - Motivo: {motivo}";
 
+            // 🔴 CORREÇÃO: REMOVER o INSERT na PagamentosParciais
             const string sql = @"
-        UPDATE Parcela
-        SET ValorRecebido = ValorRecebido - @ValorEstorno,
-            Observacao = CASE
-                WHEN Observacao IS NULL OR Observacao = '' THEN @LinhaHistorico
-                ELSE Observacao || char(13) || char(10) || @LinhaHistorico
-            END
-        WHERE ParcelaID = @ParcelaID;
-
-        INSERT INTO PagamentosParciais (ParcelaID, DataPagamento, ValorPago, Observacao)
-        VALUES (@ParcelaID, @DataEstorno, @ValorNegativo, @MotivoCompleto);";
+UPDATE Parcela
+SET ValorRecebido = ValorRecebido - @ValorEstorno,
+    Observacao = CASE
+        WHEN Observacao IS NULL OR Observacao = '' THEN @LinhaHistorico
+        ELSE Observacao || char(13) || char(10) || @LinhaHistorico
+    END
+WHERE ParcelaID = @ParcelaID;";
 
             using var conn = Helpers.Conexao.Conex();
             conn.Execute(sql, new
             {
                 ParcelaID = parcelaId,
                 ValorEstorno = valorEstorno,
-                LinhaHistorico = linhaHistorico,
-                DataEstorno = dataEstorno,
-                ValorNegativo = -valorEstorno,
-                MotivoCompleto = $"Estorno: {motivo}"
+                LinhaHistorico = linhaHistorico
+                // 🔴 REMOVIDO: DataEstorno, ValorNegativo, MotivoCompleto
             });
         }
         /// <summary>
@@ -254,7 +280,7 @@ namespace GVC.DALL
         //🔹 Passo A — Criar método na VendaDal
 
         //👉 Método simples, usando apenas o que existe
-       
+
         public void AtualizarParcelasAtrasadas()
         {
             const string sql = @"

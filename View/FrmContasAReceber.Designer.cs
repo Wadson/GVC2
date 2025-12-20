@@ -74,6 +74,16 @@
             lblTotalContasPagas = new Krypton.Toolkit.KryptonLabel();
             kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
             kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
+            dgvItensVenda = new Krypton.Toolkit.KryptonDataGridView();
+            kryptonPanel8 = new Krypton.Toolkit.KryptonPanel();
+            lblCliente = new Krypton.Toolkit.KryptonLabel();
+            lblRotuloCliente = new Krypton.Toolkit.KryptonLabel();
+            lblTotalVenda = new Krypton.Toolkit.KryptonLabel();
+            lblRotuloTotal = new Krypton.Toolkit.KryptonLabel();
+            lblDataVenda = new Krypton.Toolkit.KryptonLabel();
+            lblRotuloData = new Krypton.Toolkit.KryptonLabel();
+            lblVendaID = new Krypton.Toolkit.KryptonLabel();
+            lblRotuloVenda = new Krypton.Toolkit.KryptonLabel();
             ((System.ComponentModel.ISupportInitialize)cmbStatusParcela).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel1).BeginInit();
             kryptonPanel1.SuspendLayout();
@@ -91,6 +101,9 @@
             kryptonPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel5).BeginInit();
             kryptonPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvItensVenda).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel8).BeginInit();
+            kryptonPanel8.SuspendLayout();
             SuspendLayout();
             // 
             // kryptonPalette1
@@ -457,11 +470,12 @@
             dgvParcelas.Location = new Point(3, 67);
             dgvParcelas.Name = "dgvParcelas";
             dgvParcelas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueLightMode;
-            dgvParcelas.Size = new Size(665, 201);
+            dgvParcelas.Size = new Size(665, 173);
             dgvParcelas.TabIndex = 1039;
             dgvParcelas.CellFormatting += dgvParcelas_CellFormatting;
             dgvParcelas.CellValueChanged += dgvParcelas_CellValueChanged;
             dgvParcelas.CurrentCellDirtyStateChanged += dgvParcelas_CurrentCellDirtyStateChanged;
+            dgvParcelas.SelectionChanged += dgvParcelas_SelectionChanged;
             // 
             // kryptonPanel2
             // 
@@ -954,16 +968,108 @@
             kryptonLabel6.TabIndex = 1051;
             kryptonLabel6.Values.Text = "Valor";
             // 
+            // dgvItensVenda
+            // 
+            dgvItensVenda.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            dgvItensVenda.Location = new Point(3, 310);
+            dgvItensVenda.Name = "dgvItensVenda";
+            dgvItensVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007BlueLightMode;
+            dgvItensVenda.Size = new Size(665, 132);
+            dgvItensVenda.TabIndex = 1045;
+            // 
+            // kryptonPanel8
+            // 
+            kryptonPanel8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            kryptonPanel8.Controls.Add(lblCliente);
+            kryptonPanel8.Controls.Add(lblRotuloCliente);
+            kryptonPanel8.Controls.Add(lblTotalVenda);
+            kryptonPanel8.Controls.Add(lblRotuloTotal);
+            kryptonPanel8.Controls.Add(lblDataVenda);
+            kryptonPanel8.Controls.Add(lblRotuloData);
+            kryptonPanel8.Controls.Add(lblVendaID);
+            kryptonPanel8.Controls.Add(lblRotuloVenda);
+            kryptonPanel8.Location = new Point(3, 255);
+            kryptonPanel8.Name = "kryptonPanel8";
+            kryptonPanel8.Size = new Size(662, 52);
+            kryptonPanel8.TabIndex = 1046;
+            // 
+            // lblCliente
+            // 
+            lblCliente.Location = new Point(52, 29);
+            lblCliente.Name = "lblCliente";
+            lblCliente.Size = new Size(85, 20);
+            lblCliente.TabIndex = 7;
+            lblCliente.Values.Text = "Nome Cliente";
+            // 
+            // lblRotuloCliente
+            // 
+            lblRotuloCliente.Location = new Point(5, 29);
+            lblRotuloCliente.Name = "lblRotuloCliente";
+            lblRotuloCliente.Size = new Size(51, 20);
+            lblRotuloCliente.TabIndex = 6;
+            lblRotuloCliente.Values.Text = "Cliente:";
+            // 
+            // lblTotalVenda
+            // 
+            lblTotalVenda.Location = new Point(350, 3);
+            lblTotalVenda.Name = "lblTotalVenda";
+            lblTotalVenda.Size = new Size(70, 20);
+            lblTotalVenda.TabIndex = 5;
+            lblTotalVenda.Values.Text = "Valor Total";
+            // 
+            // lblRotuloTotal
+            // 
+            lblRotuloTotal.Location = new Point(312, 3);
+            lblRotuloTotal.Name = "lblRotuloTotal";
+            lblRotuloTotal.Size = new Size(40, 20);
+            lblRotuloTotal.TabIndex = 4;
+            lblRotuloTotal.Values.Text = "Total:";
+            // 
+            // lblDataVenda
+            // 
+            lblDataVenda.Location = new Point(204, 3);
+            lblDataVenda.Name = "lblDataVenda";
+            lblDataVenda.Size = new Size(74, 20);
+            lblDataVenda.TabIndex = 3;
+            lblDataVenda.Values.Text = "Data Venda";
+            // 
+            // lblRotuloData
+            // 
+            lblRotuloData.Location = new Point(167, 3);
+            lblRotuloData.Name = "lblRotuloData";
+            lblRotuloData.Size = new Size(39, 20);
+            lblRotuloData.TabIndex = 2;
+            lblRotuloData.Values.Text = "Data:";
+            // 
+            // lblVendaID
+            // 
+            lblVendaID.Location = new Point(52, 3);
+            lblVendaID.Name = "lblVendaID";
+            lblVendaID.Size = new Size(105, 20);
+            lblVendaID.TabIndex = 1;
+            lblVendaID.Values.Text = "Codigo da Venda";
+            // 
+            // lblRotuloVenda
+            // 
+            lblRotuloVenda.Location = new Point(5, 3);
+            lblRotuloVenda.Name = "lblRotuloVenda";
+            lblRotuloVenda.Size = new Size(48, 20);
+            lblRotuloVenda.TabIndex = 0;
+            lblRotuloVenda.Values.Text = "Venda:";
+            // 
             // FrmContasAReceber
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(252, 252, 250);
             ClientSize = new Size(913, 621);
+            Controls.Add(kryptonPanel8);
+            Controls.Add(dgvItensVenda);
             Controls.Add(kryptonPanel3);
             Controls.Add(kryptonPanel2);
             Controls.Add(dgvParcelas);
             Controls.Add(kryptonPanel1);
+            FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmContasAReceber";
@@ -993,6 +1099,10 @@
             ((System.ComponentModel.ISupportInitialize)kryptonPanel5).EndInit();
             kryptonPanel5.ResumeLayout(false);
             kryptonPanel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvItensVenda).EndInit();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel8).EndInit();
+            kryptonPanel8.ResumeLayout(false);
+            kryptonPanel8.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1043,5 +1153,15 @@
         private Krypton.Toolkit.KryptonLabel kryptonLabel17;
         private Krypton.Toolkit.KryptonLabel lblQtdeContasReceber;
         private Krypton.Toolkit.KryptonLabel lblQtdContasPagas;
+        private Krypton.Toolkit.KryptonDataGridView dgvItensVenda;
+        private Krypton.Toolkit.KryptonPanel kryptonPanel8;
+        private Krypton.Toolkit.KryptonLabel lblCliente;
+        private Krypton.Toolkit.KryptonLabel lblRotuloCliente;
+        private Krypton.Toolkit.KryptonLabel lblTotalVenda;
+        private Krypton.Toolkit.KryptonLabel lblRotuloTotal;
+        private Krypton.Toolkit.KryptonLabel lblDataVenda;
+        private Krypton.Toolkit.KryptonLabel lblRotuloData;
+        private Krypton.Toolkit.KryptonLabel lblVendaID;
+        private Krypton.Toolkit.KryptonLabel lblRotuloVenda;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.BLL;
+using GVC.MODEL;
 using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace GVC.View
     {
         private bool bloqueiaPesquisa = false;
         public int ClienteID { get; set; }
+
+        private readonly VendaBLL _vendaBll = new VendaBLL();
+        private readonly ItensVendaBLL _itensVendaBll = new ItensVendaBLL();
 
         public FrmContasAReceber()
         {
@@ -48,13 +52,15 @@ namespace GVC.View
 
             var colVendaID = new DataGridViewTextBoxColumn
             {
+                Name = "VendaID",               // OBRIGATÓRIO
                 DataPropertyName = "VendaID",
                 HeaderText = "IDVenda",
                 Width = 60,
                 Visible = false
             };
+
             dgvParcelas.Columns.Add(colVendaID);
-          
+
             var colParcela = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "NumeroParcela",
@@ -298,8 +304,8 @@ namespace GVC.View
                 if (p.StatusParcela == "Atrasada")
                     totalVencido += saldo;
             }
-           
-            txtTotalVencido.Text = totalVencido.ToString("C2");           
+
+            txtTotalVencido.Text = totalVencido.ToString("C2");
         }
         private void AtualizarCamposPorTipoPesquisa()
         {
@@ -469,7 +475,7 @@ namespace GVC.View
             cmbStatusParcela.SelectedIndex = 0;
             AtualizarCamposPorTipoPesquisa();
             CarregarParcelas(); // vai chamar AtualizarResumoGeral automaticamente
-            AtualizarCamposPorTipoPesquisa();           
+            AtualizarCamposPorTipoPesquisa();
         }
 
         private void txtNomeCliente_TextChanged(object sender, EventArgs e)
@@ -614,27 +620,43 @@ namespace GVC.View
 
         private void btnEstornarPagamento_Click(object sender, EventArgs e)
         {
-            var selecionadas = ObterParcelasSelecionadas(); // seu método atual que retorna List<dynamic> ou List<ParcelaModel>
+            var selecionadas = ObterParcelasSelecionadas();
 
+            // 🔴 CORREÇÃO: Verifica se há exatamente UMA parcela selecionada
             if (selecionadas.Count == 0)
             {
-                MessageBox.Show("Selecione ao menos uma parcela para estornar.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecione uma parcela para estornar.", "Atenção",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Verifica se todas as parcelas têm valor recebido > 0
-            var parcelasComSaldo = selecionadas.Where(p => (decimal)p.ValorRecebido > 0);
-            if (!parcelasComSaldo.Any())
+            // 🔴 NOVA VERIFICAÇÃO: Bloqueia se mais de uma parcela estiver selecionada
+            if (selecionadas.Count > 1)
             {
-                MessageBox.Show("As parcelas selecionadas não possuem pagamentos para estornar.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecione apenas UMA parcela para estornar.", "Atenção",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Agora temos certeza que é apenas uma parcela
+            var parcela = selecionadas.First();
+
+            // Verifica se a parcela tem valor recebido > 0
+            if ((decimal)parcela.ValorRecebido <= 0)
+            {
+                MessageBox.Show("Esta parcela não possui pagamentos para estornar.", "Atenção",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Form para informar o valor e motivo
             using (var frm = new FrmEstornarPagamento())
             {
-                frm.CarregarDados(selecionadas.Select(p => (long)p.ParcelaID).ToList(), selecionadas.Count == 1
-                        ? selecionadas.First().NomeCliente ?? "Cliente" : "Múltiplas parcelas");
+                // 🔴 AJUSTE: Passa apenas o ID da única parcela
+                frm.CarregarDados(
+                    new List<long> { (long)parcela.ParcelaID },
+                    parcela.NomeCliente ?? "Cliente"
+                );
 
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
@@ -642,23 +664,21 @@ namespace GVC.View
                     {
                         var bll = new ParcelaBLL();
 
-                        foreach (var p in selecionadas)
-                        {
-                            bll.EstornarPagamento(
-                                (long)p.ParcelaID,
-                                frm.ValorEstorno,
-                                frm.Motivo
-                            );
-                        }
+                        // 🔴 AGORA ESTORNA APENAS A PARCELA ÚNICA
+                        bll.EstornarPagamento(
+                            (long)parcela.ParcelaID,
+                            frm.ValorEstorno,
+                            frm.Motivo
+                        );
 
-
-
-                        MessageBox.Show("Estorno realizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Estorno realizado com sucesso!", "Sucesso",
+                                       MessageBoxButtons.OK, MessageBoxIcon.Information);
                         CarregarParcelas(); // atualiza o grid
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Erro ao estornar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Erro ao estornar: " + ex.Message, "Erro",
+                                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -718,8 +738,8 @@ namespace GVC.View
             });
 
             //// Atualiza os labels
-           
-            lblQtdContasPagas.Text = qtdPagas.ToString() ;
+
+            lblQtdContasPagas.Text = qtdPagas.ToString();
             lblTotalContasPagas.Text = totalPagas.ToString("C2");
 
             lblQtdeContasReceber.Text = qtdAReceber.ToString();
@@ -750,11 +770,70 @@ namespace GVC.View
                 System.Diagnostics.Debug.WriteLine("Erro ao atualizar parcelas atrasadas: " + ex.Message);
             }
         }
+        private void CarregarVenda(long vendaId)
+        {
+            var venda = _vendaBll.ObterVendaPorId((int)vendaId);
+
+            if (venda == null)
+            {
+                LimparAreaVenda();
+                return;
+            }
+
+            lblNumeroVenda.Text = venda.VendaID.ToString();
+            lblCliente.Text = venda.NomeCliente;
+            lblDataVenda.Text = venda.DataVenda.ToShortDateString();
+            lblTotalVenda.Text = venda.ValorTotal.ToString("C2");
+        }
+      
+        private void CarregarItensVenda(int vendaId)
+        {
+            var itens = _itensVendaBll.ListarItensPorVenda(vendaId);
+            dgvItensVenda.DataSource = itens;
+        }
+
+        private void dgvParcelas_SelectionChanged(object sender, EventArgs e)
+        {
+
+            if (dgvParcelas.CurrentRow == null)
+                return;
+
+            var data = dgvParcelas.CurrentRow.DataBoundItem;
+            if (data == null)
+                return;
+
+            // DapperRow implementa IDictionary
+            var row = (IDictionary<string, object>)data;
+
+            if (!row.ContainsKey("VendaID") || row["VendaID"] == null)
+            {
+                LimparAreaVenda();
+                return;
+            }
+
+            long vendaId = Convert.ToInt64(row["VendaID"]);
+
+            if (vendaId <= 0)
+            {
+                LimparAreaVenda();
+                return;
+            }
+
+            CarregarVenda((int)vendaId);
+            CarregarItensVenda((int)vendaId);
+
+
+
+        }
+        private void LimparAreaVenda()
+        {
+            lblNumeroVenda.Text = "-";
+            lblDataVenda.Text = "-";
+            lblCliente.Text = "-";
+            lblTotalVenda.Text = "R$ 0,00";
+
+            dgvItensVenda.DataSource = null;
+        }
+
     }
 }
-/*Consulta de histórico de pagamentos (para mostrar no form)
- * SELECT DataPagamento, ValorPago, Observacao 
-FROM PagamentosParciais 
-WHERE ParcelaID = @ParcelaID 
-ORDER BY DataPagamento DESC
- * */
